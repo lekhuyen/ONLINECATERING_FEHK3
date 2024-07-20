@@ -3,6 +3,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import images from "../../../../constants/images";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [toggleMenu, setToggleMenu] = React.useState(false);
@@ -13,25 +14,25 @@ const Navbar = () => {
             </div>
             <ul className="app__navbar-links">
                 <li className="p__opensans">
-                    <a href="#home">Home</a>
+                    <Link to="/">Home</Link>
                 </li>
                 <li className="p__opensans">
-                    <a href="#about">About</a>
+                    <Link to="/about">About</Link>
                 </li>
                 <li className="p__opensans">
-                    <a href="#menu">Menu</a>
+                    <Link to="/menu">Menu</Link>
                 </li>
                 <li className="p__opensans">
                     <a href="#awards">Awards</a>
                 </li>
                 <li className="p__opensans">
-                    <a href="#contact">Contact</a>
+                    <Link to="/contact">Contact</Link>
                 </li>
             </ul>
             <div className="app__navbar-login">
-                <a href="#login" className="p__opensans">
+                <Link to="/login" className="p__opensans">
                     Log In / Registration
-                </a>
+                </Link>
                 <div />
                 <a href="/" className="p__opensans">
                     Book Table

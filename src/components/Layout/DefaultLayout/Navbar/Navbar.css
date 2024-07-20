@@ -5,6 +5,9 @@
   align-items: center;
   background: var(--color-black);
   padding: 1rem 2rem;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
 }
 
 .app__navbar-logo {
@@ -30,8 +33,10 @@
   margin: 0 1rem;
   cursor: pointer;
 }
-
-.app__navbar-links li:hover {
+.app__navbar-links li a {
+  text-decoration: none;
+}
+.app__navbar-links li a:hover {
   color: var(--color-grey);
 }
 
@@ -48,6 +53,7 @@
 }
 
 .app__navbar-login a:hover {
+  color: var(--color-grey);
   border-bottom: 1px solid var(--color-golden);
 }
 
@@ -111,6 +117,7 @@
   .app__navbar-links {
     display: none;
   }
+  
 
   .app__navbar-smallscreen {
     display: flex;

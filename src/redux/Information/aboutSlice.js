@@ -24,9 +24,9 @@ export const createAboutUsItem = createAsyncThunk(
             const formData = new FormData();
             formData.append('title', newAboutItem.title);
             formData.append('content', newAboutItem.content);
-            if (newAboutItem.imagePaths) {
-                newAboutItem.imagePaths.forEach((file, index) => {
-                    formData.append(`imageFiles`, file);
+            if (newAboutItem.imageFiles) {
+                newAboutItem.imageFiles.forEach(file => {
+                    formData.append('imageFiles', file);
                 });
             }
 
@@ -46,28 +46,32 @@ export const createAboutUsItem = createAsyncThunk(
 // Async thunk to update about item
 export const updateAboutItem = createAsyncThunk(
     "about/updateAboutItem",
-    async (updatedAbout) => {
-        const { id, title, content, imagePaths } = updatedAbout;
+    async ({ id, title, content, imageFiles, imagePaths }) => {
         try {
             const formData = new FormData();
-            formData.append('id', id);
-            formData.append('title', title);
-            formData.append('content', content);
-            if (imagePaths) {
-                imagePaths.forEach((file, index) => {
-                    formData.append(`imageFiles`, file);
-                });
+            formData.append("id", id);
+            formData.append("title", title);
+            formData.append("content", content);
+
+            if (imageFiles && imageFiles.length > 0) {
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append("imageFiles", imageFiles[i]);
+                }
+            }
+
+            if (imagePaths && imagePaths.length > 0) {
+                formData.append("imagePaths", JSON.stringify(imagePaths));
             }
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    "Content-Type": "multipart/form-data",
+                },
             });
 
-            return response.data.data; // Ensure response data is returned correctly
+            return response.data.data;
         } catch (error) {
-            throw new Error('Error updating about item:', error);
+            throw new Error("Error updating about item:", error);
         }
     }
 );
@@ -77,67 +81,70 @@ export const deleteAboutItem = createAsyncThunk(
     "about/deleteAboutItem",
     async (id) => {
         try {
-            const response = await axios.delete(`${apiEndpoint}/${id}`);
-            return response.data.data;
+            await axios.delete(`${apiEndpoint}/${id}`);
+            return id; // Return the deleted item ID for Redux state update
         } catch (error) {
-            throw new Error('Error deleting about item:', error);
+            throw new Error('Error deleting about item:', error.response.data);
         }
     }
 );
 
-// Initial state
-const initialState = {
-    aboutItems: [],
-    status: 'idle',
-    error: null,
-};
-
-// Redux slice
 const aboutSlice = createSlice({
     name: "about",
     initialState: {
-        items: [],  // Ensure this is an array
-        status: "idle", 
+        items: [], 
+        status: "idle",
         error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(fetchAboutData.pending, (state) => {
-            state.status = "loading";
-        })
-        .addCase(fetchAboutData.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.items = Array.isArray(action.payload) ? action.payload : [];  // Ensure the payload is an array
-        })
-        .addCase(fetchAboutData.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        .addCase(createAboutUsItem.pending, (state) => {
-            state.status = "loading";
-        })
-        .addCase(createAboutUsItem.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.items.push(action.payload);
-        })
-        .addCase(createAboutUsItem.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        .addCase(updateAboutItem.pending, (state) => {
-            state.status = "loading";
-        })
-        .addCase(updateAboutItem.fulfilled, (state, action) => {
-            state.status = "succeeded";
-            state.items = state.items.map(item =>
-                item.id === action.payload.id ? action.payload : item
-            );
-        })
-        .addCase(updateAboutItem.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        });
+            .addCase(fetchAboutData.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(fetchAboutData.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.items = Array.isArray(action.payload) ? action.payload : [];
+            })
+            .addCase(fetchAboutData.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+            .addCase(createAboutUsItem.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(createAboutUsItem.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.items.push(action.payload);
+            })
+            .addCase(createAboutUsItem.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+            .addCase(updateAboutItem.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(updateAboutItem.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.items = state.items.map(item =>
+                    item.id === action.payload.id ? action.payload : item
+                );
+            })
+            .addCase(updateAboutItem.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+            .addCase(deleteAboutItem.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(deleteAboutItem.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.items = state.items.filter(item => item.id !== action.payload);
+            })
+            .addCase(deleteAboutItem.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            });
     },
 });
 
