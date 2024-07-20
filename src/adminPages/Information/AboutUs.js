@@ -20,12 +20,8 @@ function AboutUs() {
         dispatch(fetchAboutData());
     }, [dispatch]);
 
-    const handleDelete = async (id) => {
-        try {
-            dispatch(deleteAboutItem(id));
-        } catch (error) {
-            console.error('Error deleting item:', error);
-        }
+    const handleDelete = (id) => {
+        dispatch(deleteAboutItem(id));
     };
 
     const handleEdit = (id) => {
@@ -75,18 +71,6 @@ function AboutUs() {
         return null;
     }
 
-    // Static grouping logic
-    const staticGroups = {
-        "Group All": aboutData.filter(about => about.title.includes('')), // Example logic
-        "Group A": aboutData.filter(about => about.title.includes('ABOUT')), // Example logic
-        "Group B": aboutData.filter(about => about.title.includes('OUR VISION')), // Example logic
-        "Group C": aboutData.filter(about => about.title.includes('OUR MISSION')), // Example logic
-        "Group D": aboutData.filter(about => about.title.includes('OUR CORE VALUES')), // Example logic
-        "Group E": aboutData.filter(about => about.title.includes('DEI STATEMENT')), // Example logic
-        "Group F": aboutData.filter(about => about.title.includes('GIVING BACK')),
-        "Group G": aboutData.filter(about => about.title.includes('ENDLESS Inspiration')), // Example logic
-    };
-
     return (
         <div className='container'>
             <h2>About Us Content</h2>
@@ -109,73 +93,72 @@ function AboutUs() {
 
             <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}>Create About Us</button>
 
-            {/* Render static groups */}
             <div className="container mt-5">
-                {Object.keys(staticGroups).map((groupName) => (
-                    <div className="mb-4" key={groupName}>
-                        <h3>{groupName}</h3>
-                        <table className="table table-dark">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Content</th>
-                                    <th>Image</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {staticGroups[groupName].map((about) => (
-                                    <tr key={about.id}>
-                                        <td>{about.id}</td>
-                                        <td>{about.title}</td>
-                                        <td>{limitContent(about.content)}</td>
-                                        <td>
-                                            {about.imagePaths && about.imagePaths.length > 0 && (
-                                                <img
-                                                    src={`http://localhost:5034${about.imagePaths[0]}`}
-                                                    alt={`About ${about.id}`}
-                                                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                                                />
-                                            )}
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="btn btn-outline-primary"
-                                                onClick={() => handleInfoClick(about)}
-                                                data-toggle="modal"
-                                                data-target="#myModal"
-                                            >
-                                                <i className="fa fa-info-circle" aria-hidden="true"></i>
-                                            </button>
-                                            <button
-                                                className="btn btn-outline-warning"
-                                                onClick={() => handleEdit(about.id)}
-                                            >
-                                                <i className="fa fa-pencil-square" aria-hidden="true"></i>
-                                            </button>
-                                            <button
-                                                className="btn btn-outline-danger"
-                                                onClick={() => handleDelete(about.id)}
-                                            >
-                                                <i className="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ))}
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Content</th>
+                            <th>AboutTypeName</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredAboutData.map((about) => (
+                            <tr key={about.id}>
+                                <td>{about.id}</td>
+                                <td>{about.title}</td>
+                                <td>{limitContent(about.content)}</td>
+                                <td>{about.aboutTypeName}</td>
+                                <td>
+                                    {about.imagePaths && about.imagePaths.length > 0 && (
+                                        <img
+                                            src={`http://localhost:5034${about.imagePaths[0]}`}
+                                            alt={`About ${about.id}`}
+                                            style={{
+                                                width: "100px",
+                                                height: "100px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                    )}
+                                </td>
+                                <td>
+                                    <button
+                                        className="btn btn-outline-primary"
+                                        onClick={() => handleInfoClick(about)}
+                                        data-toggle="modal"
+                                        data-target="#myModal"
+                                    >
+                                        <i className="fa fa-info-circle" aria-hidden="true"></i>
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-warning"
+                                        onClick={() => handleEdit(about.id)}
+                                    >
+                                        <i className="fa fa-pencil-square" aria-hidden="true"></i>
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-danger"
+                                        onClick={() => handleDelete(about.id)}
+                                    >
+                                        <i className="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
-            {/* Modal */}
             <div className="modal fade" id="myModal" role="dialog">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h4 className="modal-title float-start">
-                                News Title: {selectedAboutUs && selectedAboutUs.title}
+                                About Title: {selectedAboutUs && selectedAboutUs.title}
                             </h4>
                             <button
                                 type="button"
@@ -188,16 +171,16 @@ function AboutUs() {
                         <div className="modal-body">
                             {selectedAboutUs && (
                                 <div>
-                                    <h5>News Content:</h5>
+                                    <h5>About Content:</h5>
                                     <p>{selectedAboutUs.content}</p>
-                                    <h5>News Image(s):</h5>
+                                    <h5>About Image(s):</h5>
                                     {selectedAboutUs.imagePaths &&
                                         selectedAboutUs.imagePaths.length > 0 ? (
                                             selectedAboutUs.imagePaths.map((imagePath, index) => (
                                                 <img
                                                     key={index}
                                                     src={`http://localhost:5034${imagePath}`}
-                                                    alt={`News ${selectedAboutUs.id}`}
+                                                    alt={`About ${selectedAboutUs.id}`}
                                                     style={{
                                                         width: "20%",
                                                         height: "auto",
@@ -225,7 +208,6 @@ function AboutUs() {
                 </div>
             </div>
 
-            {/* Pagination */}
             <nav>
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
