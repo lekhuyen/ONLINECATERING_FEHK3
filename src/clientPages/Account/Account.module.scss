@@ -1,0 +1,344 @@
+.account-page {
+    display: flex;
+    justify-content: center;
+}
+.container {
+    width: 1280px;
+    margin-top: 50px;
+}
+.row {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 15px;
+}
+
+.images-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 12px;
+    height: 550px;
+    grid-column-gap: 10px;
+}
+
+.image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.see-all-image {
+    position: relative;
+    cursor: pointer;
+}
+.all-images {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.all-images p {
+    font-size: 50px;
+    color: #fff;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+//restaurant desciption
+.container-res-info {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 15px;
+}
+.restaurant-info {
+    background-color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px 20px 0;
+}
+.restaurant-info  h2 {
+    font-family: monospace;
+    font-size: 30px;
+}
+.restaurant-info div {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-family: monospace;
+}
+.restaurant-info div span {
+    margin-right: 10px;
+}
+.active {
+    border: 4px solid #d02028;
+    border-radius:5px;
+}
+
+.vote div {
+    margin-left: 6px;
+    color: yellowgreen;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+
+//order form
+.order-form {
+    background-color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px 20px 0;
+    font-family: monospace;
+    color: #555;
+    height: 300px;
+
+    h2 {
+        text-align: center;
+        color: #d02028;
+        font-size: 25px;
+    }
+}
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+}
+.older p, .time-order p{
+    font-size: 18px;
+    height: 20px;
+}
+.older p span, .time-order span, .time p span {
+    margin-left: 5px;
+}
+.form-select ,.time input{
+    width: 100%;
+    height: 25px;
+    margin-top: 10px;
+}
+.time div {
+    display: flex;
+    align-items: center;
+}
+.time p{
+    font-size: 18px;
+    height: 20px;
+}    
+
+.order-now {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: none;
+    background-color: #d02028;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 20px;
+    font-family: monospace;
+}   
+
+
+//menu tab
+.menu-tab {
+    background-color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    // align-items: center;
+    height: 40px;
+}
+.menu-tab div {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: monospace;
+    font-size: 17px;
+    height: 40px;
+    position: relative;
+    cursor: pointer;
+}
+.active-tab::after {
+    position: absolute;
+    content: "";
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #d02028;
+    animation: activeTab .3s linear forwards;
+}
+@keyframes activeTab {
+    from {
+        width: 0;
+    }
+    to{
+        width: 100%;
+    }
+}
+
+
+.container-description {
+    background-color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+.item-restaurant {
+    padding: 10px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f5f5f5;    
+}
+.item-restaurant-info {
+    display: flex;
+    color: #464646;
+    width: 100%;
+}
+.item-restaurant-img {
+    width: 100px;
+    height: 100px;
+}
+.item-restaurant img {
+    width: 100%;
+    height: 90%;
+    background-size: cover;
+}
+.item-restaurant-name {
+    margin-left: 20px;
+}
+.item-restaurant-name span {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: monospace;
+}
+.item-restaurant-name p {
+    font-family: 'Courier New', Courier, monospace;
+}
+.item-restaurant-more {
+    display: flex;
+    align-items: center;
+    transform: translateY(-50%);
+}
+.item-restaurant-more p {
+    color: #0288d1;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: monospace;
+    margin-bottom: 0;
+}
+.item-restaurant-more div {
+    margin-left: 10px;
+    width: 22px;
+    height: 22px;
+}
+.item-restaurant-more div button {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    border: none;
+    background-color: #d02028;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.item-restaurant-more div button:hover{
+    background-color: #e71a24;
+}
+.content-sumary {
+    padding: 10px 20px 0;
+}
+
+
+//comment
+.comment-container {
+    padding: 10px 20px 20px 20px;
+    display: grid;
+    grid-template-rows: 30px 1fr 50px;
+}
+.comment-header {
+    display: flex;
+    align-items: center;
+    font-family: monospace;
+}
+.comment-content-input {
+    height: 40px;
+}
+
+.comment-input textarea{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 17px;
+    font-family: monospace;
+    background-color: #f0f2f5;
+}
+
+.comment-content {
+    display: flex;
+    // margin-bottom: 30px;
+    margin-top: 20px;
+    position: relative;
+}
+.comment-avatar-user {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+.comment-content img{
+    width: 100%;
+}
+.comment-content-user {
+    margin-left: 17px;
+    width: max-content;
+    background-color: #f0f2f5;
+    padding: 5px;
+    border-radius: 10px;
+    max-width: 500px;
+}
+.comment-content-user span {
+    font-size: 15px;
+    font-family: monospace;
+    font-weight: 700;
+}
+.comment-content-user p {
+    overflow-wrap: break-word;
+    padding-right: 10px;
+    font-family: monospace;
+    margin-bottom: 0;
+}
+.reply-comment {
+    position: absolute;
+    bottom: -20px;
+    left: 57px;
+}
+.reply-comment p {
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #898a8d;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.reply-comment p:hover {
+    text-decoration: underline;
+}
+
+//reply
+.comment-reply {
+    margin-left: 60px;
+    margin-top: 30px;
+    display: flex;
+}
+.comment-reply img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+

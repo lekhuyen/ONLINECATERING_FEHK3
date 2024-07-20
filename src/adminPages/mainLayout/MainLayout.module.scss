@@ -1,0 +1,21 @@
+.wapper {
+    margin-left: 300px;
+    transition: .5s;
+}
+.wapper.active {
+    margin-left: 80px;
+}
+
+@media (max-width: 991px){
+    .wapper {
+        margin-left: 0;
+    }
+
+}
+@media (max-width: 480px){
+    .wapper.active {
+        margin-left: 300px;
+        transition: .5s;
+    }
+
+}
