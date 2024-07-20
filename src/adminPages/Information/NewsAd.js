@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import {
   deleteNewsItem,
   fetchNewsData,
@@ -21,6 +21,10 @@ function NewsAd() {
   const [currentPage, setCurrentPage] = useState(1);
   const contactsPerPage = 5; // Number of items per page
 
+  // State for search and date filters
+  const [searchTerm, setSearchTerm] = useState("");
+
+
   // State to track selected news item for modal display
   const [selectedNews, setSelectedNews] = useState(null);
 
@@ -30,7 +34,6 @@ function NewsAd() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5034/api/News/${id}`);
       dispatch(deleteNewsItem(id));
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -41,13 +44,32 @@ function NewsAd() {
     navigate(`/News-edit/${id}`);
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+
   // Pagination logic
   const indexOfLastContact = currentPage * contactsPerPage;
   const indexOfFirstContact = indexOfLastContact - contactsPerPage;
-  const currentNews = newsData.slice(indexOfFirstContact, indexOfLastContact);
+
+  // Filtered and paginated newsData
+  let filteredNews = newsData.filter((news) => {
+    // Filter by search term
+    const searchTermLowerCase = searchTerm.toLowerCase();
+    return (
+      news.title.toLowerCase().includes(searchTermLowerCase) ||
+      news.content.toLowerCase().includes(searchTermLowerCase) ||
+      news.newsTypeName.toLowerCase().includes(searchTermLowerCase)
+    );
+  });
+
+  
+
+  const currentNews = filteredNews.slice(indexOfFirstContact, indexOfLastContact);
 
   // Calculate total pages for pagination
-  const pageNumbers = Math.ceil(newsData.length / contactsPerPage);
+  const pageNumbers = Math.ceil(filteredNews.length / contactsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -84,9 +106,27 @@ function NewsAd() {
   return (
     <div className="container">
       <h2>News Data</h2>
+
+      <div className="row mb-3">
+        <div className="col-sm-12">
+          <label htmlFor="searchTerm" className="form-label">
+            Search Title/Content:
+          </label>
+          <input
+            type="text"
+            id="searchTerm"
+            className="form-control"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder='Type to search...'
+          />
+        </div>
+        
+      </div>
+
       <button
         className="btn btn-success mb-3"
-        onClick={() => navigate("/Create-News")}
+        onClick={() => navigate("/newsadmin/create-news")}
       >
         Create News
       </button>
