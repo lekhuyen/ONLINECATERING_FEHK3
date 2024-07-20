@@ -10,6 +10,7 @@ import Account from "../clientPages/Account"
 import AboutUs from "../adminPages/Information/AboutUs"
 import NewsAd from "../adminPages/Information/NewsAd"
 import ContactAd from "../adminPages/Information/ContactAd"
+import Menu from "../clientPages/Menu"
 
 
 const publicRoutes = [
@@ -19,6 +20,7 @@ const publicRoutes = [
     {path: "/contact-us", component: Contact},
     {path: "/news", component: News},
     {path: "/account", component: Account},
+    {path: "/menu", component: Menu},
 ]
 
 const privateRoutes = [

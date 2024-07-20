@@ -9,7 +9,7 @@ import {
 } from "react-icons/io5";
 import { IoIosSearch, IoMdTime } from "react-icons/io";
 
-import { FaRegEye, FaUserCircle, FaRegStar, FaRegUser, FaRegNewspaper, FaPlus } from "react-icons/fa";
+import { FaRegEye, FaUserCircle, FaRegStar, FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus } from "react-icons/fa";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import { GoFilter } from "react-icons/go";
@@ -17,8 +17,15 @@ import { LuMapPin } from "react-icons/lu";
 import { FiFlag } from "react-icons/fi";
 import { MdOutlineChildCare, MdAccessTime } from "react-icons/md";
 import { TbMessage2Up } from "react-icons/tb";
-import { RiContactsBook3Line } from "react-icons/ri";
+import { RiContactsBook3Line, RiMoneyDollarCircleLine  } from "react-icons/ri";
 import { DiHackernews } from "react-icons/di";
+import { CiForkAndKnife } from "react-icons/ci";
+import { BiSolidDrink } from "react-icons/bi";
+import { GiChickenOven } from "react-icons/gi";
+import { FaBowlRice } from "react-icons/fa6";
+
+
+
 
 
 const icons = {
@@ -52,10 +59,7 @@ const icons = {
     MdAccessTime,
     FaPlus ,
 
-    // sdsdsad
 
-    FaRegStar, FaRegUser,
-    MdOutlineChildCare, MdAccessTime,
 
     //aboutus
     IoInformationCircleOutline,
@@ -70,6 +74,13 @@ const icons = {
     //news type
     DiHackernews,
 
+    //menu
+    CiForkAndKnife,
+    BiSolidDrink,
+    GiChickenOven,
+    FaBowlRice,
+    FaCartPlus,
+    RiMoneyDollarCircleLine 
 };
 
 export default icons;
