@@ -132,9 +132,12 @@ const Order = () => {
                         <div><button><FaPlus /></button></div>
                     </div>
                 </div>
-
-
-                
+            </div>
+            <div className={cx("total-price")}>
+                <div>
+                    <p>Total: <span>1000$</span></p>
+                    <div className={cx("btn-order")}><button>Book</button></div>
+                </div>
             </div>
         </div>
     );
