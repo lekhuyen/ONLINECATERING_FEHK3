@@ -14,7 +14,7 @@ const ContactAd = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const contactsPerPage = 10;
+  const contactsPerPage = 5;
 
   useEffect(() => {
     if (contactStatus === "idle") {
@@ -23,15 +23,20 @@ const ContactAd = () => {
   }, [contactStatus, dispatch]);
 
   const handleRespondClick = (id) => {
-    navigate(`/response/${id}`);
+    navigate(`/contactus/responsemessage/${id}`);
   };
 
   const handleDeleteClick = (id) => {
     dispatch(deleteContact(id));
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateChange = (e) => {
+    const selectedMonthYear = e.target.value;
+    if (selectedMonthYear) {
+      setSelectedDate(new Date(selectedMonthYear));
+    } else {
+      setSelectedDate(null);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -50,7 +55,6 @@ const ContactAd = () => {
     if (selectedDate) {
       const contactDate = new Date(contact.responseDate);
       if (
-        contactDate.getDate() !== selectedDate.getDate() ||
         contactDate.getMonth() !== selectedDate.getMonth() ||
         contactDate.getFullYear() !== selectedDate.getFullYear()
       ) {
@@ -95,37 +99,41 @@ const ContactAd = () => {
     <div className="container">
       <h2>Contact List</h2>
 
-      <div className="mb-3">
-        <label htmlFor="datepicker" className="form-label">
-          Select Date:
-        </label>
-        <input
-          type="date"
-          id="datepicker"
-          className="form-control"
-          value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
-          onChange={(e) => handleDateChange(new Date(e.target.value))}
-        />
-      </div>
+      <div className="row mb-3">
 
-      <div className="mb-3">
-        <label htmlFor="searchTerm" className="form-label">
-          Search:
-        </label>
-        <input
-          type="text"
-          id="searchTerm"
-          className="form-control"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
+      <div className="col-sm-9">
+          <label htmlFor="searchTerm" className="form-label">
+            Search:
+          </label>
+          <input
+            type="text"
+            id="searchTerm"
+            className="form-control"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder='Type to search...'
+          />
+        </div>
+
+        <div className="col-sm-3">
+          <label htmlFor="datepicker" className="form-label">
+            Select Month/Year:
+          </label>
+          <input
+            type="month"
+            id="datepicker"
+            className="form-control"
+            value={selectedDate ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}` : ''}
+            onChange={handleDateChange}
+          />
+        </div>
       </div>
 
       {contactStatus === "loading" && <div>Loading...</div>}
       {contactStatus === "failed" && <div>{error}</div>}
       {contactStatus === "succeeded" && (
         <div>
-          <table className="table table-dark">
+          <table className="table">
             <thead>
               <tr>
                 <th>Id</th>
@@ -147,28 +155,28 @@ const ContactAd = () => {
                   <td>{contact.phone}</td>
                   <td>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-outline-info"
                       onClick={() => handleRespondClick(contact.id)}
                     >
-                      Respond
+                      <i className="fa fa-reply" aria-hidden="true"></i>
                     </button>
                   </td>
                   <td>
-                    <span
-                      style={{
-                        color: contact.isAdminResponse ? "green" : "red",
-                      }}
-                    >
-                      ●
+                    <span style={{ color: contact.isAdminResponse ? "green" : "red" }}>
+                      {contact.isAdminResponse ? (
+                        <i className="fa fa-check-square" aria-hidden="true"></i>
+                      ) : (
+                        <i className="fa fa-times-circle" style={{ color: "red" }} aria-hidden="true"></i>
+                      )}
                     </span>
                   </td>
                   <td>{contact.responseDate}</td>
                   <td>
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-outline-danger"
                       onClick={() => handleDeleteClick(contact.id)}
                     >
-                      Delete
+                      <i className="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>

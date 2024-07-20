@@ -16,7 +16,6 @@ export const fetchNewsData = createAsyncThunk(
   }
 );
 
-// Async thunk to create a new news item
 export const createNewsItem = createAsyncThunk(
   "news/createNewsItem",
   async (newNewsItem) => {
@@ -25,9 +24,13 @@ export const createNewsItem = createAsyncThunk(
       formData.append('title', newNewsItem.title);
       formData.append('content', newNewsItem.content);
       formData.append('newsTypeId', newNewsItem.newsTypeId);
-      if (newNewsItem.imageFile) {
-        formData.append('imageFile', newNewsItem.imageFile);
-      }
+
+      // Append each image file to formData individually
+      if (newNewsItem.imagePaths) {
+        newNewsItem.imagePaths.forEach((file) => {
+            formData.append(`imageFiles`, file);
+        });
+    }
 
       const response = await axios.post(apiEndpoint, formData, {
         headers: {
@@ -41,6 +44,8 @@ export const createNewsItem = createAsyncThunk(
     }
   }
 );
+
+
 
 // Async thunk to update a news item
 export const updateNewsItem = createAsyncThunk(
@@ -106,6 +111,8 @@ const newsSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
+
+      
 
       .addCase(updateNewsItem.pending, (state) => {
         state.status = "loading";
