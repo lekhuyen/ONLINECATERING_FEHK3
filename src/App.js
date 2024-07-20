@@ -4,11 +4,13 @@ import { DefaultLayout } from './components/Layout'
 import { Fragment } from "react";
 import MainLayout from "./adminPages/mainLayout";
 import './App.css'
+import ScrollToTop from "./clientPages/ScrollToTop";
 
 
 function App() {
   return (
     <Router>
+    <ScrollToTop />
       <div>
         <Routes>
         {/* client route*/}

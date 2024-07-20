@@ -1,4 +1,8 @@
+import { CiForkAndKnife } from "react-icons/ci";
 import icons from "./icons";
+import { BiSolidDrink } from "react-icons/bi";
+import { FaBowlRice } from "react-icons/fa6";
+import { GiChickenOven } from "react-icons/gi";
 
 const {
   PiUsers,
@@ -38,5 +42,27 @@ export const menuTab = [
     {
         id: 3,
         title: "Comment"
+    },
+]
+export const menu = [
+    {
+        id: 1,
+        title: "Menu",
+        icon: <CiForkAndKnife size="20px"/>
+    },
+    {
+        id: 2,
+        title: "Drink",
+        icon: <BiSolidDrink size="20px" />
+    },
+    {
+        id: 3,
+        title: "Chicken",
+        icon: <GiChickenOven size="20px" />
+    },
+    {
+        id: 4,
+        title: "Rice",
+        icon: <FaBowlRice size="20px" />
     },
 ]

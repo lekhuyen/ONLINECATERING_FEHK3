@@ -14,13 +14,15 @@
     background-size: cover;
     background-repeat: repeat;
     background-attachment: fixed;
+    
+    /* height: 100vh; */
   }
   
   .app__wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
+    /* margin-top: 76px; */
     min-height: 100vh;
   }
   
