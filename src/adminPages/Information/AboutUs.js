@@ -51,7 +51,9 @@ function AboutUs() {
         const searchTermLowerCase = searchTerm.toLowerCase();
         return (
             about.title.toLowerCase().includes(searchTermLowerCase) ||
-            about.content.toLowerCase().includes(searchTermLowerCase)
+            about.content.toLowerCase().includes(searchTermLowerCase) ||
+            about.aboutTypeName.toLowerCase().includes(searchTermLowerCase) 
+
         );
     });
 
@@ -78,7 +80,7 @@ function AboutUs() {
             <div className="row mb-3">
                 <div className="col-sm-12">
                     <label htmlFor="searchTerm" className="form-label">
-                        Search Title/Content:
+                        Search Title/Content/Type:
                     </label>
                     <input
                         type="text"
