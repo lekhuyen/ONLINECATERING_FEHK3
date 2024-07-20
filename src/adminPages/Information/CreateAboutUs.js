@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +10,25 @@ export default function CreateAboutUs() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [imageFiles, setImageFiles] = useState(null); // State to hold multiple image files
+    const [aboutTypeId, setAboutTypeId] = useState('');
+    const [aboutTypes, setAboutTypes] = useState([]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate(); // Initialize useNavigate hook for navigation
+
+    // Fetch about types from API
+    useEffect(() => {
+        const fetchAboutTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:5034/api/About/abouttypes');
+                setAboutTypes(response.data.data); // Assuming response.data.data contains about types array
+            } catch (error) {
+                console.error('Error fetching about types:', error);
+            }
+        };
+
+        fetchAboutTypes();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,6 +37,7 @@ export default function CreateAboutUs() {
         
         formData.append('title', title);
         formData.append('content', content);
+        formData.append('aboutTypeId', aboutTypeId); // Append aboutTypeId to formData
         
         // Append multiple image files
         if (imageFiles) {
@@ -29,19 +47,25 @@ export default function CreateAboutUs() {
         }
 
         try {
-            await axios.post(apiEndpoint, formData, {
+            const response = await axios.post(apiEndpoint, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            // Refresh about data after creating a new entry
-            dispatch(createAboutUsItem());
+            // Dispatch the created item to the store
+            dispatch(createAboutUsItem({
+                title,
+                content,
+                aboutTypeId,
+                imageFiles
+            }));
             
             // Clear form fields and imageFiles state
             setTitle('');
             setContent('');
             setImageFiles(null);
+            setAboutTypeId('');
 
             // Navigate back to AboutUs component
             navigate('/aboutus');
@@ -71,6 +95,7 @@ export default function CreateAboutUs() {
                         required
                     />
                 </div>
+
                 <div className="form-group">
                     <label htmlFor="content">Content</label>
                     <textarea
@@ -81,8 +106,27 @@ export default function CreateAboutUs() {
                         required
                     ></textarea>
                 </div>
+
                 <div className="form-group">
-                    <label htmlFor="image">Image</label>
+                    <label htmlFor="aboutTypeId">About Type</label>
+                    <select
+                        className="form-control"
+                        id="aboutTypeId"
+                        value={aboutTypeId}
+                        onChange={(e) => setAboutTypeId(e.target.value)}
+                        required
+                    >
+                        <option value="">Select About Type</option>
+                        {aboutTypes.map((type) => (
+                            <option key={type.id} value={type.id}>
+                                {type.aboutTypeName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="imageFiles">Image</label>
                     <input
                         type="file"
                         className="form-control"
