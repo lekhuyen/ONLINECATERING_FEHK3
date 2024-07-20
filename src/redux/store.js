@@ -5,6 +5,7 @@ import newsSlice from './Information/newsSlice'
 import aboutSlice from './Information/aboutSlice'
 import contactSlice from './Information/contactSlice'
 import aboutTypeSlice from './Information/aboutTypeSlice'
+import newsTypeSlice from './Information/newsTypeSlice'
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         about: aboutSlice,
         aboutTypes: aboutTypeSlice,
         news: newsSlice,
+        newsTypes: newsTypeSlice,
         contacts: contactSlice,
     },
 })

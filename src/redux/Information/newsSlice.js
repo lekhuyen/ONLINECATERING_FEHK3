@@ -49,19 +49,35 @@ export const createNewsItem = createAsyncThunk(
 
 // Async thunk to update a news item
 export const updateNewsItem = createAsyncThunk(
-  "news/updateNewsItem",
-  async ({ id, formData }) => {
-    try {
-      const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+  "about/updateNewsItem",
+  async ({ id, title, content, newsTypeId ,imageFiles, imagePaths }) => {
+      try {
+          const formData = new FormData();
+          formData.append("id", id);
+          formData.append("title", title);
+          formData.append("content", content);
+          formData.append("newsTypeId", newsTypeId);
 
-      return response.data;
-    } catch (error) {
-      throw new Error('Error updating news item:', error.response.data);
-    }
+          if (imageFiles && imageFiles.length > 0) {
+              for (let i = 0; i < imageFiles.length; i++) {
+                  formData.append("imageFiles", imageFiles[i]);
+              }
+          }
+
+          if (imagePaths && imagePaths.length > 0) {
+              formData.append("imagePaths", JSON.stringify(imagePaths));
+          }
+
+          const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
+              headers: {
+                  "Content-Type": "multipart/form-data",
+              },
+          });
+
+          return response.data.data;
+      } catch (error) {
+          throw new Error("Error updating about item:", error);
+      }
   }
 );
 
