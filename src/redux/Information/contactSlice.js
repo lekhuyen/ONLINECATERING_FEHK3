@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
+    export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
     const response = await axios.get("http://localhost:5034/api/Contact");
     return response.data.data;
     });

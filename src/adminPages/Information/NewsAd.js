@@ -41,8 +41,10 @@ function NewsAd() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/News-edit/${id}`);
+    navigate(`/newsadmin/edit-news/${id}`);
   };
+
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
