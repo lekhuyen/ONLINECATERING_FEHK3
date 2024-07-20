@@ -70,33 +70,31 @@ function AboutUs() {
     const filteredAboutData = currentAboutData.filter((about) => {
         // Filter by search term (case insensitive)
         const searchTermLowerCase = searchTerm.toLowerCase();
-        if (
+        return (
             about.title.toLowerCase().includes(searchTermLowerCase) ||
             about.content.toLowerCase().includes(searchTermLowerCase)
-        )
-        return false;
+        );
     });
+    
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    
-
     // Handling initial loading state
-    if (status === "loading") {
-        return <div>Loading...</div>;
-    }
+        if (status === 'loading') {
+            return <div>Loading...</div>;
+        }
 
-    // Handling fetch error state
-    if (status === "failed") {
-        return <div>Error: {error}</div>;
-    }
+        // Handling fetch error state
+        if (status === 'failed') {
+            return <div>Error: {error}</div>;
+        }
 
-    // Ensure aboutData is always an array before mapping over it
-    if (!Array.isArray(aboutData)) {
-        return null; // or handle the case where aboutData is not an array
-    }
+        // Ensure aboutData is always an array before mapping over it
+        if (!Array.isArray(aboutData)) {
+            return null; // or handle the case where aboutData is not an array
+        }
 
     return (
         <div className='container'>
