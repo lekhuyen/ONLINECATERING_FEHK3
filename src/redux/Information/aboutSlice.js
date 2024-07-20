@@ -11,21 +11,35 @@ export const fetchAboutData = createAsyncThunk(
             const response = await axios.get(apiEndpoint);
             return response.data.data;
         } catch (error) {
-            throw new Error('Error fetching about data:', error);
+            throw new Error('Error fetching about data:', error.response.data);
         }
     }
 );
 
+export const fetchNewsData = createAsyncThunk(
+    "news/fetchNewsData",
+    async () => {
+      try {
+        const response = await axios.get(apiEndpoint);
+        return response.data.data;
+      } catch (error) {
+        throw new Error('Error fetching news data:', error.response.data);
+      }
+    }
+  );
+
+
 // Async thunk to create new about item
 export const createAboutUsItem = createAsyncThunk(
     "about/createAboutUsItem",
-    async (newAboutItem) => {
+    async (createAboutItem) => {
         try {
             const formData = new FormData();
-            formData.append('title', newAboutItem.title);
-            formData.append('content', newAboutItem.content);
-            if (newAboutItem.imageFiles) {
-                newAboutItem.imageFiles.forEach(file => {
+            formData.append('title', createAboutItem.title);
+            formData.append('content', createAboutItem.content);
+            formData.append('aboutTypeId', createAboutItem.aboutTypeId);
+            if (createAboutItem.imageFiles) {
+                createAboutItem.imageFiles.forEach(file => {
                     formData.append('imageFiles', file);
                 });
             }
