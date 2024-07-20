@@ -15,6 +15,9 @@
             }
         }
     );
+    
+
+    
 
     // Async thunk to create new about item
     export const createAboutUsItem = createAsyncThunk(
@@ -45,36 +48,32 @@
 
     export const updateAboutItem = createAsyncThunk(
         "about/updateAboutItem",
-        async (updatedAbout) => {
-        const { id, title, content, imagePaths } = updatedAbout;
-        try {
-            const formData = new FormData();
-            formData.append("title", title);
-            formData.append("content", content);
+        async ({ id, title, content, imageFiles, imagePaths }) => {
+            try {
+                const formData = new FormData();
+                formData.append("title", title);
+                formData.append("content", content);
     
-            // Append each image file to formData if new images selected
-            if (updatedAbout.imageFiles && updatedAbout.imageFiles.length > 0) {
-            for (let i = 0; i < updatedAbout.imageFiles.length; i++) {
-                formData.append("imageFiles", updatedAbout.imageFiles[i]);
+                if (imageFiles && imageFiles.length > 0) {
+                    for (let i = 0; i < imageFiles.length; i++) {
+                        formData.append("imageFiles", imageFiles[i]);
+                    }
+                } else {
+                    formData.append("imagePaths", JSON.stringify(imagePaths));
+                }
+    
+                const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+    
+                return response.data.data;
+            } catch (error) {
+                throw new Error("Error updating about item:", error);
             }
-            } else {
-            // If no new images selected, retain the existing image paths
-            formData.append("imagePaths", JSON.stringify(imagePaths));
-            }
-    
-            const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            });
-    
-            return response.data.data; // Ensure response data is returned correctly
-        } catch (error) {
-            throw new Error("Error updating about item:", error);
-        }
         }
     );
-    
 
     // Async thunk to delete about item
 
@@ -135,7 +134,7 @@
             })
             .addCase(updateAboutItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = state.items.map(item =>
+                state.aboutItems = state.aboutItems.map(item =>
                     item.id === action.payload.id ? action.payload : item
                 );
             })
@@ -143,6 +142,7 @@
                 state.status = "failed";
                 state.error = action.error.message;
             })
+
 
             .addCase(deleteAboutItem.pending, (state) => {
                 state.status = "loading";

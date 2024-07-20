@@ -4,14 +4,13 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { updateAboutItem } from '../../redux/Information/aboutSlice';
 
-
 export default function EditAboutUs() {
     const { id } = useParams(); // Get id from URL params
     const navigate = useNavigate(); // Initialize useNavigate hook
     const dispatch = useDispatch(); // Initialize useDispatch hook
 
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(''); // Initialize with empty string
+    const [content, setContent] = useState(''); // Initialize with empty string
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePaths, setImagePaths] = useState([]); // State to store current image paths
 
@@ -20,9 +19,16 @@ export default function EditAboutUs() {
             try {
                 const response = await axios.get(`http://localhost:5034/api/About/${id}`);
                 const { title, content, imagePaths } = response.data;
-                setTitle(title);
-                setContent(content);
-                setImagePaths(imagePaths); // Set current image paths
+
+                // Log the fetched data to verify
+                console.log('Fetched Data:', response.data);
+
+                setTitle(title || ''); // Ensure title is always a string
+                setContent(content || ''); // Ensure content is always a string
+                setImagePaths(imagePaths || []); // Ensure imagePaths is always an array
+
+                // Log the state after setting it
+                console.log('State after setting:', { title, content, imagePaths });
             } catch (error) {
                 console.error('Error fetching about data for editing:', error);
             }
@@ -75,12 +81,16 @@ export default function EditAboutUs() {
                 </div>
                 <div className="form-group">
                     <label>Current Images</label>
-                    {imagePaths.map((imagePath, index) => (
-                        <div key={index} className="mb-2">
-                            <img src={`http://localhost:5034/${imagePath}`} alt={`Image ${index}`} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
-                            <span>{imagePath}</span>
-                        </div>
-                    ))}
+                    {imagePaths.length > 0 ? (
+                        imagePaths.map((imagePath, index) => (
+                            <div key={index} className="mb-2">
+                                <img src={`http://localhost:5034${imagePath}`} alt={`Image ${index}`} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
+                                <span>{imagePath}</span>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No images available</p>
+                    )}
                 </div>
                 <div className="form-group">
                     <label>Upload New Images</label>
