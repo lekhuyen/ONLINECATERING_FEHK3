@@ -1,0 +1,92 @@
+.order_container {
+    margin-top: 76px;
+}
+.order_header_title {
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    color: #fff;
+}
+//order
+.order_row {
+    width: 60%;
+    margin: auto;
+    padding: 50px 0;
+}
+.item-restaurant {
+    padding: 10px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(166 189 216);    
+}
+.item-restaurant:last-child{
+    border-bottom: 0;   
+}
+.item-restaurant-info {
+    display: flex;
+    color: #dcca87;
+}
+.item-restaurant-1 {
+    display: flex;
+    align-items: center;
+}
+.item-restaurant-img {
+    width: 100px;
+    height: 100px;
+}
+.item-restaurant img {
+    width: 100%;
+    height: 90%;
+    background-size: cover;
+}
+.item-restaurant-name {
+    margin-left: 20px;
+}
+.item-restaurant-name span {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: monospace;
+}
+.item-restaurant-name p {
+    font-family: 'Courier New', Courier, monospace;
+}
+.item-restaurant-more {
+    display: flex;
+    gap: 10px;
+}
+
+.item-price p {
+    color: #0288d1;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: monospace;
+    margin-bottom: 0;
+}
+// .item-restaurant-more p {
+//     color: #0288d1;
+//     font-size: 24px;
+//     font-weight: 700;
+//     font-family: monospace;
+//     margin-bottom: 0;
+// }
+.item-restaurant-more div {
+    width: 25px;
+    height: 25px;
+}
+
+.item-restaurant-more div button {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    border: none;
+    background-color: #d02028;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.item-restaurant-more div button:hover{
+    background-color: #e71a24;
+}
+.content-sumary {
+    padding: 10px 20px 0;
+}
