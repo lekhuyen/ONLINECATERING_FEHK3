@@ -15,6 +15,7 @@ import ResponseMessage from "../adminPages/Information/ResponseMessage"
 import CreateAboutUs from "../adminPages/Information/CreateAboutUs"
 import CreateNews from "../adminPages/Information/CreateNews"
 import EditAboutUs from "../adminPages/Information/EditAboutUs"
+import Order from "../clientPages/Order"
 
 const publicRoutes = [
     {path: "/", component: Home},
@@ -24,6 +25,7 @@ const publicRoutes = [
     {path: "/news", component: News},
     {path: "/account", component: Account},
     {path: "/menu", component: Menu},
+    {path: "/order", component: Order},
 ]
 
 const privateRoutes = [
