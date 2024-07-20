@@ -2,10 +2,9 @@ import React from "react";
 
 const Contact = () => {
   return (
-    <div className="container mt-5">
-      Contact Page
+    <div className="container pt-5 mt-5 mb-5">
       <div className="row">
-        <div class="card" style={{ maxWidth: "400px" }}>
+        <div class="card border border-white" style={{ maxWidth: "400px" }}>
           <div class="card-body">
             <h4 class="card-title">Give Us The Juicy Deets! </h4>
             <p class="card-text">
