@@ -10,14 +10,12 @@ import Account from "../clientPages/Account"
 import AboutUs from "../adminPages/Information/AboutUs"
 import NewsAd from "../adminPages/Information/NewsAd"
 import ContactAd from "../adminPages/Information/ContactAd"
-<<<<<<< HEAD
 import Menu from "../clientPages/Menu"
-=======
 import ResponseMessage from "../adminPages/Information/ResponseMessage"
 import CreateAboutUs from "../adminPages/Information/CreateAboutUs"
 import CreateNews from "../adminPages/Information/CreateNews"
 import EditAboutUs from "../adminPages/Information/EditAboutUs"
->>>>>>> 6335e18656271c2ec1317c6a329461fc237b2cf8
+
 
 
 const publicRoutes = [
