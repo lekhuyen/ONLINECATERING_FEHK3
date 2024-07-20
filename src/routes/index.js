@@ -16,15 +16,17 @@ import CreateAboutUs from "../adminPages/Information/CreateAboutUs"
 import CreateNews from "../adminPages/Information/CreateNews"
 import EditAboutUs from "../adminPages/Information/EditAboutUs"
 
+import Order from "../clientPages/Order"
 
 const publicRoutes = [
     {path: "/", component: Home},
     {path: "/about", component: About},
     {path: "/login", component: Login, layout: null},
-    {path: "/contact-us", component: Contact},
+    {path: "/contact", component: Contact},
     {path: "/news", component: News},
     {path: "/account", component: Account},
     {path: "/menu", component: Menu},
+    {path: "/order", component: Order},
 ]
 
 const privateRoutes = [

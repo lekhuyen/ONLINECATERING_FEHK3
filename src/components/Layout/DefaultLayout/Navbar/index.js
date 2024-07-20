@@ -34,9 +34,9 @@ const Navbar = () => {
                     Log In / Registration
                 </Link>
                 <div />
-                <a href="/" className="p__opensans">
+                <Link to="/order" className="p__opensans">
                     Book Table
-                </a>
+                </Link>
             </div>
             <div className="app__navbar-smallscreen">
                 <GiHamburgerMenu

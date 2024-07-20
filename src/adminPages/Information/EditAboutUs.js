@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { updateAboutItem } from '../../redux/Information/aboutSlice';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAboutData, updateAboutItem } from '../../redux/Information/aboutSlice';
 
 export default function EditAboutUs() {
     const { id } = useParams(); // Get id from URL params
@@ -12,24 +10,26 @@ export default function EditAboutUs() {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [imageFiles, setImageFiles] = useState([]);
-    const [imagePaths, setImagePaths] = useState([]); // State to store current image paths
+    const [imageFiles, setImageFiles] = useState([]); // Handle multiple files
+    const [imagePaths, setImagePaths] = useState([]);
+    
+    const aboutItem = useSelector((state) => state.about.items.find(item => item.id === id));
+    const status = useSelector((state) => state.about.status);
+    const error = useSelector((state) => state.about.error);
 
     useEffect(() => {
-        const fetchAboutData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5034/api/About/${id}`);
-                const { title, content, imagePaths } = response.data;
-                setTitle(title);
-                setContent(content);
-                setImagePaths(imagePaths); // Set current image paths
-            } catch (error) {
-                console.error('Error fetching about data for editing:', error);
-            }
-        };
+        if (status === 'idle') {
+            dispatch(fetchAboutData(id));
+        }
+    }, [id, status, dispatch]);
 
-        fetchAboutData();
-    }, [id]);
+    useEffect(() => {
+        if (aboutItem) {
+            setTitle(aboutItem.title || '');
+            setContent(aboutItem.content || '');
+            setImagePaths(aboutItem.imagePaths || []);
+        }
+    }, [aboutItem]);
 
     const handleUpdate = async () => {
         try {
@@ -38,17 +38,19 @@ export default function EditAboutUs() {
             formData.append('title', title);
             formData.append('content', content);
 
-            // Append each new image file to formData
             for (let i = 0; i < imageFiles.length; i++) {
                 formData.append('imageFiles', imageFiles[i]);
             }
 
-            // If no new images selected, retain the current image paths
-            if (imageFiles.length === 0) {
-                formData.append('imagePaths', JSON.stringify(imagePaths));
-            }
+            formData.append('imagePaths', JSON.stringify(imagePaths));
 
-            await dispatch(updateAboutItem(formData)).unwrap();
+            await dispatch(updateAboutItem({
+                id,
+                title,
+                content,
+                imageFiles: imageFiles.length > 0 ? imageFiles : undefined,
+                imagePaths: imagePaths
+            })).unwrap();
 
             console.log('About data updated successfully');
             navigate('/aboutus'); // Navigate back to AboutUs after successful update
@@ -61,32 +63,70 @@ export default function EditAboutUs() {
         setImageFiles(e.target.files); // Store the selected image files
     };
 
+    if (status === 'loading') {
+        return <p>Loading...</p>;
+    }
+
+    if (status === 'failed') {
+        return <p>Error: {error}</p>;
+    }
+
     return (
         <div className='container'>
             <h2>Edit About Data</h2>
             <form>
                 <div className="form-group">
                     <label>Title</label>
-                    <input type="text" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 <div className="form-group">
                     <label>Content</label>
-                    <textarea className="form-control" rows="3" value={content} onChange={(e) => setContent(e.target.value)} />
+                    <textarea
+                        className="form-control"
+                        rows="3"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                    />
                 </div>
                 <div className="form-group">
                     <label>Current Images</label>
-                    {imagePaths.map((imagePath, index) => (
-                        <div key={index} className="mb-2">
-                            <img src={`http://localhost:5034/${imagePath}`} alt={`Image ${index}`} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
-                            <span>{imagePath}</span>
+                    {imagePaths.length > 0 ? (
+                        <div className="d-flex flex-wrap">
+                            {imagePaths.map((imagePath, index) => (
+                                <div key={index} className="mb-2 mr-2">
+                                    <img
+                                        src={`http://localhost:5034${imagePath}`}
+                                        alt={`Image ${index}`}
+                                        style={{ width: "100px", height: "100px" }}
+                                    />
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    ) : (
+                        <p>No images available</p>
+                    )}
                 </div>
                 <div className="form-group">
                     <label>Upload New Images</label>
-                    <input type="file" className="form-control-file" onChange={handleImageChange} multiple />
+                    <input
+                        type="file"
+                        className="form-control-file"
+                        onChange={handleImageChange}
+                        multiple
+                    />
                 </div>
-                <button type="button" className="btn btn-primary" onClick={handleUpdate}>Save Changes</button>
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleUpdate}
+                >
+                    Save Changes
+                </button>
             </form>
         </div>
     );
