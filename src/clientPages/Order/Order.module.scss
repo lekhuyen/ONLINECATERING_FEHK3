@@ -63,13 +63,7 @@
     font-family: monospace;
     margin-bottom: 0;
 }
-// .item-restaurant-more p {
-//     color: #0288d1;
-//     font-size: 24px;
-//     font-weight: 700;
-//     font-family: monospace;
-//     margin-bottom: 0;
-// }
+
 .item-restaurant-more div {
     width: 25px;
     height: 25px;
@@ -89,4 +83,48 @@
 }
 .content-sumary {
     padding: 10px 20px 0;
+}
+
+//total price
+.total-price {
+    width: 60%;
+    height: 50px;
+    margin: auto;
+    // background-color: #fff;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 100px;
+}
+.total-price div {
+    // padding-right: 50px;
+    display: flex;
+    // justify-content: flex-end;
+    gap: 20px;
+    align-items: center;
+}
+.total-price div p {
+    font-size: 25px;
+    font-weight: 600;
+    color: #dcca87;
+    margin-bottom: 0;
+}
+.total-price div p span{
+    color: #fff;
+}
+.btn-order {
+    width: 50px;
+    height: 40px;
+    // background-color: #0288d1;
+    text-align: center;
+}
+.btn-order button {
+    color: #fff;
+    background-color: #0288d1;
+    font-size: 17px;
+    font-weight: bold;
+    width: 50px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
 }
