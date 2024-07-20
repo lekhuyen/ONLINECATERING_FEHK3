@@ -16,7 +16,6 @@ import CreateAboutUs from "../adminPages/Information/CreateAboutUs"
 import CreateNews from "../adminPages/Information/CreateNews"
 import EditAboutUs from "../adminPages/Information/EditAboutUs"
 
-
 const publicRoutes = [
     {path: "/", component: Home},
     {path: "/about", component: About},
