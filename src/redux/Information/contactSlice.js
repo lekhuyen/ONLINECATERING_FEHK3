@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-    export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
+export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
     const response = await axios.get("http://localhost:5034/api/Contact");
     return response.data.data;
     });
@@ -27,13 +27,18 @@ import axios from "axios";
 
         export const respondToContact = createAsyncThunk(
             "contacts/respondToContact",
-            async ({ id, response }) => {
+            async ({ id, responseMessage }) => {
                 try {
                     const result = await axios.post(
                         `http://localhost:5034/api/contact/respond/${id}`,
-                        { response }
+                        responseMessage,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }
                     );
-                    return result.data.data;
+                    return { id, data: result.data.data }; // Return id and response data
                 } catch (error) {
                     console.error("Error responding to contact:", error);
                     throw error.response?.data || { message: "Unknown error occurred" };
@@ -87,19 +92,23 @@ import axios from "axios";
         // Handle respondToContact actions
         .addCase(respondToContact.pending, (state) => {
             state.status = "loading";
-            })
-            .addCase(respondToContact.fulfilled, (state, action) => {
-                const index = state.items.findIndex(
+        })
+        .addCase(respondToContact.fulfilled, (state, action) => {
+            // Find the index of the contact being responded to
+            const index = state.items.findIndex(
                 (contact) => contact.id === action.payload.id
-                );
-                if (index !== -1) {
+            );
+            // Update the response message in the state
+            if (index !== -1) {
                 state.items[index].response = action.payload.response;
-                }
-            })
-            .addCase(respondToContact.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload ? action.payload.message : "Unknown error occurred";
-            })
+                state.items[index].isAdminResponse = true; // Assuming this flag is set upon successful response
+            }
+            state.status = "succeeded";
+        })
+        .addCase(respondToContact.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload ? action.payload.message : "Unknown error occurred";
+        })
 
             
 
@@ -111,5 +120,6 @@ import axios from "axios";
         });
     },
 });
+
 
 export default contactSlice.reducer;
