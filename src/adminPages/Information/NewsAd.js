@@ -6,7 +6,7 @@ import {
   deleteNewsItem,
   fetchNewsData,
 } from "../../redux/Information/newsSlice";
-// import "@fortawesome/fontawesome-free/css/all.css"; // Import Font Awesome CSS
+import "@fortawesome/fontawesome-free/css/all.css"; // Import Font Awesome CSS
 
 function NewsAd() {
   const dispatch = useDispatch();

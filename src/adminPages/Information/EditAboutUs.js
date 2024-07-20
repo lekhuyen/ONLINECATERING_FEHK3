@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { updateAboutItem } from '../../redux/Information/aboutSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAboutData, updateAboutItem } from '../../redux/Information/aboutSlice';
 
 export default function EditAboutUs() {
     const { id } = useParams(); // Get id from URL params
@@ -13,23 +12,24 @@ export default function EditAboutUs() {
     const [content, setContent] = useState('');
     const [imageFiles, setImageFiles] = useState([]); // Handle multiple files
     const [imagePaths, setImagePaths] = useState([]);
+    
+    const aboutItem = useSelector((state) => state.about.items.find(item => item.id === id));
+    const status = useSelector((state) => state.about.status);
+    const error = useSelector((state) => state.about.error);
 
     useEffect(() => {
-        const fetchAboutData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5034/api/About/${id}`);
-                const { title, content, imagePaths } = response.data;
+        if (status === 'idle') {
+            dispatch(fetchAboutData(id));
+        }
+    }, [id, status, dispatch]);
 
-                setTitle(title || '');
-                setContent(content || '');
-                setImagePaths(imagePaths || []);
-            } catch (error) {
-                console.error('Error fetching about data for editing:', error);
-            }
-        };
-
-        fetchAboutData();
-    }, [id]);
+    useEffect(() => {
+        if (aboutItem) {
+            setTitle(aboutItem.title || '');
+            setContent(aboutItem.content || '');
+            setImagePaths(aboutItem.imagePaths || []);
+        }
+    }, [aboutItem]);
 
     const handleUpdate = async () => {
         try {
@@ -38,12 +38,10 @@ export default function EditAboutUs() {
             formData.append('title', title);
             formData.append('content', content);
 
-            // Append each new image file to formData
             for (let i = 0; i < imageFiles.length; i++) {
                 formData.append('imageFiles', imageFiles[i]);
             }
 
-            // Include existing images in the update
             formData.append('imagePaths', JSON.stringify(imagePaths));
 
             await dispatch(updateAboutItem({
@@ -64,6 +62,14 @@ export default function EditAboutUs() {
     const handleImageChange = (e) => {
         setImageFiles(e.target.files); // Store the selected image files
     };
+
+    if (status === 'loading') {
+        return <p>Loading...</p>;
+    }
+
+    if (status === 'failed') {
+        return <p>Error: {error}</p>;
+    }
 
     return (
         <div className='container'>
@@ -98,9 +104,6 @@ export default function EditAboutUs() {
                                         alt={`Image ${index}`}
                                         style={{ width: "100px", height: "100px" }}
                                     />
-                                    <div className="text-center">
-                                        <span>{imagePath}</span>
-                                    </div>
                                 </div>
                             ))}
                         </div>
