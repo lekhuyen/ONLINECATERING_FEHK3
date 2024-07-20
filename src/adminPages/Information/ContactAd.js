@@ -14,7 +14,7 @@ const ContactAd = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const contactsPerPage = 10;
+  const contactsPerPage = 5;
 
   useEffect(() => {
     if (contactStatus === "idle") {
@@ -23,7 +23,7 @@ const ContactAd = () => {
   }, [contactStatus, dispatch]);
 
   const handleRespondClick = (id) => {
-    navigate(`/response/${id}`);
+    navigate(`/contactus/responsemessage/${id}`);
   };
 
   const handleDeleteClick = (id) => {
@@ -125,7 +125,7 @@ const ContactAd = () => {
       {contactStatus === "failed" && <div>{error}</div>}
       {contactStatus === "succeeded" && (
         <div>
-          <table className="table table-dark">
+          <table className="table ">
             <thead>
               <tr>
                 <th>Id</th>
@@ -147,28 +147,31 @@ const ContactAd = () => {
                   <td>{contact.phone}</td>
                   <td>
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-outline-info"
                       onClick={() => handleRespondClick(contact.id)}
                     >
-                      Respond
+                      <i class="fa fa-reply" aria-hidden="true"></i>
                     </button>
                   </td>
                   <td>
-                    <span
-                      style={{
-                        color: contact.isAdminResponse ? "green" : "red",
-                      }}
-                    >
-                      ●
+                  <td>
+                    <span style={{ color: contact.isAdminResponse ? "green" : "red" }}>
+                      {contact.isAdminResponse ? (
+                        <i className="fa fa-check-square" aria-hidden="true"></i>
+                      ) : (
+                        <i className="fa fa-times-circle-o" aria-hidden="true"></i>
+                      )}
                     </span>
+                  </td>
+
                   </td>
                   <td>{contact.responseDate}</td>
                   <td>
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-outline-danger"
                       onClick={() => handleDeleteClick(contact.id)}
                     >
-                      Delete
+                      <i className="fa fa-trash" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>

@@ -10,6 +10,7 @@ import Account from "../clientPages/Account"
 import AboutUs from "../adminPages/Information/AboutUs"
 import NewsAd from "../adminPages/Information/NewsAd"
 import ContactAd from "../adminPages/Information/ContactAd"
+import ResponseMessage from "../adminPages/Information/ResponseMessage"
 
 
 const publicRoutes = [
@@ -26,6 +27,7 @@ const privateRoutes = [
     {path: "/aboutus", component: AboutUs},
     {path: "/newsadmin", component: NewsAd},
     {path: "/contactus", component: ContactAd},
+    {path: "/contactus/responsemessage/:id", component: ResponseMessage},
     {path: "/user-manager", component: UserManager},
     {path: "/product-manager", component: ProductManager},
 ]
