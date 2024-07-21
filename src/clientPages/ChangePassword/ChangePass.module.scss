@@ -1,0 +1,40 @@
+
+.user_pass_change_title {
+    text-align: center;
+    padding-top: 20px;
+}
+.user_pass_input {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    margin-top: 20px;
+}
+.user_pass_input_title {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 30px;
+}
+.user_pass_input div span {
+    font-weight: bold;
+}
+.user_pass_input div input {
+    border: none;   
+    outline: none;
+    height: 30px;
+    padding: 2px;
+}
+.user_btn_update {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+.user_btn_update button {
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f7d794;
+    color: #fff;
+    font-weight: 600;
+}

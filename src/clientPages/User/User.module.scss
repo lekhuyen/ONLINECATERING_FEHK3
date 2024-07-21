@@ -1,0 +1,88 @@
+.user_container {
+    margin-top: 76px;
+}
+.user_row {
+    width: 60%;
+    // background-color: #fff;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 10px;
+    padding: 100px 0;
+}
+.user_history_left {
+    background: rgb(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    height: max-content;
+
+}
+.header_info {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.user_name p {
+    margin-bottom: 0;
+    margin-left: 20px;
+}
+.user_avatar img {
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid #f7d794;
+}
+.user_info {
+    font-weight: bold;
+    color: #fff;
+}
+.user_name p {
+    color: #f7d794;
+}
+
+.user_tab {
+    color: #fff;
+    display: flex;
+    padding-left: 20px;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: .3s;
+}
+.user_tab:hover {
+    background-color: #f7d794;
+}
+.user_tab.user_tab_hover {
+    background-color: #f7d794;
+}
+.user_tab :last-child{
+    border-bottom: 0;
+}
+.user_tab p {
+    margin-bottom: 0;
+}
+.user_tab p:first-child{
+    margin-right: 10px;
+}
+
+
+.user_history_right {
+    background: rgb(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    color: #fff;
+    height: max-content;
+}
+
+
+

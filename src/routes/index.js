@@ -18,6 +18,7 @@ import EditAboutUs from "../adminPages/Information/EditAboutUs"
 import EditNews from "../adminPages/Information/EditNews"
 
 import Order from "../clientPages/Order"
+import User from "../clientPages/User"
 
 const publicRoutes = [
     {path: "/", component: Home},
@@ -28,6 +29,7 @@ const publicRoutes = [
     {path: "/account", component: Account},
     {path: "/menu", component: Menu},
     {path: "/order", component: Order},
+    {path: "/user", component: User},
 ]
 
 const privateRoutes = [
