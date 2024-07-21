@@ -4,7 +4,6 @@ import { createContact } from '../../redux/Information/contactSlice';
 
 
 const Contact = () => {
-
   const dispatch = useDispatch();
 
   const [contact, setContact] = useState({
@@ -16,6 +15,8 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     setContact({
@@ -41,7 +42,8 @@ const Contact = () => {
         const lastSubmitDate = new Date(lastSubmitTime);
         if (now.getDate() === lastSubmitDate.getDate()) {
           // Same email address has already submitted today
-          alert('You have reached the limit for sending messages today from this email.');
+          setModalMessage('You have reached the limit for sending messages today from this email.');
+          setShowModal(true);
           return;
         }
       }
@@ -66,7 +68,8 @@ const Contact = () => {
       localStorage.setItem('lastSubmitEmail', contact.email);
 
       setIsSubmitting(false);
-      alert('Contact message sent successfully!');
+      setModalMessage('Contact message sent successfully!');
+      setShowModal(true);
     } catch (error) {
       console.error('Error creating contact:', error);
       setSubmitError('Failed to send contact message. Please try again.');
@@ -82,20 +85,20 @@ const Contact = () => {
       </div>
       <div className='container mt-3 d-flex'>
         <div className="row mt-5 pt-5">
-          <div class="card border border-white">
-            <div class="card-body">
-              <h4 class="card-title">Please feel free to contact us if you have any questions or suggestion</h4>
-              <p class="card-text">
+          <div className="card border border-white">
+            <div className="card-body">
+              <h4 className="card-title">Please feel free to contact us if you have any questions or suggestions</h4>
+              <p className="card-text">
                 The beginning of your perfect event is having the best possible
                 understanding of your vision.
               </p>
-              <p class="card-text">
+              <p className="card-text">
                 Let us know, in as much detail as you can, what you’re dreaming of and we’ll get the party started!
               </p>
-              <p class="card-text">
+              <p className="card-text">
                 You can also contact us by +1 212-344-1230 or +1 212-555-1230 or via onlinecatering@gmail.com
               </p>
-              <p class="card-text">
+              <p className="card-text">
                 Online Catering is located at 9 W 53rd St, New York, NY 10019, USA
               </p>
             </div>
@@ -103,7 +106,7 @@ const Contact = () => {
         </div>
         <div className='row mt-3 ml-auto'>
           <h4>Contact Form</h4>
-          <div class="card border border-white" style={{ maxWidth: "500px" }}>
+          <div className="card border border-white" style={{ maxWidth: "500px" }}>
             <div className='container mb-3'>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -166,6 +169,26 @@ const Contact = () => {
           </div>
         </div>
 
+      </div>
+
+      {/* Modal */}
+      <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Alert</h5>
+              <button type="button" className="close" onClick={() => setShowModal(false)} aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>{modalMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const About = () => {
     }
 
     return (
-        <div className="about_us container mt-5">
+        <div className="about_us container-fluid mt-5">
             {/* About Us Section */}
             <div className=' mb-4'>
                 <h4 className='about_us_title'>About Us</h4>
