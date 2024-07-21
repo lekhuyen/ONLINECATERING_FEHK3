@@ -1,6 +1,6 @@
 /* src/clientPages/AboutUs/AboutUs.css */
 
-.container.about_us {
+.container-fluid.about_us {
     background-color: black;
     color: lightyellow;
     padding: 20px;
