@@ -6,12 +6,15 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from "react-icons/bs";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { IoMdCreate } from 'react-icons/io';
+import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
+import AboutUsType from './AboutUsType'; // Import the AboutUsType component
 
 function AboutUs() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const aboutData = useSelector((state) => state.about.items);
+    const aboutTypeData = useSelector((state) => state.aboutTypes?.items || []);
     const status = useSelector((state) => state.about.status);
     const error = useSelector((state) => state.about.error);
 
@@ -22,6 +25,7 @@ function AboutUs() {
 
     useEffect(() => {
         dispatch(fetchAboutData());
+        dispatch(fetchAboutTypes());
     }, [dispatch]);
 
     const handleDelete = (id) => {
@@ -56,8 +60,7 @@ function AboutUs() {
         return (
             about.title.toLowerCase().includes(searchTermLowerCase) ||
             about.content.toLowerCase().includes(searchTermLowerCase) ||
-            about.aboutTypeName.toLowerCase().includes(searchTermLowerCase) 
-
+            about.aboutTypeName.toLowerCase().includes(searchTermLowerCase)
         );
     });
 
@@ -82,7 +85,7 @@ function AboutUs() {
             <h2>About Us Content</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-12">
+                <div className="col-sm-6">
                     <label htmlFor="searchTerm" className="form-label">
                         Search Title/Content/Type:
                     </label>
@@ -95,9 +98,23 @@ function AboutUs() {
                         placeholder='Type to search...'
                     />
                 </div>
+
+                <div className="col-sm-6">
+                    <label htmlFor="aboutType" className="form-label">
+                        About Type
+                    </label>
+                    <button
+                        type="button"
+                        className="btn btn-info btn-lg"
+                        data-toggle="modal"
+                        data-target="#TypeModal"
+                    >
+                        Create About Type
+                    </button>
+                </div>
             </div>
 
-            <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}><IoMdCreate /></button>
+            <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}>Add About Us</button>
 
             <div className="container mt-5">
                 <table className="table table-hover">
@@ -138,21 +155,18 @@ function AboutUs() {
                                         data-toggle="modal"
                                         data-target="#myModal"
                                     >
-
                                         <BsInfoCircle />
                                     </button>
                                     <button
                                         className="btn btn-outline-warning"
                                         onClick={() => handleEdit(about.id)}
                                     >
-
                                         <HiOutlinePencilSquare />
                                     </button>
                                     <button
                                         className="btn btn-outline-danger"
                                         onClick={() => handleDelete(about.id)}
                                     >
-
                                         <FaRegTrashAlt />
                                     </button>
                                 </td>
@@ -216,6 +230,8 @@ function AboutUs() {
                     </div>
                 </div>
             </div>
+
+            <AboutUsType aboutTypeData={aboutTypeData} />
 
             <nav>
                 <ul className="pagination">
