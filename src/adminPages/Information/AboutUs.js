@@ -126,7 +126,7 @@ function AboutUs() {
             <h2>About Us Content</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-6">
+                <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
                         Search Title/Content/Type:
                     </label>
@@ -145,7 +145,7 @@ function AboutUs() {
                     </div>
                 </div>
 
-                <div className="col-sm-6">
+                <div className="col-sm-3">
                     <label htmlFor="aboutType" className="form-label">
                         About Type
                     </label>
