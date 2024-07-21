@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { deleteAboutItem, fetchAboutData } from '../../redux/Information/aboutSlice';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from "react-icons/bs";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { fetchAboutTypes, createAboutType, deleteAboutType, updateAboutType } from '../../redux/Information/aboutTypeSlice';
+import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { IoMdCreate } from 'react-icons/io';
-import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
-import AboutUsType from './AboutUsType'; // Import the AboutUsType component
 
 function AboutUs() {
     const dispatch = useDispatch();
@@ -22,6 +21,8 @@ function AboutUs() {
     const itemsPerPage = 5;
     const [selectedAboutUs, setSelectedAboutUs] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [newAboutTypeName, setNewAboutTypeName] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         dispatch(fetchAboutData());
@@ -38,6 +39,36 @@ function AboutUs() {
 
     const handleInfoClick = (aboutus) => {
         setSelectedAboutUs(aboutus);
+    };
+
+    const handleDeleteType = (id) => {
+        if (window.confirm("Are you sure you want to delete this About Type?")) {
+            dispatch(deleteAboutType(id));
+        }
+    };
+
+    const handleEditType = async (id, newName) => {
+        const updatedType = { id, aboutTypeName: newName };
+        try {
+            const response = await fetch(`http://localhost:5034/api/About/abouttypes/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedType),
+            });
+            if (response.ok) {
+                // Assuming the response returns updated data, you may dispatch an action
+                // to update your Redux store if needed.
+                dispatch(updateAboutType(updatedType)); // Assuming you have an action like this in your redux
+                // Or you can re-fetch the types after successful update
+                dispatch(fetchAboutTypes());
+            } else {
+                console.error('Failed to edit About Type:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error editing About Type:', error);
+        }
     };
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -68,16 +99,26 @@ function AboutUs() {
         setSearchTerm(e.target.value);
     };
 
+    const handleAddAboutType = async () => {
+        if (!newAboutTypeName.trim()) return;
+        
+        setIsSubmitting(true);
+        try {
+            await dispatch(createAboutType({ aboutTypeName: newAboutTypeName }));
+            setNewAboutTypeName("");
+        } catch (error) {
+            console.error('Error adding about type:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     if (status === 'loading') {
         return <div>Loading...</div>;
     }
 
     if (status === 'failed') {
         return <div>Error: {error}</div>;
-    }
-
-    if (!Array.isArray(aboutData)) {
-        return null;
     }
 
     return (
@@ -89,28 +130,35 @@ function AboutUs() {
                     <label htmlFor="searchTerm" className="form-label">
                         Search Title/Content/Type:
                     </label>
-                    <input
-                        type="text"
-                        id="searchTerm"
-                        className="form-control"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        placeholder='Type to search...'
-                    />
+                    <div className="input-group">
+                        <input
+                            type="text"
+                            id="searchTerm"
+                            className="form-control"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            placeholder="Type to search..."
+                        />
+                        <button className="btn btn-outline-secondary" type="button">
+                            Search
+                        </button>
+                    </div>
                 </div>
 
                 <div className="col-sm-6">
                     <label htmlFor="aboutType" className="form-label">
                         About Type
                     </label>
-                    <button
-                        type="button"
-                        className="btn btn-info btn-lg"
-                        data-toggle="modal"
-                        data-target="#TypeModal"
-                    >
-                        Create About Type
-                    </button>
+                    <div className="d-flex">
+                        <button
+                            type="button"
+                            className="btn btn-info btn-lg me-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#TypeModal"
+                        >
+                            Create About Type
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -176,62 +224,78 @@ function AboutUs() {
                 </table>
             </div>
 
-            <div className="modal fade" id="myModal" role="dialog">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title float-start">
-                                About Title: {selectedAboutUs && selectedAboutUs.title}
-                            </h4>
-                            <button
-                                type="button"
-                                className="btn btn-danger float-end"
-                                data-dismiss="modal"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            {selectedAboutUs && (
-                                <div>
-                                    <h5>About Content:</h5>
-                                    <p>{selectedAboutUs.content}</p>
-                                    <h5>About Image(s):</h5>
-                                    {selectedAboutUs.imagePaths &&
-                                        selectedAboutUs.imagePaths.length > 0 ? (
-                                            selectedAboutUs.imagePaths.map((imagePath, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={`http://localhost:5034${imagePath}`}
-                                                    alt={`About ${selectedAboutUs.id}`}
-                                                    style={{
-                                                        width: "20%",
-                                                        height: "auto",
-                                                        marginBottom: "10px",
-                                                        objectFit: "cover",
-                                                    }}
-                                                />
-                                            ))
-                                        ) : (
-                                            <p>No images available</p>
-                                        )}
+            {/* Modal for Create About Type */}
+            <div className='container'>
+                <h2>About Us Type</h2>
+                <button type="button" className="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#TypeModal">
+                    Create About Type
+                </button>
+
+                <div className="modal fade" id="TypeModal" role="dialog">
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">Type of About Us</h4>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>About Type Name</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {aboutTypeData.map((type) => (
+                                            <tr key={type.id}>
+                                                <td>{type.aboutTypeName}</td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-outline-warning"
+                                                        onClick={() => handleEditType(type.id, prompt("Enter new name"))}
+                                                    >
+                                                        <HiOutlinePencilSquare />
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-outline-danger"
+                                                        onClick={() => handleDeleteType(type.id)}
+                                                    >
+                                                        <FaRegTrashAlt />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+
+                                <div className="form-group">
+                                    <label htmlFor="newAboutTypeName">New About Type Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="newAboutTypeName"
+                                        value={newAboutTypeName}
+                                        onChange={(e) => setNewAboutTypeName(e.target.value)}
+                                        required
+                                    />
                                 </div>
-                            )}
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-dismiss="modal"
-                            >
-                                Close
-                            </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleAddAboutType}
+                                    disabled={isSubmitting}
+                                >
+                                    <IoMdCreate /> {isSubmitting ? 'Adding...' : 'Add Type'}
+                                </button>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <AboutUsType aboutTypeData={aboutTypeData} />
 
             <nav>
                 <ul className="pagination">
