@@ -1,10 +1,10 @@
 .order_container {
-    margin-top: 76px;
+    margin-top: 70px;
 }
 .order_header_title {
     display: flex;
     justify-content: center;
-    padding-top: 30px;
+    padding-top: 20px;
     color: #fff;
 }
 //order
@@ -25,7 +25,7 @@
 }
 .item-restaurant-info {
     display: flex;
-    color: #dcca87;
+    color: #f7d794;
 }
 .item-restaurant-1 {
     display: flex;
@@ -46,10 +46,12 @@
 .item-restaurant-name span {
     font-size: 20px;
     font-weight: 600;
-    font-family: monospace;
+    // font-family: monospace;
+    font-family: cursive;
 }
 .item-restaurant-name p {
-    font-family: 'Courier New', Courier, monospace;
+    // font-family: 'Courier New', Courier, monospace;
+    font-family: cursive;
 }
 .item-restaurant-more {
     display: flex;
@@ -57,10 +59,10 @@
 }
 
 .item-price p {
-    color: #0288d1;
-    font-size: 24px;
+    color: #1a9b5f;
+    font-size: 20px;
     font-weight: 700;
-    font-family: monospace;
+    font-family: cursive;
     margin-bottom: 0;
 }
 
@@ -74,12 +76,12 @@
     height: 100%;
     color: #fff;
     border: none;
-    background-color: #d02028;
+    background-color: #ff3f34;
     border-radius: 4px;
     cursor: pointer;
 }
 .item-restaurant-more div button:hover{
-    background-color: #e71a24;
+    background-color: #ef5777;
 }
 .content-sumary {
     padding: 10px 20px 0;
@@ -120,10 +122,10 @@
 }
 .btn-order button {
     color: #fff;
-    background-color: #0288d1;
+    background-color: #FD7272;
     font-size: 17px;
     font-weight: bold;
-    width: 50px;
+    width: 100px;
     height: 40px;
     border: none;
     border-radius: 5px;
