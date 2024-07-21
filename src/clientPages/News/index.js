@@ -31,34 +31,35 @@ const News = () => {
     }
 
     return (
-        <div className="container mt-5">
-        <h2>News</h2>
-
-        <div className="row">
-            {newsData.map((news) => (
-                <div className="col-md-4 mb-3" key={news.id}>
-                    <div className="card" style={{ maxWidth: '400px' }}>
-                        <div className="card-body">
-                            <h4 className="card-title">{news.title}</h4>
-                            <p className="card-text">{news.content}</p>
-                            <div className="row">
-                                {news.imagePaths && news.imagePaths.map((image, index) => (
-                                    <div className="col-md-4" key={index}>
-                                        <img
-                                            src={`http://localhost:5034${image}`}
-                                            alt={`News ${index}`}
-                                            className="img-fluid"
-                                            style={{ marginBottom: '10px' }}
-                                        />
+        <div className="container pt-5 mt-5">
+            <h2>News</h2>
+            <div className="container-fluid">
+                <div className="row">
+                    {newsData.map((news) => (
+                        <div className="col-md-4 mb-3" key={news.id}>
+                            <div className="card border-light">
+                                <div className="card-body">
+                                    <h4 className="card-title">{news.title}</h4>
+                                    <p className="card-text">{news.content}</p>
+                                    <div className="row">
+                                        {news.imagePaths && news.imagePaths.map((image, index) => (
+                                            <div className="col-md-4" key={index}>
+                                                <img
+                                                    src={`http://localhost:5034${image}`}
+                                                    alt={`News ${index}`}
+                                                    className="img-fluid"
+                                                    style={{ marginBottom: '10px' }}
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
-            ))}
+            </div>
         </div>
-    </div>
     );
 };
 

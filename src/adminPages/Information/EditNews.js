@@ -1,44 +1,45 @@
+// EditNews Component
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAboutData, updateAboutItem } from '../../redux/Information/aboutSlice';
-import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
+import { fetchNewsData, updateNewsItem } from '../../redux/Information/newsSlice';
+import { fetchNewsTypes } from '../../redux/Information/newsTypeSlice';
 
-export default function EditAboutUs() {
-    const { id } = useParams(); // Get id from URL params
-    const navigate = useNavigate(); // Initialize useNavigate hook
-    const dispatch = useDispatch(); // Initialize useDispatch hook
+export default function EditNews() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [aboutTypeId, setAboutTypeId] = useState('');
-    const [imageFiles, setImageFiles] = useState([]); // Handle multiple files
+    const [newsTypeId, setNewsTypeId] = useState('');
+    const [imageFiles, setImageFiles] = useState([]);
     const [imagePaths, setImagePaths] = useState([]);
 
-    const aboutItem = useSelector((state) => state.about.items.find(item => item.id === id));
-    const aboutTypes = useSelector((state) => state.aboutTypes.items);
-    const status = useSelector((state) => state.about.status);
-    const aboutTypeStatus = useSelector((state) => state.aboutTypes.status);
-    const error = useSelector((state) => state.about.error);
+    const newsItem = useSelector((state) => state.news.items.find(item => item.id === id));
+    const newsTypes = useSelector((state) => state.newsTypes.items);
+    const status = useSelector((state) => state.news.status);
+    const newsTypeStatus = useSelector((state) => state.newsTypes.status);
+    const error = useSelector((state) => state.news.error);
 
     useEffect(() => {
         if (status === 'idle') {
-            dispatch(fetchAboutData(id));
+            dispatch(fetchNewsData(id));
         }
-        if (aboutTypeStatus === 'idle') {
-            dispatch(fetchAboutTypes());
+        if (newsTypeStatus === 'idle') {
+            dispatch(fetchNewsTypes());
         }
-    }, [id, status, aboutTypeStatus, dispatch]);
+    }, [id, status, newsTypeStatus, dispatch]);
 
     useEffect(() => {
-        if (aboutItem) {
-            setTitle(aboutItem.title || '');
-            setContent(aboutItem.content || '');
-            setImagePaths(aboutItem.imagePaths || []);
-            const selectedType = aboutTypes.find(type => type.aboutTypeName === aboutItem.aboutTypeName);
-            setAboutTypeId(selectedType ? selectedType.id : '');
+        if (newsItem) {
+            setTitle(newsItem.title || '');
+            setContent(newsItem.content || '');
+            setImagePaths(newsItem.imagePaths || []);
+            const selectedType = newsTypes.find(type => type.aboutTypeName === newsItem.aboutTypeName);
+            setNewsTypeId(selectedType ? selectedType.id : '');
         }
-    }, [aboutItem, aboutTypes]);
+    }, [newsItem, newsTypes]);
 
     const handleUpdate = async () => {
         try {
@@ -46,7 +47,7 @@ export default function EditAboutUs() {
             formData.append('id', id);
             formData.append('title', title);
             formData.append('content', content);
-            formData.append('aboutTypeId', aboutTypeId);
+            formData.append('newsTypeId', newsTypeId);
 
             for (let i = 0; i < imageFiles.length; i++) {
                 formData.append('imageFiles', imageFiles[i]);
@@ -54,27 +55,27 @@ export default function EditAboutUs() {
 
             formData.append('imagePaths', JSON.stringify(imagePaths));
 
-            await dispatch(updateAboutItem({
+            await dispatch(updateNewsItem({
                 id,
                 title,
                 content,
-                aboutTypeId,
+                newsTypeId,
                 imageFiles: imageFiles.length > 0 ? imageFiles : undefined,
                 imagePaths: imagePaths
             })).unwrap();
 
-            console.log('About data updated successfully');
-            navigate('/aboutus'); // Navigate back to AboutUs after successful update
+            console.log('News data updated successfully');
+            navigate('/newsadmin');
         } catch (error) {
-            console.error('Error updating about data:', error);
+            console.error('Error updating news item:', error);
         }
     };
 
     const handleImageChange = (e) => {
-        setImageFiles(e.target.files); // Store the selected image files
+        setImageFiles(e.target.files);
     };
 
-    if (status === 'loading' || aboutTypeStatus === 'loading') {
+    if (status === 'loading' || newsTypeStatus === 'loading') {
         return <p>Loading...</p>;
     }
 
@@ -82,11 +83,9 @@ export default function EditAboutUs() {
         return <p>Error: {error}</p>;
     }
 
-    console.log('AboutTypes:', aboutTypes); // Log the aboutTypes to verify structure
-
     return (
         <div className='container'>
-            <h2>Edit About Data</h2>
+            <h2>Edit News Data</h2>
             <form>
                 <div className="form-group">
                     <label>Title</label>
@@ -108,18 +107,18 @@ export default function EditAboutUs() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="aboutTypeId">About Type</label>
+                    <label htmlFor="newsTypeId">News Type</label>
                     <select
                         className="form-control"
-                        id="aboutTypeId"
-                        value={aboutTypeId}
-                        onChange={(e) => setAboutTypeId(e.target.value)}
+                        id="newsTypeId"
+                        value={newsTypeId}
+                        onChange={(e) => setNewsTypeId(e.target.value)}
                         required
                     >
-                        <option value="">Select About Type</option>
-                        {aboutTypes.map((type) => (
+                        <option value="">Select News Type</option>
+                        {newsTypes.map((type) => (
                             <option key={type.id} value={type.id}>
-                                {type.aboutTypeName}
+                                {type.newsTypeName}
                             </option>
                         ))}
                     </select>

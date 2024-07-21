@@ -6,6 +6,11 @@ import {
   deleteNewsItem,
   fetchNewsData,
 } from "../../redux/Information/newsSlice";
+import { BsInfoCircle } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
+
+import { IoNewspaperOutline } from "react-icons/io5";
 // import "@fortawesome/fontawesome-free/css/all.css"; // Import Font Awesome CSS
 
 function NewsAd() {
@@ -41,8 +46,10 @@ function NewsAd() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/News-edit/${id}`);
+    navigate(`/newsadmin/edit-news/${id}`);
   };
+
+
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -128,7 +135,7 @@ function NewsAd() {
         className="btn btn-success mb-3"
         onClick={() => navigate("/newsadmin/create-news")}
       >
-        Create News
+        Create News <IoNewspaperOutline />
       </button>
 
       <table className="table table-hover">
@@ -170,18 +177,19 @@ function NewsAd() {
                   data-target="#myModal"
                 >
                   <i className="fa fa-info-circle" aria-hidden="true"></i>
+                  <BsInfoCircle />
                 </button>
                 <button
                   className="btn btn-outline-warning"
                   onClick={() => handleEdit(news.id)}
                 >
-                  <i className="fa fa-pencil-square" aria-hidden="true"></i>
+                  <HiOutlinePencilSquare />
                 </button>
                 <button
                   className="btn btn-outline-danger"
                   onClick={() => handleDelete(news.id)}
                 >
-                  <i className="fa fa-trash" aria-hidden="true"></i>
+                  <FaRegTrashAlt />
                 </button>
               </td>
             </tr>

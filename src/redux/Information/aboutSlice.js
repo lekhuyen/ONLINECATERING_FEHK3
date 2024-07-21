@@ -1,119 +1,112 @@
-    import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-    import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
-    const apiEndpoint = "http://localhost:5034/api/About";
+const apiEndpoint = "http://localhost:5034/api/About";
 
-    // Async thunk to fetch about data
-    export const fetchAboutData = createAsyncThunk(
-        "about/fetchAboutData",
-        async () => {
-            try {
-                const response = await axios.get(apiEndpoint);
-                return response.data.data;
-            } catch (error) {
-                throw new Error('Error fetching about data:', error);
-            }
+// Async thunk to fetch about data
+export const fetchAboutData = createAsyncThunk(
+    "about/fetchAboutData",
+    async () => {
+        try {
+            const response = await axios.get(apiEndpoint);
+            return response.data.data;
+        } catch (error) {
+            throw new Error('Error fetching about data:', error.response.data);
         }
-    );
+    }
+);
 
-    // Async thunk to create new about item
-    export const createAboutUsItem = createAsyncThunk(
-        "about/createAboutUsItem",
-        async (newAboutItem) => {
-            try {
-                const formData = new FormData();
-                formData.append('title', newAboutItem.title);
-                formData.append('content', newAboutItem.content);
-                if (newAboutItem.imagePaths) {
-                    newAboutItem.imagePaths.forEach((file, index) => {
-                        formData.append(`imageFiles`, file);
-                    });
-                }
-
-                const response = await axios.post(apiEndpoint, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-
-                return response.data.data;
-            } catch (error) {
-                throw new Error('Error creating about item:', error);
-            }
-        }
-    );
-
-    export const updateAboutItem = createAsyncThunk(
-        "about/updateAboutItem",
-        async (updatedAbout) => {
-        const { id, title, content, imagePaths } = updatedAbout;
+// Async thunk to create new about item
+export const createAboutUsItem = createAsyncThunk(
+    "about/createAboutUsItem",
+    async (createAboutItem) => {
         try {
             const formData = new FormData();
+            formData.append('title', createAboutItem.title);
+            formData.append('content', createAboutItem.content);
+            formData.append('aboutTypeId', createAboutItem.aboutTypeId);
+            if (createAboutItem.imageFiles) {
+                createAboutItem.imageFiles.forEach(file => {
+                    formData.append('imageFiles', file);
+                });
+            }
+
+            const response = await axios.post(apiEndpoint, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            return response.data.data;
+        } catch (error) {
+            throw new Error('Error creating about item:', error);
+        }
+    }
+);
+
+// Async thunk to update about item
+export const updateAboutItem = createAsyncThunk(
+    "about/updateAboutItem",
+    async ({ id, title, content, aboutTypeId ,imageFiles, imagePaths }) => {
+        try {
+            const formData = new FormData();
+            formData.append("id", id);
             formData.append("title", title);
             formData.append("content", content);
-    
-            // Append each image file to formData if new images selected
-            if (updatedAbout.imageFiles && updatedAbout.imageFiles.length > 0) {
-            for (let i = 0; i < updatedAbout.imageFiles.length; i++) {
-                formData.append("imageFiles", updatedAbout.imageFiles[i]);
+            formData.append("aboutTypeId", aboutTypeId);
+
+            if (imageFiles && imageFiles.length > 0) {
+                for (let i = 0; i < imageFiles.length; i++) {
+                    formData.append("imageFiles", imageFiles[i]);
+                }
             }
-            } else {
-            // If no new images selected, retain the existing image paths
-            formData.append("imagePaths", JSON.stringify(imagePaths));
+
+            if (imagePaths && imagePaths.length > 0) {
+                formData.append("imagePaths", JSON.stringify(imagePaths));
             }
-    
+
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
-    
-            return response.data.data; // Ensure response data is returned correctly
+
+            return response.data.data;
         } catch (error) {
             throw new Error("Error updating about item:", error);
         }
+    }
+);
+
+// Async thunk to delete about item
+export const deleteAboutItem = createAsyncThunk(
+    "about/deleteAboutItem",
+    async (id) => {
+        try {
+            await axios.delete(`${apiEndpoint}/${id}`);
+            return id; // Return the deleted item ID for Redux state update
+        } catch (error) {
+            throw new Error('Error deleting about item:', error.response.data);
         }
-    );
-    
+    }
+);
 
-    // Async thunk to delete about item
-
-    export const deleteAboutItem = createAsyncThunk(
-        "about/deleteAboutItem",
-        async (id) => {
-            try {
-                await axios.delete(`${apiEndpoint}/${id}`);
-                return id; // Return the deleted item ID for Redux state update
-            } catch (error) {
-                throw new Error('Error deleting about item:', error.response.data);
-            }
-        }
-    );
-
-    // Initial state
-    const initialState = {
-        aboutItems: [],
-        status: 'idle',
+const aboutSlice = createSlice({
+    name: "about",
+    initialState: {
+        items: [], 
+        status: "idle",
         error: null,
-    };
-
-    // Redux slice
-    const aboutSlice = createSlice({
-        name: "about",
-        initialState: {
-            items: [],  // Ensure this is an array
-            status: "idle", 
-            error: null,
-        },
-        reducers: {},
-        extraReducers: (builder) => {
-            builder
+    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
             .addCase(fetchAboutData.pending, (state) => {
                 state.status = "loading";
             })
             .addCase(fetchAboutData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = Array.isArray(action.payload) ? action.payload : [];  // Ensure the payload is an array
+                state.items = Array.isArray(action.payload) ? action.payload : [];
             })
             .addCase(fetchAboutData.rejected, (state, action) => {
                 state.status = "failed";
@@ -143,20 +136,18 @@
                 state.status = "failed";
                 state.error = action.error.message;
             })
-
             .addCase(deleteAboutItem.pending, (state) => {
                 state.status = "loading";
             })
             .addCase(deleteAboutItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                // Remove the deleted item from state.items array
                 state.items = state.items.filter(item => item.id !== action.payload);
             })
             .addCase(deleteAboutItem.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
             });
-        },
-    });
+    },
+});
 
-    export default aboutSlice.reducer;
+export default aboutSlice.reducer;

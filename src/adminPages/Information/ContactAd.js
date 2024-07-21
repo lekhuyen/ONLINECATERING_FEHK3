@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteContact, fetchContacts } from "../../redux/Information/contactSlice";
+import { FaCheckSquare, FaRegTimesCircle, FaRegTrashAlt } from "react-icons/fa";
+import { TbMessageReply } from "react-icons/tb";
 
 const ContactAd = () => {
   const dispatch = useDispatch();
@@ -158,15 +160,15 @@ const ContactAd = () => {
                       className="btn btn-outline-info"
                       onClick={() => handleRespondClick(contact.id)}
                     >
-                      <i className="fa fa-reply" aria-hidden="true"></i>
+                      <TbMessageReply />
                     </button>
                   </td>
                   <td>
                     <span style={{ color: contact.isAdminResponse ? "green" : "red" }}>
                       {contact.isAdminResponse ? (
-                        <i className="fa fa-check-square" aria-hidden="true"></i>
+                        <FaCheckSquare />
                       ) : (
-                        <i className="fa fa-times-circle" style={{ color: "red" }} aria-hidden="true"></i>
+                        <FaRegTimesCircle style={{ color: "red" }}/>
                       )}
                     </span>
                   </td>
@@ -176,7 +178,7 @@ const ContactAd = () => {
                       className="btn btn-outline-danger"
                       onClick={() => handleDeleteClick(contact.id)}
                     >
-                      <i className="fa fa-trash" aria-hidden="true"></i>
+                      <FaRegTrashAlt />
                     </button>
                   </td>
                 </tr>
@@ -186,6 +188,21 @@ const ContactAd = () => {
           {renderPagination()}
         </div>
       )}
+
+{/* <!-- Modal content--> */}
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
     </div>
   );
 };

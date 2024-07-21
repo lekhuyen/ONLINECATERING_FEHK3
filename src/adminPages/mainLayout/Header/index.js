@@ -17,7 +17,7 @@ const Header = ({handleToggleSidebar}) => {
                     </div>
                     <div className={cx('search')}>
                         <label>
-                            <input type="text" placeholder="Search here" />
+                            <input type="text" placeholder="Type to search" />
                             <span><IoIosSearch /></span>
                         </label>
                     </div>
