@@ -1,11 +1,11 @@
 import React from 'react';
 
-const UserManager = () => {
+const Accounts = () => {
     return (
         <div>
-            UserManager
+            Accounts
         </div>
     );
 };
 
-export default UserManager;
+export default Accounts;

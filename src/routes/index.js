@@ -2,7 +2,6 @@ import Home from "../clientPages/Home"
 import About from "../clientPages/About"
 import Login from "../clientPages/Login"
 import DashBoard from "../adminPages/Dashboard"
-import UserManager from "../adminPages/UserManager"
 import ProductManager from "../adminPages/ProductManager"
 import Contact from "../clientPages/ContactUs"
 import News from "../clientPages/News"
@@ -19,6 +18,8 @@ import EditNews from "../adminPages/Information/EditNews"
 
 import Order from "../clientPages/Order"
 import User from "../clientPages/User"
+
+
 
 const publicRoutes = [
     {path: "/", component: Home},
@@ -42,7 +43,7 @@ const privateRoutes = [
     {path: "/newsadmin/edit-news/:id", component: EditNews},
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
-    {path: "/user-manager", component: UserManager},
+    {path: "/accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
 ]
 
