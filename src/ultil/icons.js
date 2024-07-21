@@ -17,7 +17,6 @@ import { FaRegEye, FaUserCircle, FaRegStar,
 } from "react-icons/fa";
 
 
-import { FaRegEye, FaUserCircle, FaRegStar, FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus, FaMinusCircle } from "react-icons/fa";
 
 import { BsCurrencyDollar } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";

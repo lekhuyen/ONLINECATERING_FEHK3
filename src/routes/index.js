@@ -43,7 +43,7 @@ const privateRoutes = [
     {path: "/newsadmin/edit-news/:id", component: EditNews},
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
-    {path: "/accounts", component: Accounts},
+    // {path: "/accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
 ]
 
