@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { createNewsItem, fetchNewsData } from '../../redux/Information/newsSlice';
 
 const apiEndpoint = "http://localhost:5034/api/News";
 
@@ -30,24 +29,22 @@ export default function CreateNews() {
     }, []);
 
     // Handle file input change
-    const handleFileChange = (e) => {
-        setImageFiles(Array.from(e.target.files));
-    };
+    
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
         formData.append('newsTypeId', newsTypeId);
-
+    
         // Append each image file to formData
-        for (let i = 0; i < imageFiles.length; i++) {
-            formData.append('imageFiles', imageFiles[i]);
-        }
-
+        Array.from(imageFiles).forEach(file => {
+            formData.append('imageFiles', file);
+        });
+    
         try {
             // Send formData to backend using Axios
             const response = await axios.post(apiEndpoint, formData, {
@@ -55,22 +52,23 @@ export default function CreateNews() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
+    
             console.log('Response from server:', response.data); // Log server response for debugging
-
-            // Dispatch Redux action after successful API call
-            await dispatch(createNewsItem(formData)).unwrap();
-            dispatch(fetchNewsData());
-
+    
             // Clear form fields and navigate after successful submission
             setTitle('');
             setContent('');
+            setImageFiles(null);
             setNewsTypeId('');
-            setImageFiles([]);
             navigate('/newsadmin');
         } catch (error) {
             console.error('Error creating news entry:', error);
         }
+    };
+
+    // Function to handle file input change
+    const handleFileChange = (e) => {
+        setImageFiles(e.target.files);
     };
 
     return (

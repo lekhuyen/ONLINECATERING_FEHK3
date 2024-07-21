@@ -16,19 +16,6 @@ export const fetchAboutData = createAsyncThunk(
     }
 );
 
-export const fetchNewsData = createAsyncThunk(
-    "news/fetchNewsData",
-    async () => {
-      try {
-        const response = await axios.get(apiEndpoint);
-        return response.data.data;
-      } catch (error) {
-        throw new Error('Error fetching news data:', error.response.data);
-      }
-    }
-  );
-
-
 // Async thunk to create new about item
 export const createAboutUsItem = createAsyncThunk(
     "about/createAboutUsItem",
@@ -60,12 +47,13 @@ export const createAboutUsItem = createAsyncThunk(
 // Async thunk to update about item
 export const updateAboutItem = createAsyncThunk(
     "about/updateAboutItem",
-    async ({ id, title, content, imageFiles, imagePaths }) => {
+    async ({ id, title, content, aboutTypeId ,imageFiles, imagePaths }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
             formData.append("title", title);
             formData.append("content", content);
+            formData.append("aboutTypeId", aboutTypeId);
 
             if (imageFiles && imageFiles.length > 0) {
                 for (let i = 0; i < imageFiles.length; i++) {
