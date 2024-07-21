@@ -17,6 +17,8 @@ import CreateNews from "../adminPages/Information/CreateNews"
 import EditAboutUs from "../adminPages/Information/EditAboutUs"
 import EditNews from "../adminPages/Information/EditNews"
 
+import Order from "../clientPages/Order"
+
 const publicRoutes = [
     {path: "/", component: Home},
     {path: "/about", component: About},
@@ -25,6 +27,7 @@ const publicRoutes = [
     {path: "/news", component: News},
     {path: "/account", component: Account},
     {path: "/menu", component: Menu},
+    {path: "/order", component: Order},
 ]
 
 const privateRoutes = [
