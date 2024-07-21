@@ -12,6 +12,10 @@ const {
   IoInformationCircleOutline,
   RiContactsBook3Line,
   FaRegNewspaper,
+
+  DiHackernews,
+    PiLockKey, FaRegHeart, IoCalendarOutline, IoIosLogOut,
+
 } = icons;
 
 export const menuItems = [
@@ -62,4 +66,23 @@ export const menu = [
         title: "Rice",
         icon: <FaBowlRice size="20px" />
     },
+]
+
+export const menuUserTab = [
+    {
+        id: 1,
+        title: "Password",
+        icon: <PiLockKey />
+    },
+    {
+        id: 2,
+        title: "Favorites List",
+        icon: <FaRegHeart />
+    },
+    {
+        id: 3,
+        title: "Booking History",
+        icon: <IoCalendarOutline />
+    },
+    
 ]

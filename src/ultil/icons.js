@@ -1,4 +1,4 @@
-import { PiUsers, PiSignOutLight } from "react-icons/pi";
+import { PiUsers, PiSignOutLight, PiLockKey } from "react-icons/pi";
 import {
     IoHomeOutline,
     IoChatboxOutline,
@@ -6,9 +6,19 @@ import {
     IoMenu,
     IoCartOutline,
     IoInformationCircleOutline,
+    IoCalendarOutline,
 } from "react-icons/io5";
-import { IoIosSearch, IoMdTime, IoMdClose } from "react-icons/io";
+
+import { IoIosSearch, IoMdTime, IoMdClose, IoIosLogOut } from "react-icons/io";
+
+import { FaRegEye, FaUserCircle, FaRegStar, 
+    FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus, 
+    FaMinusCircle, FaRegHeart,
+} from "react-icons/fa";
+
+
 import { FaRegEye, FaUserCircle, FaRegStar, FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus, FaMinusCircle } from "react-icons/fa";
+
 import { BsCurrencyDollar } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import { GoFilter } from "react-icons/go";
@@ -21,6 +31,7 @@ import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
 import { FaBowlRice } from "react-icons/fa6";
+
 
 const icons = {
 
@@ -75,6 +86,13 @@ const icons = {
     FaCartPlus,
     RiMoneyDollarCircleLine ,
     IoMdClose,
+
+
+    //user
+    PiLockKey,
+    FaRegHeart,
+    IoCalendarOutline,
+    IoIosLogOut,
 };
 
 export default icons;
