@@ -17,7 +17,9 @@ import EditAboutUs from "../adminPages/Information/EditAboutUs"
 import EditNews from "../adminPages/Information/EditNews"
 
 import Order from "../clientPages/Order"
-import Accounts from "../adminPages/Accounts"
+import User from "../clientPages/User"
+
+
 
 const publicRoutes = [
     {path: "/", component: Home},
@@ -28,6 +30,7 @@ const publicRoutes = [
     {path: "/account", component: Account},
     {path: "/menu", component: Menu},
     {path: "/order", component: Order},
+    {path: "/user", component: User},
 ]
 
 const privateRoutes = [
@@ -40,7 +43,7 @@ const privateRoutes = [
     {path: "/newsadmin/edit-news/:id", component: EditNews},
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
-    {path: "/accounts", component: Accounts},
+    // {path: "/accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
 ]
 
