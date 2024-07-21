@@ -33,7 +33,7 @@ const About = () => {
                         return (
                             <div className="about_us_card card mb-3" key={about.id}>
                                 <div className="about_us_card_body">
-                                    <h4 className="about_us_card_title card-title">{about.title}</h4>
+                                    <h1 className="about_us_card_title card-title">{about.title}</h1>
                                     <p className="about_us_card_text card-text">{about.content}</p>
                                     <div className="about_us_row row justify-content-center">
                                         {about.imagePaths && about.imagePaths.slice(0, 3).map((image, index) => (
@@ -53,25 +53,24 @@ const About = () => {
                     return null;
                 })}
             </div>
-
+                <br/>
             {/* OUR HISTORY Section */}
             <div className='mb-4'>
-                <h2>OUR HISTORY</h2>
+                <h2 className='about_us_title'>OUR HISTORY</h2>
                 {aboutData.map((about) => {
                     if (about.aboutTypeName === 'OUR HISTORY') {
                         return (
-                            <div className="card mb-3" key={about.id}>
-                                <div className="card-body">
-                                    <h4 className="card-title">{about.title}</h4>
-                                    <p className="card-text">{about.content}</p>
-                                    <div className="row justify-content-center">
-                                        {about.imagePaths && about.imagePaths.map((image, index) => (
-                                            <div className="col-md-4" key={index}>
+                            <div className="about_us_card card mb-3" key={about.id}>
+                                <div className="about_us_card_body">
+                                    <h1 className="about_us_card_title card-title">{about.title}</h1>
+                                    <p className="about_us_card_text card-text">{about.content}</p>
+                                    <div className="about_us_row row justify-content-center">
+                                        {about.imagePaths && about.imagePaths.slice(0, 3).map((image, index) => (
+                                            <div className="about_us_image_col col-md-4" key={index}>
                                                 <img
                                                     src={`http://localhost:5034${image}`}
-                                                    alt={`History ${index}`}
-                                                    className="img-fluid"
-                                                    style={{ marginBottom: '10px' }}
+                                                    alt={`About ${index}`}
+                                                    className="about_us_image img-fluid"
                                                 />
                                             </div>
                                         ))}
@@ -83,25 +82,24 @@ const About = () => {
                     return null;
                 })}
             </div>
-
+                <br/>
             {/* NEWS & BLOGS Section */}
             <div className='mb-4'>
                 <h2>NEWS & BLOGS</h2>
                 {aboutData.map((about) => {
                     if (about.aboutTypeName === 'NEWS & BLOGS') {
                         return (
-                            <div className="card mb-3" key={about.id}>
-                                <div className="card-body">
-                                    <h4 className="card-title">{about.title}</h4>
-                                    <p className="card-text">{about.content}</p>
-                                    <div className="row justify-content-center">
-                                        {about.imagePaths && about.imagePaths.map((image, index) => (
-                                            <div className="col-md-4" key={index}>
+                            <div className="about_us_card card mb-3" key={about.id}>
+                                <div className="about_us_card_body">
+                                    <h1 className="about_us_card_title card-title">{about.title}</h1>
+                                    <p className="about_us_card_text card-text">{about.content}</p>
+                                    <div className="about_us_row row justify-content-center">
+                                        {about.imagePaths && about.imagePaths.slice(0, 3).map((image, index) => (
+                                            <div className="about_us_image_col col-md-4" key={index}>
                                                 <img
                                                     src={`http://localhost:5034${image}`}
-                                                    alt={`Blog ${index}`}
-                                                    className="img-fluid"
-                                                    style={{ marginBottom: '10px' }}
+                                                    alt={`About ${index}`}
+                                                    className="about_us_image img-fluid"
                                                 />
                                             </div>
                                         ))}
