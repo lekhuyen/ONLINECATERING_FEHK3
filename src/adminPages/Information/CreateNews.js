@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiSend } from 'react-icons/fi';
 
 const apiEndpoint = "http://localhost:5034/api/News";
 
@@ -124,7 +125,7 @@ export default function CreateNews() {
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                    Submit
+                    <FiSend />
                 </button>
             </form>
         </div>

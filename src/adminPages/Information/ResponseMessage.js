@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { deleteContact, fetchContacts, respondToContact } from '../../redux/Information/contactSlice';
+import { FiSend } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { RiArrowGoBackLine } from "react-icons/ri";
 
 export default function ResponseMessage() {
     const { id } = useParams();
@@ -78,7 +81,7 @@ export default function ResponseMessage() {
                         </div>
                         <br />
                         <button type="submit" className="btn btn-primary">
-                            Submit
+                        <FiSend />
                         </button>
                     </form>
                 )}
@@ -91,11 +94,11 @@ export default function ResponseMessage() {
                 <br />
                 {/* Delete button */}
                 <button className="btn btn-danger" onClick={handleDelete}>
-                    <i className="fa fa-trash" aria-hidden="true"></i> Delete
+                <FaRegTrashAlt />
                 </button>
             </div>
             <div className="mt-3">
-                <button className="btn btn-secondary" onClick={handleGoBack}>Go Back</button>
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /></button>
             </div>
             {/* Show status */}
             <div>
