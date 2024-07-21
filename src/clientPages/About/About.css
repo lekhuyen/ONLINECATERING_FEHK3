@@ -1,22 +1,22 @@
 /* src/clientPages/AboutUs/AboutUs.css */
 
 .container-fluid.about_us {
-    background-color: black;
-    color: lightyellow;
+    /* background-color: black; */
+    /* color: lightyellow; */
     padding: 20px;
 
 }
 
 .about_us_title {
-    color: lightyellow;
+    /* color: lightyellow; */
     text-align: center;
     margin-bottom: 20px;
 }
 
 .card.about_us_card {
-    background-color: #333;
+    /* background-color: #333; */
     border: none;
-    color: lightyellow;
+    /* color: lightyellow; */
     margin-bottom: 20px;
 }
 
@@ -25,12 +25,12 @@
 }
 
 .about_us_card_title {
-    color: lightyellow;
+    /* color: lightyellow; */
     text-align: center;
 }
 
 .about_us_card_text {
-    color: lightyellow;
+    /* color: lightyellow; */
     text-align: center;
 }
 
@@ -56,3 +56,4 @@
     flex-wrap: wrap;
     justify-content: center; /* Center images horizontally */
 }
+

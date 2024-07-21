@@ -7,7 +7,7 @@ import {
     IoCartOutline,
     IoInformationCircleOutline,
 } from "react-icons/io5";
-import { IoIosSearch, IoMdTime } from "react-icons/io";
+import { IoIosSearch, IoMdTime, IoMdClose } from "react-icons/io";
 
 import { FaRegEye, FaUserCircle, FaRegStar, FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus, FaMinusCircle } from "react-icons/fa";
 import { BsCurrencyDollar } from "react-icons/bs";
@@ -81,7 +81,8 @@ const icons = {
     GiChickenOven,
     FaBowlRice,
     FaCartPlus,
-    RiMoneyDollarCircleLine 
+    RiMoneyDollarCircleLine ,
+    IoMdClose,
 };
 
 export default icons;
