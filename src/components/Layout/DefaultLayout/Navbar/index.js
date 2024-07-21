@@ -10,7 +10,7 @@ const Navbar = () => {
     return (
         <nav className="app__navbar">
             <div className="app__navbar-logo">
-                <img src={images.gericht} alt="app__logo" />
+                <img src={images.oclogo} alt="app__logo" />
             </div>
             <ul className="app__navbar-links">
                 <li className="p__opensans">
@@ -26,16 +26,19 @@ const Navbar = () => {
                     <a href="#awards">Awards</a>
                 </li>
                 <li className="p__opensans">
+                    <Link to="/news">News & Blog</Link>
+                </li>
+                <li className="p__opensans">
                     <Link to="/contact">Contact</Link>
                 </li>
             </ul>
             <div className="app__navbar-login">
                 <Link to="/login" className="p__opensans">
-                    Log In / Registration
+                    Login/Register
                 </Link>
                 <div />
                 <Link to="/order" className="p__opensans">
-                    Book Table
+                    Reservation
                 </Link>
             </div>
             <div className="app__navbar-smallscreen">
@@ -53,17 +56,17 @@ const Navbar = () => {
                         />
                         <ul className="app__navbar-smallscreen_links">
                             <li>
-                                <a href="#home" onClick={() => setToggleMenu(false)}>
+                                <a href="/" onClick={() => setToggleMenu(false)}>
                                     Home
                                 </a>
                             </li>
                             <li>
-                                <a href="#about" onClick={() => setToggleMenu(false)}>
+                                <a href="/about" onClick={() => setToggleMenu(false)}>
                                     About
                                 </a>
                             </li>
                             <li>
-                                <a href="#menu" onClick={() => setToggleMenu(false)}>
+                                <a href="/menu" onClick={() => setToggleMenu(false)}>
                                     Menu
                                 </a>
                             </li>
@@ -73,7 +76,7 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#contact" onClick={() => setToggleMenu(false)}>
+                                <a href="/contact" onClick={() => setToggleMenu(false)}>
                                     Contact
                                 </a>
                             </li>

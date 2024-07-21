@@ -7,14 +7,11 @@ import { GiChickenOven } from "react-icons/gi";
 const {
   PiUsers,
   IoHomeOutline,
-  IoChatboxOutline,
   IoHelpOutline,
   PiSignOutLight,
   IoInformationCircleOutline,
   RiContactsBook3Line,
-  TbMessage2Up,
   FaRegNewspaper,
-  DiHackernews,
 } = icons;
 
 export const menuItems = [
@@ -25,7 +22,7 @@ export const menuItems = [
   { icon: <RiContactsBook3Line />, title: "Contact" },
 //   { icon: <TbMessage2Up />, title: "Response" },
   { icon: <FaRegNewspaper />, title: "News" },
-  { icon: <DiHackernews />, title: "News Type" },
+
   { icon: <IoHelpOutline />, title: "Settings" },
   { icon: <PiSignOutLight />, title: "Sign Out" },
 ];
