@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteAboutItem, fetchAboutData } from '../../redux/Information/aboutSlice';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { BsInfoCircle } from "react-icons/bs";
+import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { IoMdCreate } from 'react-icons/io';
 
 function AboutUs() {
     const dispatch = useDispatch();
@@ -93,7 +97,7 @@ function AboutUs() {
                 </div>
             </div>
 
-            <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}>Create About Us</button>
+            <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}><IoMdCreate /></button>
 
             <div className="container mt-5">
                 <table className="table table-hover">
@@ -134,19 +138,22 @@ function AboutUs() {
                                         data-toggle="modal"
                                         data-target="#myModal"
                                     >
-                                        <i className="fa fa-info-circle" aria-hidden="true"></i>
+
+                                        <BsInfoCircle />
                                     </button>
                                     <button
                                         className="btn btn-outline-warning"
                                         onClick={() => handleEdit(about.id)}
                                     >
-                                        <i className="fa fa-pencil-square" aria-hidden="true"></i>
+
+                                        <HiOutlinePencilSquare />
                                     </button>
                                     <button
                                         className="btn btn-outline-danger"
                                         onClick={() => handleDelete(about.id)}
                                     >
-                                        <i className="fa fa-trash" aria-hidden="true"></i>
+
+                                        <FaRegTrashAlt />
                                     </button>
                                 </td>
                             </tr>
