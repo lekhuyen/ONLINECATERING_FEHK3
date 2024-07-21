@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { fetchNewsData } from '../../redux/Information/newsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import styles from './News.module.scss'
+import clsx from 'clsx';
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles)
 
 const News = () => {
 
@@ -31,32 +35,36 @@ const News = () => {
     }
 
     return (
-        <div className="container pt-5 mt-5">
-            <h2>News</h2>
-            <div className="container-fluid">
-                <div className="row">
-                    {newsData.map((news) => (
-                        <div className="col-md-4 mb-3" key={news.id}>
-                            <div className="card border-light">
-                                <div className="card-body">
-                                    <h4 className="card-title">{news.title}</h4>
-                                    <p className="card-text">{news.content}</p>
-                                    <div className="row">
-                                        {news.imagePaths && news.imagePaths.map((image, index) => (
-                                            <div className="col-md-4" key={index}>
-                                                <img
-                                                    src={`http://localhost:5034${image}`}
-                                                    alt={`News ${index}`}
-                                                    className="img-fluid"
-                                                    style={{ marginBottom: '10px' }}
-                                                />
+        <div className={clsx(styles.news_container, "app__bg")}>
+            <div className={cx("news_header_title")}><h1>News & Blog</h1></div>
+            <div className={cx("news_row")}>
+                <div className="container pt-5 mt-5">
+                    <div className="container-fluid">
+                        <div className="row">
+                            {newsData.map((news) => (
+                                <div className="col-md-4 mb-3" key={news.id}>
+                                    <div className="card border-light">
+                                        <div className="card-body">
+                                            <h4 className="card-title">{news.title}</h4>
+                                            <p className="card-text">{news.content}</p>
+                                            <div className="row">
+                                                {news.imagePaths && news.imagePaths.map((image, index) => (
+                                                    <div className="col-md-4" key={index}>
+                                                        <img
+                                                            src={`http://localhost:5034${image}`}
+                                                            alt={`News ${index}`}
+                                                            className="img-fluid"
+                                                            style={{ marginBottom: '10px' }}
+                                                        />
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
         </div>
