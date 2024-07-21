@@ -45,7 +45,7 @@ const Contact = () => {
         const lastSubmitDate = new Date(lastSubmitTime);
         if (now.getDate() === lastSubmitDate.getDate()) {
           // Same email address has already submitted today
-          setModalMessage('You have reached the limit for sending messages today from this email.');
+          setModalMessage('You have reached the limit for sending messages today using this email.');
           setShowModal(true);
           return;
         }
@@ -71,7 +71,7 @@ const Contact = () => {
       localStorage.setItem('lastSubmitEmail', contact.email);
 
       setIsSubmitting(false);
-      setModalMessage('Contact message sent successfully!');
+      setModalMessage('Your message is successfully sent to us.');
       setShowModal(true);
     } catch (error) {
       console.error('Error creating contact:', error);
@@ -84,7 +84,7 @@ const Contact = () => {
     <div className={clsx(styles.contactUs_container, "app__bg")}>
       <div className={cx("contactUs_header_title")}><h1>Contact Us</h1></div>
       <div className={cx("contactUs_row")}>
-        <div className="container mt-3 mb-1">
+        <div className="container mt-3">
           <div className='container mt-5'>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.041305664508!2d-73.97928762414293!3d40.761116234607684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258fbd0b82edf%3A0x41af87d148d1a374!2s9%20W%2053rd%20St%2C%20New%20York%2C%20NY%2010019%2C%20USA!5e0!3m2!1sen!2s!4v1721497213869!5m2!1sen!2s"
               style={{ border: "0", width: "1300px", height: "500px" }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
@@ -178,8 +178,8 @@ const Contact = () => {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Alert</h5>
-              <button type="button" className="close" onClick={() => setShowModal(false)} aria-label="Close">
+              <h5 className="modal-title">Thank you for choosing us!</h5>
+              <button type="button" className="close btn btn-sm btn-danger text-white" onClick={() => setShowModal(false)} aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -187,7 +187,7 @@ const Contact = () => {
               <p>{modalMessage}</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+              <button type="button" className="btn btn-danger" onClick={() => setShowModal(false)}>Close</button>
             </div>
           </div>
         </div>
