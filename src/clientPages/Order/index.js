@@ -160,19 +160,19 @@ const Order = () => {
             {/* form book */}
             {
                 showFormOrderStatus && (
-                    <div className={cx("form-book-conatiner", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
+                    <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
                         <div className={cx("btn-close-form-order")}>
                             <button onClick={handleClickBtnCloseFormOrder}><IoMdClose /></button>
                         </div>
                         <div className={cx("order-header-title")}>
-                            <h3>MAKE A RESERVATION</h3>
+                            <h3 className={cx("order_title")}>MAKE A RESERVATION</h3>
                             <span>To help us find the best table for you, select the preferred party size, date, and time of your reservation.</span>
                         </div>
                         <div>
                             <div className={cx("order-form")}>
                                 <div className={cx("form")}>
                                     <div className={cx("older")}>
-                                        <p><FaRegUser /><span>Nguoi lon</span></p>
+                                        <p><FaRegUser /><span>Adult:</span></p>
                                         <select className={cx(!showFormOrderStatus ? "bg" : "")}>
                                             <option>1</option>
                                             <option>2</option>
@@ -181,7 +181,7 @@ const Order = () => {
                                         </select>
                                     </div>
                                     <div className={cx("older")}>
-                                        <p><MdOutlineChildCare /><span>Tre em</span></p>
+                                        <p><MdOutlineChildCare /><span>Children:</span></p>
                                         <select className={cx(!showFormOrderStatus ? "bg" : "")}>
                                             <option>1</option>
                                             <option>2</option>
@@ -193,12 +193,12 @@ const Order = () => {
                                 <div className={cx("form")}>
                                     <div className={cx("time")}>
                                         <div>
-                                            <p><MdAccessTime /><span>Thoi gian den</span></p>
+                                            <p><MdAccessTime /><span>Booking Date:</span></p>
                                         </div>
                                         <input type="date" className={cx(!showFormOrderStatus ? "bg" : "")} />
                                     </div>
                                     <div className={cx("time")}>
-                                        <p><MdAccessTime /><span>Gio den</span></p>
+                                        <p><MdAccessTime /><span>Booking Time:</span></p>
                                         <input type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
                                     </div>
                                 </div>

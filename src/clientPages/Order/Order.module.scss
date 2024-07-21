@@ -61,7 +61,7 @@
 }
 
 .item-price p {
-    color: #1a9b5f;
+    color: #58B19F;
     font-size: 20px;
     font-weight: 700;
     font-family: cursive;
@@ -120,11 +120,11 @@
     width: 50px;
     height: 40px;
     // background-color: #0288d1;
-    text-align: center;
+    text-align: center;    
 }
 .btn-order button {
-    color: #fff;
-    background-color: #FD7272;
+    color: #B33771;
+    background-color: #f7d794;
     font-size: 17px;
     font-weight: bold;
     width: 100px;
@@ -132,9 +132,13 @@
     border: none;
     border-radius: 5px;
 }
+.btn-order button:hover{
+    transition: transform .6s;
+    transform: scale(1.5);
+}
 
 //form book
-.form-book-conatiner {
+.form-book-container {
     margin: auto;
     position: absolute;
 
@@ -143,7 +147,7 @@
     transform: translateY(-50%);
     left: 0;
     right: 0;
-    color: #0288d1;
+    color:#60a3bc;
     border-radius: 5px;
     background: rgb(255,255,255,0.1);
     backdrop-filter: blur(5px);
@@ -154,10 +158,10 @@
 
     
 }
-.form-book-conatiner.showFrom {
+.form-book-container.showFrom {
     animation: showFormOrder .3s linear forwards ;
 }
-.form-book-conatiner.closeFrom {
+.form-book-container.closeFrom {
     animation: closeformOrder .3s linear forwards ;
 }
 
@@ -201,7 +205,7 @@
     border: none;
     background-color: transparent;
     font-size: 25px;
-    color: #0288d1;
+    color: #d02028;
 }
 .order-header-title {
     text-align: center;
@@ -252,7 +256,12 @@
     height: 40px;
     text-align: center;
     border: none;
-    border: radius 5px;
-    color: #d02028;
+    border-radius: 5px;
+    background-color: #f7d794;
+    color: #B33771;
     font-weight: 500;
+}
+.order_title{
+    color: #f7d794;
+    font-family: cursive;
 }
