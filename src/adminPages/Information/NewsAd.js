@@ -128,7 +128,7 @@ function NewsAd() {
             <h2>News Data</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-12">
+                <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
                         Search Title/Content:
                     </label>
@@ -140,6 +140,17 @@ function NewsAd() {
                         onChange={handleSearchChange}
                         placeholder="Type to search..."
                     />
+                </div>
+                <div className="col-sm-3">
+                    <h2>News Type</h2>
+                    <button
+                        type="button"
+                        className="btn btn-info btn-lg"
+                        data-bs-toggle="modal"
+                        data-bs-target="#TypeModal"
+                    >
+                        Create News Type
+                    </button>
                 </div>
             </div>
 
@@ -265,15 +276,7 @@ function NewsAd() {
 
             {/* Modal for Create News Type */}
             <div className="container">
-                <h2>News Type</h2>
-                <button
-                    type="button"
-                    className="btn btn-info btn-lg"
-                    data-bs-toggle="modal"
-                    data-bs-target="#TypeModal"
-                >
-                    Create News Type
-                </button>
+                
 
                 <div className="modal fade" id="TypeModal" role="dialog">
                     <div className="modal-dialog modal-lg">
