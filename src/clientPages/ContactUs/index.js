@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 const cx = classNames.bind(styles)
 
 const Contact = () => {
-
   const dispatch = useDispatch();
 
   const [contact, setContact] = useState({
@@ -19,6 +18,8 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     setContact({
@@ -44,7 +45,8 @@ const Contact = () => {
         const lastSubmitDate = new Date(lastSubmitTime);
         if (now.getDate() === lastSubmitDate.getDate()) {
           // Same email address has already submitted today
-          alert('You have reached the limit for sending messages today from this email.');
+          setModalMessage('You have reached the limit for sending messages today from this email.');
+          setShowModal(true);
           return;
         }
       }
@@ -69,7 +71,8 @@ const Contact = () => {
       localStorage.setItem('lastSubmitEmail', contact.email);
 
       setIsSubmitting(false);
-      alert('Contact message sent successfully!');
+      setModalMessage('Contact message sent successfully!');
+      setShowModal(true);
     } catch (error) {
       console.error('Error creating contact:', error);
       setSubmitError('Failed to send contact message. Please try again.');
@@ -163,9 +166,30 @@ const Contact = () => {
 
                     {submitError && <div className="text-danger mt-2">{submitError}</div>}
                   </form>
+
                 </div>
               </div>
             </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Alert</h5>
+              <button type="button" className="close" onClick={() => setShowModal(false)} aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>{modalMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Close</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

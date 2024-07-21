@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createAboutUsItem } from '../../redux/Information/aboutSlice';
+import { FiSend } from 'react-icons/fi';
 
 const apiEndpoint = "http://localhost:5034/api/About";
 
@@ -135,7 +136,7 @@ export default function CreateAboutUs() {
                         multiple // Allow multiple file selection
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary"><FiSend /></button>
             </form>
         </div>
     );
