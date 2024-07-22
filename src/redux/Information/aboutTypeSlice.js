@@ -9,20 +9,26 @@ export const fetchAboutTypes = createAsyncThunk('aboutTypes/fetchAboutTypes', as
 export const createAboutType = createAsyncThunk('aboutTypes/createAboutType', async (data, { rejectWithValue }) => {
     try {
         const response = await axios.post('http://localhost:5034/api/About/abouttypes', data);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         return rejectWithValue(error.response.data);
     }
 });
 
-export const updateAboutType = createAsyncThunk('aboutTypes/updateAboutType', async ({ id, data }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`http://localhost:5034/api/About/abouttypes/${id}`, data);
-        return response.data;
-    } catch (error) {
-        return rejectWithValue(error.response.data);
+export const updateAboutType = createAsyncThunk(
+    'aboutTypes/updateAboutType',
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.put(`http://localhost:5034/api/About/abouttypes/${id}`, data);
+            return response.data.data;
+        } catch (error) {
+            // Log the error message to understand the issue
+            console.error('Failed to edit About Type:', error.message);
+            return rejectWithValue(error.response.data); // Provide the error details to the reducer
+        }
     }
-});
+);
+
 
 export const deleteAboutType = createAsyncThunk('aboutTypes/deleteAboutType', async (id, { rejectWithValue }) => {
     try {
@@ -70,14 +76,15 @@ const aboutTypeSlice = createSlice({
             })
             .addCase(updateAboutType.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                const index = state.items.findIndex(item => item.id === action.payload.id);
+                const updatedItem = action.payload;
+                const index = state.items.findIndex(item => item.id === updatedItem.id);
                 if (index !== -1) {
-                    state.items[index] = action.payload;
+                    state.items[index] = updatedItem;
                 }
             })
             .addCase(updateAboutType.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message;
+                state.error = action.payload ? action.payload.message : 'Failed to edit About Type'; // Set a default message or use the server-provided message
             })
             .addCase(deleteAboutType.pending, (state) => {
                 state.status = 'loading';
