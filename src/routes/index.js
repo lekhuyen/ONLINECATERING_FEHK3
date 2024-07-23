@@ -18,6 +18,7 @@ import EditNews from "../adminPages/Information/EditNews"
 
 import Order from "../clientPages/Order"
 import User from "../clientPages/User"
+import EmailInput from "../clientPages/ForgotPassword/emailInput"
 
 
 
@@ -25,6 +26,7 @@ const publicRoutes = [
     {path: "/", component: Home},
     {path: "/about", component: About},
     {path: "/login", component: Login, layout: null},
+    {path: "/forgot-password", component: EmailInput, layout: null},
     {path: "/contact", component: Contact},
     {path: "/news", component: News},
     {path: "/account", component: Account},
