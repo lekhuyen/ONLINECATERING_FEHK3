@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    // baseURL: process.env.REACT_APP_API_URL,
+    baseURL: "http://localhost:5246",
     headers: {
         'Content-Type': 'application/json'
     }
@@ -15,7 +16,7 @@ axiosInstance.interceptors.request.use(function (config) {
 
 // Add a response interceptor
 axiosInstance.interceptors.response.use(function (response) {
-    return response;
+    return response.data;
 }, function (error) {
     return Promise.reject(error);
 });
