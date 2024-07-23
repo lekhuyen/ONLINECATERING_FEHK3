@@ -25,3 +25,8 @@ export const apiUserSendPassword = (data)  => axios({
     method: 'POST',
     data
 })
+export const apiUserRefreshToken = (tokenRefresh)  => axios({
+    url: '/user-service/user/refresh-token',
+    method: 'POST',
+    tokenRefresh
+})
