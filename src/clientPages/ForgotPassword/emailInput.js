@@ -34,6 +34,8 @@ const EmailInput = () => {
     const handleSubmit = async () => {
         if (payload.userEmail.length > 0) {
             dispath(sendMailOtp(payload))
+        }else {
+            return
         }
     }
 
@@ -49,7 +51,7 @@ const EmailInput = () => {
             }
         }
     }, [status, message]);
-    
+
     return (
         <>
 
