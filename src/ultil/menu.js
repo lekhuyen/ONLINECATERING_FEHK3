@@ -5,30 +5,30 @@ import { FaBowlRice } from "react-icons/fa6";
 import { GiChickenOven } from "react-icons/gi";
 
 const {
-  PiUsers,
-  IoHomeOutline,
-  IoHelpOutline,
-  PiSignOutLight,
-  IoInformationCircleOutline,
-  RiContactsBook3Line,
-  FaRegNewspaper,
+    PiUsers,
+    IoHomeOutline,
+    IoHelpOutline,
+    PiSignOutLight,
+    IoInformationCircleOutline,
+    RiContactsBook3Line,
+    FaRegNewspaper,
 
-  DiHackernews,
+    DiHackernews,
     PiLockKey, FaRegHeart, IoCalendarOutline, IoIosLogOut,
 
 } = icons;
 
 export const menuItems = [
-  { icon: <IoHomeOutline />, title: "Dashboard" },
-  { icon: <PiUsers />, title: "Accounts" },
-//   { icon: <IoChatboxOutline />, title: "Message" },
-  { icon: <IoInformationCircleOutline />, title: "About" },
-  { icon: <RiContactsBook3Line />, title: "Contact" },
-//   { icon: <TbMessage2Up />, title: "Response" },
-  { icon: <FaRegNewspaper />, title: "News" },
+    { icon: <IoHomeOutline />, title: "Dashboard" },
+    { icon: <PiUsers />, title: "Accounts" },
+    //   { icon: <IoChatboxOutline />, title: "Message" },
+    { icon: <IoInformationCircleOutline />, title: "About" },
+    { icon: <RiContactsBook3Line />, title: "Contact" },
+    //   { icon: <TbMessage2Up />, title: "Response" },
+    { icon: <FaRegNewspaper />, title: "News" },
 
-  { icon: <IoHelpOutline />, title: "Settings" },
-  { icon: <PiSignOutLight />, title: "Sign Out" },
+    { icon: <IoHelpOutline />, title: "Settings" },
+    { icon: <PiSignOutLight />, title: "Sign Out" },
 ];
 
 export const menuTab = [
@@ -49,7 +49,7 @@ export const menu = [
     {
         id: 1,
         title: "Menu",
-        icon: <CiForkAndKnife size="20px"/>
+        icon: <CiForkAndKnife size="20px" />
     },
     {
         id: 2,
@@ -76,7 +76,7 @@ export const menuUserTab = [
     },
     {
         id: 2,
-        title: "Favorites List",
+        title: "Favorite List",
         icon: <FaRegHeart />
     },
     {
@@ -84,5 +84,5 @@ export const menuUserTab = [
         title: "Booking History",
         icon: <IoCalendarOutline />
     },
-    
+
 ]
