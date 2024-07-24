@@ -4,6 +4,7 @@ import { BiSolidDrink } from "react-icons/bi";
 import { FaBowlRice } from "react-icons/fa6";
 import { GiChickenOven } from "react-icons/gi";
 
+
 const {
     PiUsers,
     IoHomeOutline,
@@ -19,17 +20,15 @@ const {
 } = icons;
 
 export const menuItems = [
-    { icon: <IoHomeOutline />, title: "Dashboard" },
-    { icon: <PiUsers />, title: "Accounts" },
-    //   { icon: <IoChatboxOutline />, title: "Message" },
-    { icon: <IoInformationCircleOutline />, title: "About" },
-    { icon: <RiContactsBook3Line />, title: "Contact" },
-    //   { icon: <TbMessage2Up />, title: "Response" },
-    { icon: <FaRegNewspaper />, title: "News" },
-
-    { icon: <IoHelpOutline />, title: "Settings" },
-    { icon: <PiSignOutLight />, title: "Sign Out" },
+    { icon: <IoHomeOutline />, title: "Dashboard", path: "/dashboard" },
+    { icon: <PiUsers />, title: "Accounts", path: "/accounts" },
+    { icon: <IoInformationCircleOutline />, title: "About", path: "/aboutus" },
+    { icon: <RiContactsBook3Line />, title: "Contact", path: "/contactus" },
+    { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
+    { icon: <IoHelpOutline />, title: "Settings", path: "/settings" },
+    { icon: <PiSignOutLight />, title: "Sign Out", path: "/signout" },
 ];
+
 
 export const menuTab = [
     {

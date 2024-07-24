@@ -49,4 +49,12 @@ const privateRoutes = [
     {path: "/product-manager", component: ProductManager},
 ]
 
-export {publicRoutes, privateRoutes} 
+const navbarRouters = [
+    {path: "/dashboard", component: DashBoard},
+    {path: "/aboutus", component: AboutUs},
+    {path: "/newsadmin", component: NewsAd},
+    {path: "/contactus", component: ContactAd},
+    {path: "/product-manager", component: ProductManager},
+]
+
+export {publicRoutes, privateRoutes, navbarRouters} 

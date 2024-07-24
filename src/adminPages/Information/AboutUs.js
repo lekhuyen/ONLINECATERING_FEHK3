@@ -226,10 +226,6 @@ function AboutUs() {
 
             {/* Modal for Create About Type */}
             <div className='container'>
-                <h2>About Us Type</h2>
-                <button type="button" className="btn btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#TypeModal">
-                    Create About Type
-                </button>
 
                 <div className="modal fade" id="TypeModal" role="dialog">
                     <div className="modal-dialog modal-lg">
