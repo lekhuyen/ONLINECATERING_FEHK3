@@ -1,5 +1,6 @@
 .user_container {
     margin-top: 76px;
+    font-family: cursive;
 }
 .user_row {
     width: 60%;
@@ -17,7 +18,7 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-right: 1px solid rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-
+    border-radius: 5px;
     height: max-content;
 
 }
@@ -57,9 +58,13 @@
 }
 .user_tab:hover {
     background-color: #f7d794;
+    color: #B33771;
 }
 .user_tab.user_tab_hover {
     background-color: #f7d794;
+    color: #B33771;
+    font-weight: bolder;
+    font-size: 20px;
 }
 .user_tab :last-child{
     border-bottom: 0;
@@ -79,7 +84,7 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-right: 1px solid rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-
+    border-radius: 5px;
     color: #fff;
     height: max-content;
 }

@@ -1,5 +1,15 @@
+.user_booked_all{
+    font-family: cursive;
 
-.user_booked_title {
+}
+
+.user_booked_title{
+    text-align: center;
+    padding-top: 20px;
+    color: #f7d794;
+}
+
+.user_booked_text {
     display: grid;
     grid-template-columns: 1fr 150px 150px;
     padding: 20px;
