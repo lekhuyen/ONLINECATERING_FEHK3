@@ -1,7 +1,10 @@
-
+.user_pass_all{
+    font-family: cursive;
+}
 .user_pass_change_title {
     text-align: center;
     padding-top: 20px;
+    color: #f7d794;
 }
 .user_pass_input {
     display: grid;
@@ -23,6 +26,11 @@
     height: 30px;
     padding: 2px;
 }
+
+.user_pass_input_value{
+    border-radius: 5px;
+}
+
 .user_btn_update {
     display: flex;
     justify-content: center;
@@ -35,6 +43,6 @@
     border: none;
     border-radius: 5px;
     background-color: #f7d794;
-    color: #fff;
+    color: #B33771;
     font-weight: 600;
 }
