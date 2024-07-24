@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import images from "../../../../constants/images";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../../redux/User/userSlice";
 
 const Navbar = () => {
+    const navigate = useNavigate()
     const [toggleMenu, setToggleMenu] = React.useState(false);
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [userCurrent, setUserCurrent] = useState('')
+    const [showLoginBtn, setShowLoginBtn] = useState(false)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user.userName);
+        }
+    }, [isLoggedIn])
+    const handleOnclickAccount = () => {
+        navigate("/user")
+    }
+    
+    const handleClickLogout = () => {
+        dispatch(logout())
+        localStorage.removeItem("userCurrent")
+        navigate("/")
+    }
+
     return (
         <nav className="app__navbar">
             <div className="app__navbar-logo">
@@ -33,9 +57,40 @@ const Navbar = () => {
                 </li>
             </ul>
             <div className="app__navbar-login">
-                <Link to="/login" className="p__opensans">
-                    Login/Register
-                </Link>
+                {
+                    !isLoggedIn ? (
+                        <Link to="/login" className="p__opensans">
+                            Login/Register
+                        </Link>
+                    )
+                        :
+                        <div
+                            className="user__name"
+                            onMouseOver={() => setShowLoginBtn(true)}
+                            onMouseLeave={() => setShowLoginBtn(false)}
+                        >
+                            <p>
+                                {userCurrent}
+                            </p>
+                            
+                            {
+                                showLoginBtn && (
+                                    <div className="btn__login">
+                                        <span
+                                            onClick={handleOnclickAccount}
+                                            className="acount-info">
+                                            <span>Account</span>
+                                        </span>
+                                        <div>
+                                            <span
+                                            onClick={handleClickLogout}
+                                            >Logout</span>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                }
                 <div />
                 <Link to="/order" className="p__opensans">
                     Reservation
