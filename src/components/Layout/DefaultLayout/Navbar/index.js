@@ -117,12 +117,12 @@ const Navbar = () => {
                             </li>
                             <li>
                                 <a href="/about" onClick={() => setToggleMenu(false)}>
-                                    About
+                                    About Us
                                 </a>
                             </li>
                             <li>
                                 <a href="/menu" onClick={() => setToggleMenu(false)}>
-                                    Menu
+                                    Our Menu
                                 </a>
                             </li>
                             <li>
@@ -131,8 +131,13 @@ const Navbar = () => {
                                 </a>
                             </li>
                             <li>
+                                <a href="/news" onClick={() => setToggleMenu(false)}>
+                                    Our Blog
+                                </a>
+                            </li>
+                            <li>
                                 <a href="/contact" onClick={() => setToggleMenu(false)}>
-                                    Contact
+                                    Get In Touch
                                 </a>
                             </li>
                         </ul>
