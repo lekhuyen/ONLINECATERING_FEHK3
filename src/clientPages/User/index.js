@@ -6,10 +6,11 @@ import { menuUserTab } from '../../ultil/menu';
 import ChangePassword from '../ChangePassword';
 import HistoryBooking from '../BookingHistory';
 import { IoIosLogOut } from 'react-icons/io';
+import FavoriteList from '../FavoriteList';
 
 const cx = classNames.bind(styles)
 const User = () => {
-    const [statusUserTab, setClickUserTab] = useState(3)
+    const [statusUserTab, setClickUserTab] = useState(2)
     // const [selectUserTab, setSelectUserTab] = useState(3)
 
     const handleClickUserTab = (id) => {
@@ -56,6 +57,10 @@ const User = () => {
                     {
                         statusUserTab === 1 &&
                         <ChangePassword />
+                    }
+                    {
+                        statusUserTab === 2 &&
+                        <FavoriteList />
                     }
                     {
                         statusUserTab === 3 &&
