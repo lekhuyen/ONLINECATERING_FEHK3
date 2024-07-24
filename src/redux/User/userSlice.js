@@ -20,6 +20,11 @@ export const userSlice = createSlice({
             state.userCurrent = action.payload.userCurrent
             state.token = action.payload.token
         },
+        logout: (state, action) => {
+            state.isLoggedIn = false
+            state.userCurrent = null
+            state.token = null
+        },
         resetStatusMessage: (state) => {
             state.status = null;
             state.message = "";
@@ -44,5 +49,5 @@ export const userSlice = createSlice({
     }
     
 })
-export const {login, resetStatusMessage  } = userSlice.actions
+export const {login, resetStatusMessage, logout  } = userSlice.actions
 export default userSlice.reducer

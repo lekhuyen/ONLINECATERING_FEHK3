@@ -23,7 +23,7 @@ const comonConfig = {
 }
 const userConfig  = {
     ...comonConfig,
-    whitelist:['isLoggedIn', 'token']
+    whitelist:['isLoggedIn', 'token', 'userCurrent']
 }
 
 export const store = configureStore({
