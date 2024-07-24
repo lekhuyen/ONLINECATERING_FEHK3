@@ -21,6 +21,9 @@ import sign from '../assets/sign.png';
 import quote from '../assets/quote.png';
 import gericht from '../assets/gericht.png';
 import oclogo from '../assets/oclogo.png';
+import SurfnTurf from '../assets/SurfnTurf.jpg';
+import dumaloo from '../assets/dumaloo.jpg';
+import applewalnut from '../assets/applewalnut.jpg';
 
 export default {
   bg,
@@ -45,5 +48,8 @@ export default {
   sign,
   quote,
   gericht,
-  oclogo
+  oclogo,
+  SurfnTurf,
+  dumaloo,
+  applewalnut
 };
