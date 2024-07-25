@@ -20,6 +20,7 @@ import Order from "../clientPages/Order"
 import User from "../clientPages/User"
 import EmailInput from "../clientPages/ForgotPassword/emailInput"
 import Lobby from "../clientPages/Lobby"
+import OrderCombo from "../clientPages/OrderCombo"
 
 
 
@@ -35,6 +36,7 @@ const publicRoutes = [
     {path: "/order", component: Order},
     {path: "/user", component: User},
     {path: "/lobby", component: Lobby},
+    {path: "/ordercombo", component: OrderCombo},
 ]
 
 const privateRoutes = [
