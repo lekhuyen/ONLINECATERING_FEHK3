@@ -30,7 +30,7 @@ export default function Service() {
 
     const handleEdit = (id) => {
         // Navigate to edit service item page
-        navigate(`/service/edit/${id}`);
+        navigate(`/service/edit-service/${id}`);
     };
 
     const handleInfoClick = (service) => {

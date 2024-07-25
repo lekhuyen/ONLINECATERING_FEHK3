@@ -42,13 +42,21 @@ export const createServiceItem = createAsyncThunk(
 // Async thunk to update service item
 export const updateServiceItem = createAsyncThunk(
     "service/updateServiceItem",
-    async ({ id, name, description, formFile }) => {
+    async ({ id, name, description, imagePath, formFile }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
             formData.append("name", name);
             formData.append("description", description);
-            formData.append("formFile", formFile);
+            if (formFile && formFile.length > 0) {
+                for (let i = 0; i < formFile.length; i++) {
+                    formData.append("formFile", formFile[i]);
+                }
+            }
+
+            if (imagePath && imagePath.length > 0) {
+                formData.append("imagePath", JSON.stringify(imagePath));
+            }
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
                 headers: {
