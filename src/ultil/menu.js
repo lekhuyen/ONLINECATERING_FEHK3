@@ -72,25 +72,49 @@ export const menu = [
         icon: <CiForkAndKnife size="20px" />
     },
     {
-        id: 3,
+        id: 2,
         title: "Main Dishes",
         icon: <GiChickenOven size="20px" />
     },
     {
-        id: 4,
+        id: 3,
         title: "Desserts",
         icon: <GiCupcake size="20px" />
     },
     {
-        id: 2,
+        id: 4,
         title: "Beverages",
         icon: <BiSolidDrink size="20px" />
     },
     {
-        id: 4,
+        id: 5,
         title: "Promotion",
         icon: <FaBullhorn size="20px" />
     },
+]
+export const menuDish = [
+
+    {
+        id: 1,
+        title: "Appetizers",
+        icon: <CiForkAndKnife size="20px" />
+    },
+    {
+        id: 2,
+        title: "Main Dishes",
+        icon: <GiChickenOven size="20px" />
+    },
+    {
+        id: 3,
+        title: "Desserts",
+        icon: <GiCupcake size="20px" />
+    },
+    {
+        id: 4,
+        title: "Beverages",
+        icon: <BiSolidDrink size="20px" />
+    },
+    
 ]
 
 export const menuUserTab = [
