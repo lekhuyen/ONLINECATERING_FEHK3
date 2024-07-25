@@ -7,6 +7,7 @@ import contactSlice from './Information/contactSlice'
 import aboutTypeSlice from './Information/aboutTypeSlice'
 import newsTypeSlice from './Information/newsTypeSlice'
 
+
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore,FLUSH,
     REHYDRATE,
@@ -16,6 +17,9 @@ import { persistReducer, persistStore,FLUSH,
     REGISTER, } from 'redux-persist';
 import comboSlice from './Restaurant/comboSlice'
 import accountsSlice from './Accounts/accountsSlice'
+import ServiceSlice from './Restaurant/ServiceSlice'
+
+
 
 
 const comonConfig = {
@@ -36,7 +40,8 @@ export const store = configureStore({
         newsTypes: newsTypeSlice,
         contacts: contactSlice,
         combo: comboSlice,
-        accounts : accountsSlice
+        accounts : accountsSlice,
+        service : ServiceSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
