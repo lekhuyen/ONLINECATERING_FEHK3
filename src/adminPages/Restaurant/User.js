@@ -1,6 +1,11 @@
-import React from 'react';
+import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const Accounts = () => {
+export default function User() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     return (
         <div className="container mt-5">
                     <table className="table table-hover">
@@ -51,6 +56,4 @@ const Accounts = () => {
                     </table>
                 </div>
     )
-};
-
-export default Accounts;
+}
