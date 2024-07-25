@@ -7,6 +7,7 @@ import {
     IoCartOutline,
     IoInformationCircleOutline,
     IoCalendarOutline,
+    IoTabletLandscapeOutline,
 } from "react-icons/io5";
 
 import { IoIosSearch, IoMdTime, IoMdClose, IoIosLogOut } from "react-icons/io";
@@ -29,7 +30,7 @@ import { RiContactsBook3Line, RiMoneyDollarCircleLine  } from "react-icons/ri";
 import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
-import { FaBowlRice } from "react-icons/fa6";
+import { FaBowlRice, FaBullhorn, FaTable } from "react-icons/fa6";
 
 
 const icons = {
@@ -63,7 +64,7 @@ const icons = {
     MdAccessTime,
     FaPlus ,
     FaMinusCircle,
-
+    FaBullhorn,
 
 
     //aboutus
@@ -85,7 +86,8 @@ const icons = {
     FaCartPlus,
     RiMoneyDollarCircleLine ,
     IoMdClose,
-
+    FaTable,
+    IoTabletLandscapeOutline,
 
     //user
     PiLockKey,
