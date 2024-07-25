@@ -96,7 +96,7 @@ const Contact = () => {
 
           </div>
           <div className='container mt-3 d-flex'>
-            <div className="mt-5 pt-5">
+            <div className={cx("contactUs_left")}>
               <h5 className={cx("contactUs_title")}>Please feel free to contact us if you have any questions or suggestion</h5>
               <p className={cx("contactUs_text")}>
                 The beginning of your perfect event is having the best possible
@@ -112,7 +112,7 @@ const Contact = () => {
                 Online Catering is located at 9 W 53rd St, New York, NY 10019, USA
               </p>
             </div>
-            <div className='row mt-3 ml-auto'>
+            <div className={cx("contactUs_right")}>
               <h4 className={cx("contactUs_title")}>Contact Form</h4>
               <div className='container mb-3'>
                 <form onSubmit={handleSubmit}>
