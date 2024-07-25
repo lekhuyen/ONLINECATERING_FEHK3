@@ -12,12 +12,11 @@ import {
 
 import { IoIosSearch, IoMdTime, IoMdClose, IoIosLogOut } from "react-icons/io";
 
-import { FaRegEye, FaUserCircle, FaRegStar, 
-    FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus, 
+import {
+    FaRegEye, FaUserCircle, FaRegStar,
+    FaRegUser, FaRegNewspaper, FaPlus, FaCartPlus,
     FaMinusCircle, FaRegHeart,
 } from "react-icons/fa";
-
-
 
 import { BsCurrencyDollar } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";
@@ -26,12 +25,12 @@ import { LuMapPin } from "react-icons/lu";
 import { FiFlag } from "react-icons/fi";
 import { MdOutlineChildCare, MdAccessTime } from "react-icons/md";
 import { TbMessage2Up } from "react-icons/tb";
-import { RiContactsBook3Line, RiMoneyDollarCircleLine  } from "react-icons/ri";
+import { RiContactsBook3Line, RiMoneyDollarCircleLine } from "react-icons/ri";
 import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
 import { FaBowlRice, FaBullhorn, FaTable } from "react-icons/fa6";
-
+import { GiCupcake } from "react-icons/gi";
 
 const icons = {
 
@@ -58,11 +57,11 @@ const icons = {
     LuMapPin,
     FiFlag,
     IoMdTime,
-    FaRegStar ,
-    FaRegUser ,
+    FaRegStar,
+    FaRegUser,
     MdOutlineChildCare,
     MdAccessTime,
-    FaPlus ,
+    FaPlus,
     FaMinusCircle,
     FaBullhorn,
 
@@ -84,10 +83,11 @@ const icons = {
     GiChickenOven,
     FaBowlRice,
     FaCartPlus,
-    RiMoneyDollarCircleLine ,
+    RiMoneyDollarCircleLine,
     IoMdClose,
     FaTable,
     IoTabletLandscapeOutline,
+    GiCupcake,
 
     //user
     PiLockKey,

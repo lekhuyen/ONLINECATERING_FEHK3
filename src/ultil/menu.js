@@ -2,7 +2,7 @@ import { CiForkAndKnife } from "react-icons/ci";
 import icons from "./icons";
 import { BiSolidDrink } from "react-icons/bi";
 import { FaBowlRice } from "react-icons/fa6";
-import { GiChickenOven } from "react-icons/gi";
+import { GiChickenOven, GiCupcake } from "react-icons/gi";
 
 
 const {
@@ -47,23 +47,23 @@ export const menuTab = [
 export const menu = [
     {
         id: 1,
-        title: "Menu",
+        title: "Appetizers",
         icon: <CiForkAndKnife size="20px" />
     },
     {
-        id: 2,
-        title: "Appetizer",
-        icon: <BiSolidDrink size="20px" />
-    },
-    {
         id: 3,
-        title: "Main dishes",
+        title: "Main Dishes",
         icon: <GiChickenOven size="20px" />
     },
     {
         id: 4,
-        title: "Dessert",
-        icon: <FaBowlRice size="20px" />
+        title: "Desserts",
+        icon: <GiCupcake size="20px" />
+    },
+    {
+        id: 2,
+        title: "Beverages",
+        icon: <BiSolidDrink size="20px" />
     },
     {
         id: 4,

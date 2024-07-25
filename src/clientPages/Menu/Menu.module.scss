@@ -1,11 +1,12 @@
 .menuContainer {
     margin-top: 76px;    
+    font-family: cursive;
 }
 .menu_category {
     position: relative;
 }
 .title {
-    color: #dcca87;
+    color: #f7d794;
     font-weight: 400;
     padding-top: 40px;
     margin-bottom: 20px;
@@ -25,23 +26,24 @@
     bottom:0;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
+    width: 0px;
     height: 3px;
     background-color: #dcca87;
     border-radius: 5px;
 }
 .book_btn {
-    margin-left: 50px;
+    grid-column: 1 / -1; 
+    justify-self: end; 
 }
 .book_btn button{
     color: #B33771;
     background-color: #f7d794;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: bold;
-    width: 100px;
+    width: 180px;
     height: 40px;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
 }
 .menu {
     display: flex;
@@ -52,9 +54,9 @@
 }
 .menu_catery {
     width: 100px;
-    height: 120px;
+    height: 100px;
     background-color: #f5efdb;
-    border-radius: 5px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,15 +65,15 @@
     transition: .5s;
 }
 .menu_catery:hover{
-    background-color: #f2e4b4;
+    background-color: #f7d794;
 }
 .menu_catery.active{
-    background-color: #f2e4b4;
+    background-color: #f5cd79;
 }
 .menu_catery div {
     width: 40px;
     height: 40px;
-    background-color: red;
+    background-color: #B33771;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,9 +90,9 @@
     padding-bottom: 100px;
 }
 .menu_item {
-    background-color: #dcca87;
-    height: 220px;
-    border-radius: 5px;
+    background-color: #f5efdb;
+    height: 200px;
+    border-radius: 20px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -99,6 +101,9 @@
     cursor: pointer;
     transition: .5s;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+.menu_item:hover{
+    background-color: #f7d794;
 }
 .choose_menu {
     animation: chooseMenu_1 .3s linear; 
@@ -178,7 +183,7 @@
 .icon_cart {
     width: 40px;
     height: 40px;
-    background-color: red;
+    background-color: #ff7675;
     display: flex;
     justify-content: center;
     align-items: center;
