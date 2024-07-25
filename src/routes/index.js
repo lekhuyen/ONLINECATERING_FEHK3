@@ -21,6 +21,7 @@ import User from "../clientPages/User"
 import EmailInput from "../clientPages/ForgotPassword/emailInput"
 import Lobby from "../clientPages/Lobby"
 import OrderCombo from "../clientPages/OrderCombo"
+import Accounts from "../adminPages/Accounts"
 
 
 
@@ -49,8 +50,9 @@ const privateRoutes = [
     {path: "/newsadmin/edit-news/:id", component: EditNews},
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
-    // {path: "/accounts", component: Accounts},
+    {path: "/admin-accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
+
 ]
 
 export {publicRoutes, privateRoutes} 
