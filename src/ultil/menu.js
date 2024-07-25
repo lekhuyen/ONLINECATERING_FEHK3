@@ -3,7 +3,6 @@ import icons from "./icons";
 import { BiDish, BiSolidDrink } from "react-icons/bi";
 import { FaBowlRice } from "react-icons/fa6";
 
-import { GiChickenOven } from "react-icons/gi";
 import { MdMonitor, MdOutlinePayment } from "react-icons/md";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { TiImage } from "react-icons/ti";

@@ -45,8 +45,6 @@ import {
   RiCustomerService2Line,
 } from "react-icons/ri";
 
-import { RiContactsBook3Line, RiMoneyDollarCircleLine } from "react-icons/ri";
-
 import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
