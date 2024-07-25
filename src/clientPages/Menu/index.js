@@ -11,7 +11,7 @@ const cx = classNames.bind(styles)
 const {
     FaCartPlus,
     RiMoneyDollarCircleLine,
-    
+
 } = icons
 const Menu = () => {
     const [menuChoose, setMenuChoose] = useState(1)
@@ -34,12 +34,7 @@ const Menu = () => {
         <div className={clsx(styles.menuContainer, "app__bg")}>
             <div className={styles.menu_category}>
                 <div className={styles.title}>
-                    <div className={styles.title_more}><h3>Menu of standards</h3></div>
-                    <div className={styles.book_btn}>
-                        <button
-                            onClick={handleClickBtnShowFormOrder}
-                        >Book now</button>
-                    </div>
+                    <div className={styles.title_more}><h1>Our Menu</h1></div>
                 </div>
                 <div className={styles.menu}>
                     {
@@ -179,7 +174,7 @@ const Menu = () => {
                                         <p><RiMoneyDollarCircleLine color='red' />100</p>
                                     </div>
                                 </div>
-                                <div className={clsx(styles.menu_item, styles.choose_menu_4)}>
+                                {/* <div className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                     <div className={styles.menu_more}>
                                         <div><img alt="" src="https://toplist.vn/images/800px/win-steak-1267156.jpg" /></div>
                                         <div className={styles.icon_cart}>
@@ -202,7 +197,7 @@ const Menu = () => {
                                         <span>Coca</span>
                                         <p><RiMoneyDollarCircleLine color='red' />100</p>
                                     </div>
-                                </div>
+                                </div> */}
                             </>
 
                         )
@@ -297,6 +292,12 @@ const Menu = () => {
                             </>
                         )
                     }
+                    {/* Form Booking Button */}
+                    <div className={styles.book_btn}>
+                        <button
+                            onClick={handleClickBtnShowFormOrder}
+                        >BOOK NOW</button>
+                    </div>
                 </div>
                 {/* form booking */}
                 {

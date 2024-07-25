@@ -2,6 +2,7 @@ import { CiForkAndKnife } from "react-icons/ci";
 import icons from "./icons";
 import { BiDish, BiSolidDrink } from "react-icons/bi";
 import { FaBowlRice } from "react-icons/fa6";
+
 import { GiChickenOven } from "react-icons/gi";
 import { MdMonitor, MdOutlinePayment } from "react-icons/md";
 import { RiCustomerService2Line } from "react-icons/ri";
@@ -9,6 +10,10 @@ import { TiImage } from "react-icons/ti";
 import { TbBrandBooking } from "react-icons/tb";
 import { IoMdGift } from "react-icons/io";
 import { TfiLayersAlt } from "react-icons/tfi";
+
+import { GiChickenOven, GiCupcake } from "react-icons/gi";
+
+
 
 const {
   PiUsers,
@@ -61,32 +66,33 @@ export const menuTab = [
   },
 ];
 export const menu = [
-  {
-    id: 1,
-    title: "Menu",
-    icon: <CiForkAndKnife size="20px" />,
-  },
-  {
-    id: 2,
-    title: "Appetizer",
-    icon: <BiSolidDrink size="20px" />,
-  },
-  {
-    id: 3,
-    title: "Main dishes",
-    icon: <GiChickenOven size="20px" />,
-  },
-  {
-    id: 4,
-    title: "Dessert",
-    icon: <FaBowlRice size="20px" />,
-  },
-  {
-    id: 4,
-    title: "Promotion",
-    icon: <FaBullhorn size="20px" />,
-  },
-];
+
+    {
+        id: 1,
+        title: "Appetizers",
+        icon: <CiForkAndKnife size="20px" />
+    },
+    {
+        id: 3,
+        title: "Main Dishes",
+        icon: <GiChickenOven size="20px" />
+    },
+    {
+        id: 4,
+        title: "Desserts",
+        icon: <GiCupcake size="20px" />
+    },
+    {
+        id: 2,
+        title: "Beverages",
+        icon: <BiSolidDrink size="20px" />
+    },
+    {
+        id: 4,
+        title: "Promotion",
+        icon: <FaBullhorn size="20px" />
+    },
+]
 
 export const menuUserTab = [
   {
