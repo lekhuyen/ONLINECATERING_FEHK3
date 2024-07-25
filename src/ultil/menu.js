@@ -21,7 +21,7 @@ const {
 
 export const menuItems = [
     { icon: <IoHomeOutline />, title: "Dashboard", path: "/dashboard" },
-    { icon: <PiUsers />, title: "Accounts", path: "/accounts" },
+    { icon: <PiUsers />, title: "Accounts", path: "/admin-accounts" },
     { icon: <IoInformationCircleOutline />, title: "About", path: "/aboutus" },
     { icon: <RiContactsBook3Line />, title: "Contact", path: "/contactus" },
     { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
