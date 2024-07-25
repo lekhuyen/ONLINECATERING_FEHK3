@@ -22,6 +22,8 @@ import EmailInput from "../clientPages/ForgotPassword/emailInput"
 import Lobby from "../clientPages/Lobby"
 import OrderCombo from "../clientPages/OrderCombo"
 import Accounts from "../adminPages/Accounts"
+import Service from "../adminPages/Restaurant/Service"
+
 
 
 
@@ -52,6 +54,7 @@ const privateRoutes = [
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
     {path: "/admin-accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
+    {path: "/service", component: Service},
 
 ]
 

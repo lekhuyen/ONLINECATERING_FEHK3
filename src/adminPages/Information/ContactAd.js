@@ -16,7 +16,7 @@ const ContactAd = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const contactsPerPage = 5;
+  const contactsPerPage = 6;
 
   useEffect(() => {
     if (contactStatus === "idle") {

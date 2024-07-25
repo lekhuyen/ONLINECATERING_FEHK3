@@ -20,7 +20,7 @@ function NewsAd() {
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-    const contactsPerPage = 5; // Number of items per page
+    const contactsPerPage = 3;
 
     // State for search and date filters
     const [searchTerm, setSearchTerm] = useState("");
