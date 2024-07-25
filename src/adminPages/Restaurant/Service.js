@@ -109,16 +109,16 @@ export default function Service() {
                                 <td>{service.description}</td>
                                 <td>{service.status ? 'Active' : 'Inactive'}</td>
                                 <td>
-                                    {service.ImageFile && (
+                                    {service.formFile && (
                                         <img
-                                        src={`http://localhost:5265/${service.ImageFile}`} // Adjusted src attribute
-                                        alt={`Service ${service.id}`}
-                                        style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            objectFit: "cover",
-                                        }}
-                                    />
+                                            src={`http://localhost:5265/${service.formFile}`}
+                                            alt={`Service ${service.id}`}
+                                            style={{
+                                                width: "100px",
+                                                height: "100px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
                                     )}
                                 </td>
                                 <td>

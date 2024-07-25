@@ -17,25 +17,25 @@ export default function CreateService() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
-
+    
         // Append image files if available
         if (formFile) {
             for (let i = 0; i < formFile.length; i++) {
-                formData.append('formFile', formFile[i]);
+                formData.append('formFile', formFile[i]); // Ensure 'formFile' matches backend expectation
             }
         }
-
+    
         try {
             const response = await axios.post(apiEndpoint, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
+    
             // Dispatch the created item to the store
             dispatch(createServiceItem({
                 name,
@@ -47,7 +47,7 @@ export default function CreateService() {
             setName('');
             setDescription('');
             setImageFiles(null);
-
+    
             // Navigate to service list or any other desired location
             navigate('/service'); // Example: navigate to service list page
         } catch (error) {
@@ -55,6 +55,7 @@ export default function CreateService() {
             // Handle error state or display error message to the user
         }
     };
+    
 
     // Function to handle file input change
     const handleFileChange = (e) => {
@@ -91,11 +92,11 @@ export default function CreateService() {
                 <div className="form-group">
                     <label htmlFor="formFile">Image</label>
                     <input
-                        type="formFile"
+                        type="file"
                         className="form-control"
                         id="formFile"
                         onChange={handleFileChange}
-                        
+                        multiple // Allow multiple file selection
                     />
                 </div>
 
