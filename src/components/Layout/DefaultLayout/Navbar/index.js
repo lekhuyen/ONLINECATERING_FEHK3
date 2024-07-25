@@ -47,6 +47,9 @@ const Navbar = () => {
                     <Link to="/menu">Menu</Link>
                 </li>
                 <li className="p__opensans">
+                    <Link to="/lobby">Lobby</Link>
+                </li>
+                <li className="p__opensans">
                     <a href="#awards">Awards</a>
                 </li>
                 <li className="p__opensans">

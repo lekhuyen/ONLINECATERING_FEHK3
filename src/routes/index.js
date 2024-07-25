@@ -19,6 +19,7 @@ import EditNews from "../adminPages/Information/EditNews"
 import Order from "../clientPages/Order"
 import User from "../clientPages/User"
 import EmailInput from "../clientPages/ForgotPassword/emailInput"
+import Lobby from "../clientPages/Lobby"
 
 
 
@@ -33,6 +34,7 @@ const publicRoutes = [
     {path: "/menu", component: Menu},
     {path: "/order", component: Order},
     {path: "/user", component: User},
+    {path: "/lobby", component: Lobby},
 ]
 
 const privateRoutes = [
