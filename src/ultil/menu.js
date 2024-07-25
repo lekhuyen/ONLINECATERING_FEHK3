@@ -52,17 +52,17 @@ export const menu = [
     },
     {
         id: 2,
-        title: "Drink",
+        title: "Appetizer",
         icon: <BiSolidDrink size="20px" />
     },
     {
         id: 3,
-        title: "Chicken",
+        title: "Main dishes",
         icon: <GiChickenOven size="20px" />
     },
     {
         id: 4,
-        title: "Rice",
+        title: "Dessert",
         icon: <FaBowlRice size="20px" />
     },
 ]
