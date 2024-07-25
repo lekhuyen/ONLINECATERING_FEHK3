@@ -18,7 +18,7 @@ function AboutUs() {
     const error = useSelector((state) => state.about.error);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 3;
     const [selectedAboutUs, setSelectedAboutUs] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [newAboutTypeName, setNewAboutTypeName] = useState("");
