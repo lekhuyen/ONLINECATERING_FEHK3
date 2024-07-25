@@ -15,6 +15,7 @@ import { persistReducer, persistStore,FLUSH,
     PURGE,
     REGISTER, } from 'redux-persist';
 import comboSlice from './Restaurant/comboSlice'
+import accountsSlice from './Accounts/accountsSlice'
 
 
 const comonConfig = {
@@ -35,6 +36,7 @@ export const store = configureStore({
         newsTypes: newsTypeSlice,
         contacts: contactSlice,
         combo: comboSlice,
+        accounts : accountsSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
