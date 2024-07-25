@@ -3,29 +3,51 @@ import icons from '../../ultil/icons'
 import styles from './Menu.module.scss'
 import { menu } from '../../ultil/menu';
 import { useState } from 'react';
+import FormBooking from '../FormBooking';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles)
 
 const {
     FaCartPlus,
     RiMoneyDollarCircleLine,
+    
 } = icons
 const Menu = () => {
     const [menuChoose, setMenuChoose] = useState(1)
+    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
+
+    const handleClickBtnShowFormOrder = () => {
+        setShowFormOrderStatus(true)
+    }
+    const handleClickBtnCloseFormOrder = () => {
+        setShowFormOrderStatus(false)
+    }
 
     const handleOnclickMenu = (index) => {
         setMenuChoose(index)
     }
+
+
     return (
 
         <div className={clsx(styles.menuContainer, "app__bg")}>
             <div className={styles.menu_category}>
-                <div className={styles.title}><h3>Our Hot Dishes</h3></div>
+                <div className={styles.title}>
+                    <div className={styles.title_more}><h3>Menu of standards</h3></div>
+                    <div className={styles.book_btn}>
+                        <button
+                            onClick={handleClickBtnShowFormOrder}
+                        >Book now</button>
+                    </div>
+                </div>
                 <div className={styles.menu}>
                     {
                         menu.map((item, index) => (
-                            <div 
-                            onClick={() => handleOnclickMenu(item.id)}
-                            key={index} className={clsx(styles.menu_tab)}>
-                                <div className={clsx(styles.menu_catery, menuChoose === item.id ? styles.active : "" )}>
+                            <div
+                                onClick={() => handleOnclickMenu(item.id)}
+                                key={index} className={clsx(styles.menu_tab)}>
+                                <div className={clsx(styles.menu_catery, menuChoose === item.id ? styles.active : "")}>
                                     <div>{item.icon}</div>
                                     <span>{item.title}</span>
                                 </div>
@@ -85,7 +107,6 @@ const Menu = () => {
                                         <p><RiMoneyDollarCircleLine color='red' />100</p>
                                     </div>
                                 </div>
-
                                 <div className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                     <div className={styles.menu_more}>
                                         <div><img alt="" src="https://giadinh.mediacdn.vn/296230595582509056/2021/9/17/photo-1-16318475587211840296470.jpg" /></div>
@@ -277,7 +298,18 @@ const Menu = () => {
                         )
                     }
                 </div>
+                {/* form booking */}
+                {
+                    showFormOrderStatus && (
+                        <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
+                            <FormBooking
+                                showFormOrderStatus={showFormOrderStatus}
+                                handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
+                        </div>
+                    )
+                }
             </div>
+
         </div>
     );
 };

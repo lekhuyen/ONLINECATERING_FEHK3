@@ -14,8 +14,8 @@ const {
     RiContactsBook3Line,
     FaRegNewspaper,
 
-    DiHackernews,
-    PiLockKey, FaRegHeart, IoCalendarOutline, IoIosLogOut,
+    PiLockKey, FaRegHeart, IoCalendarOutline,
+    FaBullhorn,
 
 } = icons;
 
@@ -64,6 +64,11 @@ export const menu = [
         id: 4,
         title: "Dessert",
         icon: <FaBowlRice size="20px" />
+    },
+    {
+        id: 4,
+        title: "Promotion",
+        icon: <FaBullhorn size="20px" />
     },
 ]
 
