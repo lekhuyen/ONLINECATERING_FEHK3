@@ -13,6 +13,7 @@ import {
 import { IoIosSearch, IoMdTime, IoMdClose, IoIosLogOut } from "react-icons/io";
 
 import {
+
   FaRegEye,
   FaUserCircle,
   FaRegStar,
@@ -22,6 +23,7 @@ import {
   FaCartPlus,
   FaMinusCircle,
   FaRegHeart,
+
 } from "react-icons/fa";
 
 import { BsCurrencyDollar } from "react-icons/bs";
@@ -36,88 +38,89 @@ import {
   MdOutlinePayment,
 } from "react-icons/md";
 import { TbMessage2Up } from "react-icons/tb";
+
 import {
   RiContactsBook3Line,
   RiMoneyDollarCircleLine,
   RiCustomerService2Line,
 } from "react-icons/ri";
+
 import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
 import { FaBowlRice, FaBullhorn, FaTable } from "react-icons/fa6";
+
 import { TiImage } from "react-icons/ti";
 import { TbBrandBooking } from "react-icons/tb";
 import { BiDish } from "react-icons/bi";
 import { IoMdGift } from "react-icons/io";
 import { TfiLayersAlt } from "react-icons/tfi";
 
+import { GiCupcake } from "react-icons/gi";
+
 const icons = {
-  MdMonitor,
-  PiUsers,
-  IoHomeOutline,
-  IoChatboxOutline,
-  IoHelpOutline,
-  PiSignOutLight,
-  IoMenu,
-  IoIosSearch,
-  FaRegEye,
-  IoCartOutline,
-  BsCurrencyDollar,
-  RiCustomerService2Line,
-  TiImage,
-  TbBrandBooking,
-  BiDish,
-  MdOutlinePayment,
-  IoMdGift,
-  TfiLayersAlt,
 
-  // home
-  FaUserCircle,
-  GrPrevious,
-  GrNext,
+    PiUsers,
+    IoHomeOutline,
+    IoChatboxOutline,
+    IoHelpOutline,
+    PiSignOutLight,
+    IoMenu,
+    IoIosSearch,
+    FaRegEye,
+    IoCartOutline,
+    BsCurrencyDollar,
 
-  //
-  GoFilter,
+    // home
+    FaUserCircle,
+    GrPrevious,
+    GrNext,
 
-  //account
-  LuMapPin,
-  FiFlag,
-  IoMdTime,
-  FaRegStar,
-  FaRegUser,
-  MdOutlineChildCare,
-  MdAccessTime,
-  FaPlus,
-  FaMinusCircle,
-  FaBullhorn,
+    //
+    GoFilter,
 
-  //aboutus
-  IoInformationCircleOutline,
+    //account
+    LuMapPin,
+    FiFlag,
+    IoMdTime,
+    FaRegStar,
+    FaRegUser,
+    MdOutlineChildCare,
+    MdAccessTime,
+    FaPlus,
+    FaMinusCircle,
+    FaBullhorn,
 
-  //contact
-  RiContactsBook3Line,
-  //response message
-  TbMessage2Up,
 
-  //news
-  FaRegNewspaper,
+    //aboutus
+    IoInformationCircleOutline,
 
-  //menu
-  CiForkAndKnife,
-  BiSolidDrink,
-  GiChickenOven,
-  FaBowlRice,
-  FaCartPlus,
-  RiMoneyDollarCircleLine,
-  IoMdClose,
-  FaTable,
-  IoTabletLandscapeOutline,
+    //contact
+    RiContactsBook3Line,
+    //response message
+    TbMessage2Up,
 
-  //user
-  PiLockKey,
-  FaRegHeart,
-  IoCalendarOutline,
-  IoIosLogOut,
+    //news
+    FaRegNewspaper,
+
+    //menu
+    CiForkAndKnife,
+    BiSolidDrink,
+    GiChickenOven,
+    FaBowlRice,
+    FaCartPlus,
+    RiMoneyDollarCircleLine,
+    IoMdClose,
+    FaTable,
+    IoTabletLandscapeOutline,
+    GiCupcake,
+
+    //user
+    PiLockKey,
+    FaRegHeart,
+    IoCalendarOutline,
+    IoIosLogOut,
+
 };
 
 export default icons;

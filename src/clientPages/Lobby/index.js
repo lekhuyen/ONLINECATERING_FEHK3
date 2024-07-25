@@ -6,55 +6,51 @@ const Lobby = () => {
     return (
         <div className={clsx(styles.container_lobby, 'app__bg')}>
             <div className={styles.info_lobby}>
-            <div className={styles.lobby_title}><h2>SẢNH TIỆC CƯỚI</h2></div>
+                <div className={styles.lobby_title}><h1>Our Lobby</h1></div>
                 <div className={styles.info_lobby_more}>
                     <div className={styles.info_lobby_img}>
                         <img alt="" src="http://bachviet.com.vn/wp-content/uploads/elementor/thumbs/6-nzh15jl73tlvj8mhyxxqa0nk415nq6tseyin8cp548.jpg" />
                     </div>
                     <div className={styles.info_title}>
-                        <div className={styles.info_title_header}><h3>SẢNH ROSY</h3></div>
+                        <div className={styles.info_title_header}><h3>Mars Lobby</h3></div>
                         <div className={styles.info_title_body}>
-                            <span>Với 2 tone màu tím lavender  và hồng  pastel là những gam màu mới hiện đại đầy 
-                                quyến rũ. Không gian lãng mạng đầy tinh tế của sắc tím hay không gian tươi trẻ của 
-                                sắc hồng sẽ tạo cho khách mời một cảm giác vui vẻ. Với mong muốn mang lại một không 
-                                gian mới mẻ, lãng mạng và tinh tế thì sảnh Rosy là không gian hoàn hảo cho các cặp đôi 
-                                trong ngày hạnh phúc, mở ra một cuộc sống ngập tràn yêu thương!
-                            </span>
+                            <span>With 2 tones of lavender purple and pastel pink, these are new, modern and charming colors.
+                                The romantic and sophisticated space of purple or the youthful space of pink will give guests a joyful feeling.
+                                With the desire to bring a new, romantic and sophisticated space, Mars Lobby is the perfect space for couples on their happy day, opening up a life filled with love!</span>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div className={styles.info_lobby_more}>
                     <div className={styles.info_title}>
-                        <div className={styles.info_title_header}><h3>SẢNH GREEN</h3></div>
+                        <div className={styles.info_title_header}><h3>Venus Lobby</h3></div>
                         <div className={styles.info_title_body}>
-                            <span>Tone màu xanh tươi mát là sắc màu của thiên nhiên, trẻ trung và tràn đầy hy vọng. 
-                            Sảnh Green lựa chọn tone màu này làm chủ đạo để đem lại cảm giác vui tươi dễ chịu cho 
-                            khách mời tham dự. Đây là sảnh mang phong cách hiện đại, tươi mát đầy niềm vui và hạnh phúc.
+                            <span>The fresh green tone is the color of nature, youthful and full of hope.
+                                Venus Lobby chose this tone as the main color to bring a joyful and pleasant feeling to the guests attending.
+                                This is a modern, fresh style hall full of joy and happiness.
                             </span>
                         </div>
-                        
+
                     </div>
                     <div className={styles.info_lobby_img}>
                         <img alt="" src="http://bachviet.com.vn/wp-content/uploads/2020/06/3-3.jpg" />
                     </div>
                 </div>
                 <div className={styles.info_lobby_more}>
-                    
+
                     <div className={styles.info_lobby_img}>
                         <img alt="" src="http://bachviet.com.vn/wp-content/uploads/2020/06/3-3.jpg" />
                     </div>
                     <div className={styles.info_title}>
-                        <div className={styles.info_title_header}><h3>SẢNH GOLD</h3></div>
+                        <div className={styles.info_title_header}><h3>Peony Lobby</h3></div>
                         <div className={styles.info_title_body}>
-                            <span>Được thiết kế với 2 tone màu vàng đồng và đỏ Bordeaux là hai sắc màu truyền 
-                            thống đặc trưng cho không gian tiệc cưới. Màu đỏ rực rỡ hay màu vàng quý phái lộng 
-                            lẫy đều tạo nên cảm giác ấm áp sang trọng. Sảnh Gold được thiết kế và trang trí với 
-                            hai sắc màu này như một lời chúc tốt lành mà BáchViệt muốn gửi đến đôi bạn trong ngày 
-                            trọng đại.Từ sự ấm áp bởi 2 sắc màu này sẽ góp phần tạo nên không khí thân thiện, thoải mái.
+                            <span>Designed with 2 tones of copper yellow and Bordeaux red, which are two traditional colors typical for wedding spaces.
+                                The brilliant red or the splendid noble yellow both create a warm and luxurious feeling.
+                                Peony Lobby is designed and decorated with these two colors as a good wish that OnlineCatering.in wants to send to the couple on their big day.
+                                The warmth of these two colors will contribute to creating a friendly and comfortable atmosphere.
                             </span>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
