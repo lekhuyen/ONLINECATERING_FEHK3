@@ -23,6 +23,7 @@ import Lobby from "../clientPages/Lobby"
 import OrderCombo from "../clientPages/OrderCombo"
 import Accounts from "../adminPages/Accounts"
 import Service from "../adminPages/Restaurant/Service"
+import CreateService from "../adminPages/Restaurant/CreateService"
 
 
 
@@ -55,6 +56,8 @@ const privateRoutes = [
     {path: "/admin-accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
     {path: "/service", component: Service},
+    {path: "/service/create-service", component: CreateService},
+
 
 ]
 

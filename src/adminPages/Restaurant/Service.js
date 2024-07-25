@@ -85,7 +85,7 @@ export default function Service() {
                 </div>
 
                 <div className="col-sm-3">
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/service/create')}>Add Service</button>
+                    <button className="btn btn-success mb-3" onClick={() => navigate('/service/create-service')}>Add Service</button>
                 </div>
             </div>
 
@@ -109,16 +109,16 @@ export default function Service() {
                                 <td>{service.description}</td>
                                 <td>{service.status ? 'Active' : 'Inactive'}</td>
                                 <td>
-                                    {service.imagePath && (
+                                    {service.ImageFile && (
                                         <img
-                                            src={`http://localhost:5265${service.imagePath}`}
-                                            alt={`Service ${service.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                objectFit: "cover",
-                                            }}
-                                        />
+                                        src={`http://localhost:5265/${service.ImageFile}`} // Adjusted src attribute
+                                        alt={`Service ${service.id}`}
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            objectFit: "cover",
+                                        }}
+                                    />
                                     )}
                                 </td>
                                 <td>

@@ -24,7 +24,7 @@ export const createServiceItem = createAsyncThunk(
             const formData = new FormData();
             formData.append('name', createServiceItem.name);
             formData.append('description', createServiceItem.description);
-            formData.append('imageFiles', createServiceItem.imageFiles);
+            formData.append('formFile', createServiceItem.formFile);
 
             const response = await axios.post(apiEndpoint, formData, {
                 headers: {
@@ -38,6 +38,7 @@ export const createServiceItem = createAsyncThunk(
         }
     }
 );
+
 
 // Async thunk to update service item
 export const updateServiceItem = createAsyncThunk(
@@ -102,7 +103,7 @@ const ServiceSlice = createSlice({
             })
             .addCase(createServiceItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items.push(action.payload);
+                state.items.push(action.payload); 
             })
             .addCase(createServiceItem.rejected, (state, action) => {
                 state.status = "failed";
