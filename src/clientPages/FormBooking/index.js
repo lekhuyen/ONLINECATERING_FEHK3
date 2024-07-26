@@ -1,6 +1,9 @@
 import styles from './FormBooking.module.scss'
 import classNames from 'classnames/bind';
 import icons from '../../ultil/icons';
+import { useEffect, useState } from 'react';
+import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
+import { useParams } from 'react-router-dom';
 
 
 const cx = classNames.bind(styles)
@@ -10,7 +13,49 @@ const {
     FaTable,
     IoTabletLandscapeOutline,
 } = icons
-const FormBooking = ({ handleClickBtnCloseFormOrder, showFormOrderStatus }) => {
+const FormBooking = ({ handleClickBtnCloseFormOrder, showFormOrderStatus, comboPrice }) => {
+    const [lobby, setLobby] = useState(null)
+
+    // ---------------
+    const [quantityTable, setQuantityTable] = useState(1)
+    const [lobbySelect, setLobbySelect] = useState(null)
+    const [lobbyPrice, setLobbyPrice] = useState(0)
+
+
+    const getAllLobby = async () => {
+        const response = await apiGetAllLobby()
+        if (response.status === 0) {
+            setLobby(response.data.$values)
+        }
+    }
+    useEffect(() => {
+        getAllLobby()
+    }, [])
+
+    const handleSelectTable = (e) => {
+        setQuantityTable(e.target.value);
+    }
+    const handleChangeLobby = (e) => {
+        const selectedId = e.target.value;
+        if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
+    }
+
+    const getOneLobby = async () => {
+        if (lobbySelect == null) {
+            return
+        }else{
+            const response = await apiGetOneLobby(lobbySelect)
+            if(response.status === 0) {
+                setLobbyPrice(response.data.price);
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        getOneLobby()
+    }, [lobbySelect])
+
 
     return (
         <>
@@ -18,7 +63,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder, showFormOrderStatus }) => {
                 <button onClick={handleClickBtnCloseFormOrder}><IoMdClose /></button>
             </div>
             <div className={cx("order-header-title")}>
-                <h3 className={cx("order_title")}>MAKE A RESERVATION</h3>
+                {/* <h3 className={cx("order_title")}>MAKE A RESERVATION</h3> */}
                 <span>To help us find the best table for you, select the preferred party size, date, and time of your reservation.</span>
             </div>
             <div>
@@ -26,20 +71,27 @@ const FormBooking = ({ handleClickBtnCloseFormOrder, showFormOrderStatus }) => {
                     <div className={cx("form")}>
                         <div className={cx("older")}>
                             <p><FaTable /><span>Quantity:</span></p>
-                            <select className={cx(!showFormOrderStatus ? "bg" : "")}>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                            <select
+                                onChange={handleSelectTable}
+                                className={cx(!showFormOrderStatus ? "bg" : "")}>
+                                {
+                                    Array.from({ length: 20 }, (_, i) => (
+                                        <option key={i} value={i + 1}>{i + 1}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                         <div className={cx("older")}>
                             <p><IoTabletLandscapeOutline /><span>Lobby:</span></p>
-                            <select className={cx(!showFormOrderStatus ? "bg" : "")}>
-                                <option>--Choose Lobby--</option>
-                                <option>Lobby 1</option>
-                                <option>Lobby 2</option>
-                                <option>Lobby 3</option>
+                            <select
+                                onChange={handleChangeLobby}
+                                className={cx(!showFormOrderStatus ? "bg" : "")}>
+                                <option value="--Choose Lobby--">--Choose Lobby--</option>
+                                {
+                                    lobby?.length > 0 && lobby?.map(item => (
+                                        <option key={item.id} value={item.id}>{item?.lobbyName}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                     </div>
@@ -57,10 +109,10 @@ const FormBooking = ({ handleClickBtnCloseFormOrder, showFormOrderStatus }) => {
                     </div>
                     <div className={cx("total_price")}>
                         <div>
-                            Total: <span>$10000</span>
+                            Total: <span>${(quantityTable * comboPrice) + lobbyPrice}</span>
                         </div>
                         <div>
-                            Deposit: <span>$300</span>
+                            Deposit: <span>${parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)}</span>
                         </div>
                     </div>
                     <div className={cx("order-now")}>

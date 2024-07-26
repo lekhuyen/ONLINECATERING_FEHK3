@@ -4,6 +4,10 @@ export const apiGetAllCombo = ()  => axios({
     url: '/restaurant-service/combo',
     method: 'GET',
 })
+export const apiGetComboById = (comboid)  => axios({
+    url: `/restaurant-service/combo/${comboid}`,
+    method: 'GET',
+})
 export const apiGetDishByComboId = (comboid)  => axios({
     url: `/restaurant-service/comboDish/${comboid}`,
     method: 'GET',
