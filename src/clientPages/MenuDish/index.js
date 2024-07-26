@@ -36,6 +36,7 @@ const MenuDish = () => {
             setMainDish(responseDish.data.$values)
         }
     }
+    console.log(mainDish);
     useEffect(() => {
         getOneCombo()
     }, [])
