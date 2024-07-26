@@ -1,12 +1,11 @@
 import clsx from 'clsx';
 import icons from '../../ultil/icons'
 import styles from './Menu.module.scss'
-import { menu } from '../../ultil/menu';
+import { menuDish } from '../../ultil/menu';
 import { useEffect, useState } from 'react';
 import FormBooking from '../FormBooking';
 import classNames from 'classnames/bind';
-import { useParams } from 'react-router-dom';
-import { apiGetAppetizerComboId, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
+import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish } from '../../apis/menu';
 
 const cx = classNames.bind(styles)
 
@@ -15,25 +14,18 @@ const {
     RiMoneyDollarCircleLine,
 
 } = icons
-const Menu = () => {
-    const [menuChoose, setMenuChoose] = useState(1)
-    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
+const MenuDish = () => {
+
     const [mainDish, setMainDish] = useState(null)
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
-    const [mainPromotion, setPromotion] = useState(null)
 
-    const { comboid } = useParams()
 
     const getOneCombo = async () => {
-        const responseDish = await apiGetDishByComboId(comboid)
-        const responseDessert = await apiGetDessertComboId(comboid)
-        const responseAppetizer = await apiGetAppetizerComboId(comboid)
-        const responsePromotion = await apiGetPromotionByComboId(comboid)
+        const responseDish = await apiGetAllDish()
+        const responseDessert = await apiGetAllDessert()
+        const responseAppetizer = await apiGetAllAppetizer()
 
-        if (responsePromotion.status === 0) {
-            setPromotion(responsePromotion.data.promotions.$values)
-        }
         if (responseAppetizer.status === 0) {
             setAppetizer(responseAppetizer.data.$values)
         }
@@ -46,7 +38,10 @@ const Menu = () => {
     }
     useEffect(() => {
         getOneCombo()
-    }, [comboid])
+    }, [])
+    const [menuChoose, setMenuChoose] = useState(1)
+    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
+
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
     }
@@ -57,7 +52,7 @@ const Menu = () => {
     const handleOnclickMenu = (index) => {
         setMenuChoose(index)
     }
-
+    
     return (
         <div className={clsx(styles.menuContainer, "app__bg")}>
             <div className={styles.menu_category}>
@@ -66,7 +61,7 @@ const Menu = () => {
                 </div>
                 <div className={styles.menu}>
                     {
-                        menu.map((item, index) => (
+                        menuDish.map((item, index) => (
                             <div
                                 onClick={() => handleOnclickMenu(item.id)}
                                 key={index} className={clsx(styles.menu_tab)}>
@@ -109,9 +104,9 @@ const Menu = () => {
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item.imagePath} /></div>
-                                                {/* <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
+                                                <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
-                                                </div> */}
+                                                </div>
                                             </div>
                                             <div className={styles.menu_price}>
                                                 <span>{item.name}</span>
@@ -142,44 +137,10 @@ const Menu = () => {
                                         </div>
                                     ))
                                 }
-                                {/* <div className={clsx(styles.menu_item, styles.choose_menu_3)}>
-                                    <div className={styles.menu_more}>
-                                        <div><img alt="" src="https://cdn.pixabay.com/photo/2024/01/30/16/47/ai-generated-8542471_1280.jpg" /></div>
-                                        <div className={styles.icon_cart}>
-                                            <FaCartPlus />
-                                        </div>
-                                    </div>
-                                    <div className={styles.menu_price}>
-                                        <span>Coca</span>
-                                        <p><RiMoneyDollarCircleLine color='red' />100</p>
-                                    </div>
-                                </div> */}
                             </>
                         )
                     }
-                    {
-                        menuChoose === 5 && (
-                            <>
-                                {
-                                    mainPromotion?.length > 0 && mainPromotion?.map(item => (
-                                        <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu)}>
-                                            <div className={styles.menu_more}>
-                                                <div><img alt="" src={item.imagePath} /></div>
-                                                <div className={styles.icon_cart}>
-                                                    <FaCartPlus />
-                                                </div>
-                                            </div>
-                                            <div className={styles.menu_price}>
-                                                <span>{item.name}</span>
-                                                {/* <p><RiMoneyDollarCircleLine color='red' />100</p> */}
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                                
-                            </>
-                        )
-                    }
+
                     {/* Form Booking Button */}
                     <div className={styles.book_btn}>
                         <button
@@ -203,4 +164,4 @@ const Menu = () => {
     );
 };
 
-export default Menu;
+export default MenuDish;
