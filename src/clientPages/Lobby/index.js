@@ -16,7 +16,7 @@ const Lobby = () => {
     useEffect(() => {
         getAllLobby()
     }, [])
-    console.log(lobby);
+    
     return (
         <div className={clsx(styles.container_lobby, 'app__bg')}>
             <div className={styles.info_lobby}>
