@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import FormBooking from '../FormBooking';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
-import { apiGetAppetizerComboId, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
+import { apiGetAppetizerComboId, apiGetComboById, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
 
 const cx = classNames.bind(styles)
 
@@ -22,6 +22,7 @@ const Menu = () => {
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
     const [mainPromotion, setPromotion] = useState(null)
+    const [comboPrice, setComboPrice] = useState(null)
 
     const { comboid } = useParams()
 
@@ -30,7 +31,12 @@ const Menu = () => {
         const responseDessert = await apiGetDessertComboId(comboid)
         const responseAppetizer = await apiGetAppetizerComboId(comboid)
         const responsePromotion = await apiGetPromotionByComboId(comboid)
+        const responseComboOne = await apiGetComboById(comboid)
 
+
+        if (responseComboOne.status === 0) {
+            setComboPrice(responseComboOne.data.price)
+        }
         if (responsePromotion.status === 0) {
             setPromotion(responsePromotion.data.promotions.$values)
         }
@@ -192,6 +198,7 @@ const Menu = () => {
                     showFormOrderStatus && (
                         <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
                             <FormBooking
+                                comboPrice={comboPrice}
                                 showFormOrderStatus={showFormOrderStatus}
                                 handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
                         </div>
