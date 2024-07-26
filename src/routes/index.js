@@ -23,6 +23,9 @@ import Lobby from "../clientPages/Lobby"
 import OrderCombo from "../clientPages/OrderCombo"
 import Accounts from "../adminPages/Accounts"
 import Service from "../adminPages/Restaurant/Service"
+import CreateService from "../adminPages/Restaurant/CreateService"
+import EditService from "../adminPages/Restaurant/EditService"
+import MenuDish from "../clientPages/MenuDish"
 
 
 
@@ -35,7 +38,8 @@ const publicRoutes = [
     {path: "/contact", component: Contact},
     {path: "/news", component: News},
     {path: "/account", component: Account},
-    {path: "/menu", component: Menu},
+    {path: "/menu-combo/:comboid", component: Menu},
+    {path: "/menu/", component: MenuDish},
     {path: "/order", component: Order},
     {path: "/user", component: User},
     {path: "/lobby", component: Lobby},
@@ -55,6 +59,9 @@ const privateRoutes = [
     {path: "/admin-accounts", component: Accounts},
     {path: "/product-manager", component: ProductManager},
     {path: "/service", component: Service},
+    {path: "/service/create-service", component: CreateService},
+    {path: "/service/edit-service/:id", component: EditService},
+
 
 ]
 
