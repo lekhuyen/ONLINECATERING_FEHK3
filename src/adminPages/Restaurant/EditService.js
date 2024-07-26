@@ -11,9 +11,9 @@ export default function EditService() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [formFile, setFormFile] = useState(null); // For handling file upload
-    const [imagePath, setImagePaths] = useState([]);
+    const [imagePath, setImagePath] = useState(''); // Initialize as a string
 
-    const serviceItem = useSelector((state) => state.service.items.find(item => item.id === id));
+    const serviceItem = useSelector((state) => state.service.items.find(item => item.id === Number(id))); // Convert id to number
     const status = useSelector((state) => state.service.status);
     const error = useSelector((state) => state.service.error);
 
@@ -27,7 +27,7 @@ export default function EditService() {
         if (serviceItem) {
             setName(serviceItem.name || '');
             setDescription(serviceItem.description || '');
-            setImagePaths(serviceItem.imagePath || []);
+            setImagePath(serviceItem.imagePath || ''); // Set single image path
         }
     }, [serviceItem]);
 
@@ -41,14 +41,14 @@ export default function EditService() {
                 formData.append('formFile', formFile);
             }
 
-            formData.append('imagePath', JSON.stringify(imagePath));
-
+            formData.append('imagePath', imagePath); // Include current image path
 
             await dispatch(updateServiceItem({
-                id,
+                id: Number(id),
                 name,
                 description,
-                formFile: formFile || undefined
+                formFile,
+                imagePath
             })).unwrap();
 
             console.log('Service item updated successfully');
@@ -95,25 +95,21 @@ export default function EditService() {
                 </div>
 
                 <div className="form-group">
-                    <label>Current Images</label>
-                    {imagePath.length > 0 ? (
-                        <div className="d-flex flex-wrap">
-                            {imagePath.map((imagePath, index) => (
-                                <div key={index} className="mb-2 mr-2">
-                                    <img
-                                        src={`http://localhost:5265${imagePath}`}
-                                        alt={`Image ${index}`}
-                                        style={{ width: "100px", height: "100px" }}
-                                    />
-                                </div>
-                            ))}
+                    <label>Current Image</label>
+                    {imagePath ? (
+                        <div className="mb-2">
+                            <img
+                                src={imagePath}
+                                alt="Current"
+                                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                            />
                         </div>
                     ) : (
-                        <p>No images available</p>
+                        <p>No image available</p>
                     )}
                 </div>
                 <div className="form-group">
-                    <label>Upload New Images</label>
+                    <label>Upload New Image</label>
                     <input
                         type="file"
                         className="form-control-file"
