@@ -32,6 +32,9 @@ import AdminCombo from "../adminPages/Restaurant/AdminCombo"
 import AdminDish from "../adminPages/Restaurant/AdminDish"
 import CreateDish from "../adminPages/Restaurant/CreateDish"
 import EditDish from "../adminPages/Restaurant/EditDish"
+import AdminAppetizer from "../adminPages/Restaurant/AdminAppetizer"
+import CreateAppetizer from "../adminPages/Restaurant/CreateAppetizer"
+import EditAdminAppetizer from "../adminPages/Restaurant/EditAdminAppetizer"
 
 
 
@@ -73,6 +76,9 @@ const privateRoutes = [
     {path: "/dish-admin", component: AdminDish},
     {path: "/dish-admin/create-dish-admin", component: CreateDish},
     {path: "/dish-admin/edit-dish-admin/:id", component: EditDish},
+    {path: "/appetizer-admin", component: AdminAppetizer},
+    {path: "/appetizer-admin/create-appetizer-admin", component: CreateAppetizer},
+    {path: "/appetizer-admin/edit-appetizer-admin/:id", component: EditAdminAppetizer},
 
 ]
 
