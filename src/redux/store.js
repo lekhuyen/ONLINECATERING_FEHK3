@@ -19,6 +19,8 @@ import comboSlice from './Restaurant/comboSlice'
 import accountsSlice from './Accounts/accountsSlice'
 import ServiceSlice from './Restaurant/ServiceSlice'
 import dishSlice from './Restaurant/dishSlice'
+import CustomCombo from '../adminPages/Restaurant/CustomCombo'
+import customComboSlice from './Restaurant/customComboSlice'
 
 
 
@@ -43,7 +45,8 @@ export const store = configureStore({
         combo: comboSlice,
         accounts : accountsSlice,
         service : ServiceSlice,
-        dish: dishSlice
+        dish: dishSlice,
+        customCombo: customComboSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
