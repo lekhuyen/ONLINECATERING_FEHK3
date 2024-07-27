@@ -7,6 +7,7 @@ import FormBooking from '../FormBooking';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
 import { apiGetAppetizerComboId, apiGetComboById, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles)
 
@@ -23,6 +24,10 @@ const Menu = () => {
     const [mainAppetizer, setAppetizer] = useState(null)
     const [mainPromotion, setPromotion] = useState(null)
     const [comboPrice, setComboPrice] = useState(null)
+    const [userCurrent, setUserCurrent] = useState('')
+    const [bookingDate, setBookingDate] = useState('')
+    const [bookingTime, setBookingTime] = useState('')
+    const { isLoggedIn } = useSelector(state => state.user)
 
     // book form
     const [quantityTable, setQuantityTable] = useState(1)
@@ -32,6 +37,21 @@ const Menu = () => {
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
     
     const { comboid } = useParams()
+    const order = {
+        userId: userCurrent,
+        comboId: comboid,
+        totalPrice: totalPrice,
+        quantityTable: quantityTable,
+        deposit: deposit,
+        oganization: bookingDate + ' ' + bookingTime
+    }
+    
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user.id);
+        }
+    }, [isLoggedIn])
 
     const getOneCombo = async () => {
         const responseDish = await apiGetDishByComboId(comboid)
@@ -209,6 +229,11 @@ const Menu = () => {
                                 deposit={deposit}
                                 setQuantityTable={setQuantityTable}
                                 setLobbyPrice={setLobbyPrice}
+                                lobbyPrice={lobbyPrice}
+                                quantityTable={quantityTable}
+                                setBookingDate={setBookingDate}
+                                setBookingTime={setBookingTime}
+                                order={order}
                                 
                                 showFormOrderStatus={showFormOrderStatus}
                                 handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
