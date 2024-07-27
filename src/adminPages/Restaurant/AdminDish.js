@@ -36,13 +36,17 @@ export default function AdminDish() {
         setShowModal(true);
     };
 
-    const filteredDishData = dishData.filter((dish) => {
+    const filterBySearchTerm = (dish) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
-        return (
-            dish.name.toLowerCase().includes(searchTermLowerCase) ||
-            dish.type.toLowerCase().includes(searchTermLowerCase)
-        );
-    });
+        const priceMatches = dish.price.toString().includes(searchTermLowerCase);
+        const statusMatches = dish.status ? 'active'.includes(searchTermLowerCase) : 'inactive'.includes(searchTermLowerCase);
+        const nameMatches = dish.name?.toLowerCase().includes(searchTermLowerCase);
+        const typeMatches = dish.type?.toLowerCase().includes(searchTermLowerCase);
+
+        return nameMatches || priceMatches || statusMatches || typeMatches;
+    };
+
+    const filteredDishData = dishData.filter(filterBySearchTerm);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -66,7 +70,7 @@ export default function AdminDish() {
             <div className="row mb-3">
                 <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
-                        Search Name/Type:
+                        Search Name/Price/Status:
                     </label>
                     <div className="input-group">
                         <input
