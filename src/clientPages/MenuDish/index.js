@@ -19,7 +19,21 @@ const MenuDish = () => {
     const [mainDish, setMainDish] = useState(null)
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
+    const [menuChoose, setMenuChoose] = useState(1)
+    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
 
+    const [cartAppetizer, setCartAppetizer] = useState(() => {
+        const storedCart = localStorage.getItem('appetizer');
+        return storedCart ? JSON.parse(storedCart) : [];
+    });
+    const [cartDish, setCartDish] = useState(() => {
+        const storedCart = localStorage.getItem('dish');
+        return storedCart ? JSON.parse(storedCart) : [];
+    });
+    const [cartDessert, setCartDessert] = useState(() => {
+        const storedCart = localStorage.getItem('dessert');
+        return storedCart ? JSON.parse(storedCart) : [];
+    });
 
     const getOneCombo = async () => {
         const responseDish = await apiGetAllDish()
@@ -40,8 +54,7 @@ const MenuDish = () => {
     useEffect(() => {
         getOneCombo()
     }, [])
-    const [menuChoose, setMenuChoose] = useState(1)
-    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
+
 
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
@@ -53,7 +66,50 @@ const MenuDish = () => {
     const handleOnclickMenu = (index) => {
         setMenuChoose(index)
     }
-    
+
+    const handleClickCart = (item, type) => {
+        if (type === 'appetizer') {
+            setCartAppetizer(prevCart => {
+                const existItem = prevCart.find(c => c.item.id === item.id);
+                if (existItem) {
+                    return prevCart.map(cartItem =>
+                        cartItem.item.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+                    );
+                } else {
+                    return [...prevCart, { item, quantity: 1 }];
+                }
+            });
+        } else if (type === 'dish') {
+            setCartDish(prevCart => {
+                const existItem = prevCart.find(c => c.item.id === item.id);
+                if (existItem) {
+                    return prevCart.map(cartItem =>
+                        cartItem.item.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+                    );
+                } else {
+                    return [...prevCart, { item, quantity: 1 }];
+                }
+            });
+        } else if (type === 'dessert') {
+            setCartDessert(prevCart => {
+                const existItem = prevCart.find(c => c.item.id === item.id);
+                if (existItem) {
+                    return prevCart.map(cartItem =>
+                        cartItem.item.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+                    );
+                } else {
+                    return [...prevCart, { item, quantity: 1 }];
+                }
+            });
+        }
+    }
+    useEffect(() => {
+        localStorage.setItem('dessert', JSON.stringify(cartDessert))
+        localStorage.setItem('dish', JSON.stringify(cartDish))
+        localStorage.setItem('appetizer', JSON.stringify(cartAppetizer))
+    }, [cartDessert, cartDish, cartAppetizer])
+
+
     return (
         <div className={clsx(styles.menuContainer, "app__bg")}>
             <div className={styles.menu_category}>
@@ -83,9 +139,11 @@ const MenuDish = () => {
                                         <div key={item.appetizerId} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item.appetizerImage} /></div>
-                                                {/* <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
+                                                <div
+                                                    onClick={() => handleClickCart(item, 'appetizer')}
+                                                    className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
-                                                </div> */}
+                                                </div>
                                             </div>
                                             <div className={styles.menu_price}>
                                                 <span>{item.appetizerName}</span>
@@ -105,7 +163,9 @@ const MenuDish = () => {
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item.imagePath} /></div>
-                                                <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
+                                                <div
+                                                    onClick={() => handleClickCart(item, 'dish')}
+                                                    className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
                                                 </div>
                                             </div>
@@ -127,7 +187,9 @@ const MenuDish = () => {
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_3)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item?.dessertImage} /></div>
-                                                <div className={styles.icon_cart}>
+                                                <div
+                                                    onClick={() => handleClickCart(item, 'dessert')}
+                                                    className={styles.icon_cart}>
                                                     <FaCartPlus />
                                                 </div>
                                             </div>
