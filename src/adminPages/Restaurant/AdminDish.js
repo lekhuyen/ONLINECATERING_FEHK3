@@ -5,6 +5,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { BsInfoCircle } from 'react-icons/bs';
 import { deleteDishItem, fetchDishData } from '../../redux/Restaurant/dishSlice';
+import { fetchCustomComboData } from '../../redux/Restaurant/customComboSlice';
 
 export default function AdminDish() {
     const dispatch = useDispatch();
@@ -12,15 +13,20 @@ export default function AdminDish() {
     const dishData = useSelector((state) => state.dish.items);
     const status = useSelector((state) => state.dish.status);
     const error = useSelector((state) => state.dish.error);
+    const customComboData = useSelector((state) => state.customCombo.customCombos);
+    const comboStatus = useSelector((state) => state.customCombo.status);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedDish, setSelectedDish] = useState(null);
+    const [selectedCombo, setSelectedCombo] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showComboModal, setShowComboModal] = useState(false);
 
     useEffect(() => {
         dispatch(fetchDishData());
+        dispatch(fetchCustomComboData());
     }, [dispatch]);
 
     const handleDelete = (id) => {
@@ -34,6 +40,12 @@ export default function AdminDish() {
     const handleInfoClick = (dish) => {
         setSelectedDish(dish);
         setShowModal(true);
+    };
+
+    const handleComboInfoClick = (dish) => {
+        const filteredCombos = customComboData.filter(combo => combo.dishId === dish.id);
+        setSelectedCombo(filteredCombos);
+        setShowComboModal(true);
     };
 
     const filterBySearchTerm = (dish) => {
@@ -134,6 +146,12 @@ export default function AdminDish() {
                                         <BsInfoCircle />
                                     </button>
                                     <button
+                                        className="btn btn-outline-primary"
+                                        onClick={() => handleComboInfoClick(dish)}
+                                    >
+                                        <BsInfoCircle />
+                                    </button>
+                                    <button
                                         className="btn btn-outline-warning"
                                         onClick={() => handleEdit(dish.id)}
                                     >
@@ -176,21 +194,19 @@ export default function AdminDish() {
                                         <p>{selectedDish.price}</p>
                                         <h5>Status:</h5>
                                         <p>{selectedDish.status ? 'Active' : 'Inactive'}</p>
-                                        <h5>Type:</h5>
-                                        <p>{selectedDish.type}</p>
-                                        <h5>Image:</h5>
-                                        {selectedDish.imagePath ? (
-                                            <img
-                                                src={selectedDish.imagePath}
-                                                alt={`Dish ${selectedDish.id}`}
-                                                style={{
-                                                    width: "20%",
-                                                    height: "auto",
-                                                    objectFit: "cover",
-                                                }}
-                                            />
-                                        ) : (
-                                            <p>No image available</p>
+                                        {selectedDish.imagePath && (
+                                            <div>
+                                                <h5>Image:</h5>
+                                                <img
+                                                    src={selectedDish.imagePath}
+                                                    alt={`Dish ${selectedDish.id}`}
+                                                    style={{
+                                                        width: "300px",
+                                                        height: "300px",
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                            </div>
                                         )}
                                     </div>
                                 )}
@@ -198,7 +214,7 @@ export default function AdminDish() {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className="btn btn-danger"
+                                    className="btn btn-secondary"
                                     onClick={() => setShowModal(false)}
                                 >
                                     Close
@@ -208,6 +224,67 @@ export default function AdminDish() {
                     </div>
                 </div>
             )}
+
+            {/* Modal for Custom Combo Details */}
+            {showComboModal && (
+            <div className="modal fade show" style={{ display: 'block' }} onClick={() => setShowComboModal(false)}>
+                    <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title">
+                                    Custom Combo Details for Dish ID: {selectedCombo.length > 0 ? selectedCombo[0].dishId : ''}
+                                </h4>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => setShowComboModal(false)}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedCombo.length > 0 ? (
+                                    <table className="table table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th>User ID</th>
+                                                <th>User Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {selectedCombo.map((combo) => (
+                                                <tr key={combo.userId}>
+                                                    <td>{combo.userId}</td>
+                                                    <td>{combo.userName}</td>
+                                                    <td>{combo.userEmail}</td>
+                                                    <td>{combo.phone}</td>
+                                                    <td>{new Date(combo.date).toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p>No data available.</p>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowComboModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
 
             <nav>
                 <ul className="pagination">
