@@ -17,8 +17,8 @@ export const fetchPromotionData = createAsyncThunk(
 );
 
 // Async thunk to create new promotion
-export const createPromotion = createAsyncThunk(
-    "promotion/createPromotion",
+export const createPromotionItem = createAsyncThunk(
+    "promotion/createPromotionItem",
     async (newPromotion) => {
         try {
             const formData = new FormData();
@@ -45,8 +45,8 @@ export const createPromotion = createAsyncThunk(
 );
 
 // Async thunk to update promotion
-export const updatePromotion = createAsyncThunk(
-    "promotion/updatePromotion",
+export const updatePromotionItem = createAsyncThunk(
+    "promotion/updatePromotionItem",
     async (updatedPromotion) => {
         try {
             const formData = new FormData();
@@ -74,8 +74,8 @@ export const updatePromotion = createAsyncThunk(
 );
 
 // Async thunk to delete promotion
-export const deletePromotion = createAsyncThunk(
-    "promotion/deletePromotion",
+export const deletePromotionItem = createAsyncThunk(
+    "promotion/deletePromotionItem",
     async (id) => {
         try {
             await axios.delete(`${apiEndpoint}/${id}`);
@@ -107,38 +107,38 @@ const promotionSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error.message;
             })
-            .addCase(createPromotion.pending, (state) => {
+            .addCase(createPromotionItem.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(createPromotion.fulfilled, (state, action) => {
+            .addCase(createPromotionItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.promotions.push(action.payload.data);
             })
-            .addCase(createPromotion.rejected, (state, action) => {
+            .addCase(createPromotionItem.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
             })
-            .addCase(updatePromotion.pending, (state) => {
+            .addCase(updatePromotionItem.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(updatePromotion.fulfilled, (state, action) => {
+            .addCase(updatePromotionItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.promotions = state.promotions.map(promotion =>
                     promotion.id === action.payload.data.id ? action.payload.data : promotion
                 );
             })
-            .addCase(updatePromotion.rejected, (state, action) => {
+            .addCase(updatePromotionItem.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
             })
-            .addCase(deletePromotion.pending, (state) => {
+            .addCase(deletePromotionItem.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(deletePromotion.fulfilled, (state, action) => {
+            .addCase(deletePromotionItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.promotions = state.promotions.filter(promotion => promotion.id !== action.payload);
             })
-            .addCase(deletePromotion.rejected, (state, action) => {
+            .addCase(deletePromotionItem.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
             });
