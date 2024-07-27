@@ -27,6 +27,15 @@ import CreateService from "../adminPages/Restaurant/CreateService"
 import EditService from "../adminPages/Restaurant/EditService"
 import MenuDish from "../clientPages/MenuDish"
 import CheckoutBook from "../clientPages/CheckoutBook"
+import Promotion from "../adminPages/Restaurant/Promotion"
+import AdminOrder from "../adminPages/Restaurant/AdminOrder"
+import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+import AdminDish from "../adminPages/Restaurant/AdminDish"
+import CreateDish from "../adminPages/Restaurant/CreateDish"
+import EditDish from "../adminPages/Restaurant/EditDish"
+import AdminAppetizer from "../adminPages/Restaurant/AdminAppetizer"
+import CreateAppetizer from "../adminPages/Restaurant/CreateAppetizer"
+import EditAdminAppetizer from "../adminPages/Restaurant/EditAdminAppetizer"
 
 
 
@@ -63,7 +72,15 @@ const privateRoutes = [
     {path: "/service", component: Service},
     {path: "/service/create-service", component: CreateService},
     {path: "/service/edit-service/:id", component: EditService},
-
+    {path: "/promotion", component: Promotion},
+    {path: "/combo-admin", component: AdminCombo},
+    {path: "/order-admin", component: AdminOrder},
+    {path: "/dish-admin", component: AdminDish},
+    {path: "/dish-admin/create-dish-admin", component: CreateDish},
+    {path: "/dish-admin/edit-dish-admin/:id", component: EditDish},
+    {path: "/appetizer-admin", component: AdminAppetizer},
+    {path: "/appetizer-admin/create-appetizer-admin", component: CreateAppetizer},
+    {path: "/appetizer-admin/edit-appetizer-admin/:id", component: EditAdminAppetizer},
 
 ]
 

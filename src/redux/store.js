@@ -18,8 +18,10 @@ import { persistReducer, persistStore,FLUSH,
 import comboSlice from './Restaurant/comboSlice'
 import accountsSlice from './Accounts/accountsSlice'
 import ServiceSlice from './Restaurant/ServiceSlice'
+import dishSlice from './Restaurant/dishSlice'
 
-
+import customComboSlice from './Restaurant/customComboSlice'
+import adminappetizersSlice from './Restaurant/adminappetizersSlice'
 
 
 const comonConfig = {
@@ -41,7 +43,10 @@ export const store = configureStore({
         contacts: contactSlice,
         combo: comboSlice,
         accounts : accountsSlice,
-        service : ServiceSlice
+        service : ServiceSlice,
+        dish: dishSlice,
+        customCombo: customComboSlice,
+        adminappetizer : adminappetizersSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

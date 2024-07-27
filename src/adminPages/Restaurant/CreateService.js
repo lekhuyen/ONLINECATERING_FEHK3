@@ -10,7 +10,7 @@ const apiEndpoint = "http://localhost:5265/api/Service";
 export default function CreateService() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [formFile, setImageFiles] = useState(null); // State to hold image file(s)
+    const [imageFile, setImageFile] = useState(null); // State to hold image file
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -22,11 +22,9 @@ export default function CreateService() {
         formData.append('name', name);
         formData.append('description', description);
     
-        // Append image files if available
-        if (formFile) {
-            for (let i = 0; i < formFile.length; i++) {
-                formData.append('formFile', formFile[i]); // Ensure 'formFile' matches backend expectation
-            }
+        // Append image file if available
+        if (imageFile) {
+            formData.append('formFile', imageFile); // Ensure 'formFile' matches backend expectation
         }
     
         try {
@@ -40,13 +38,13 @@ export default function CreateService() {
             dispatch(createServiceItem({
                 name,
                 description,
-                formFile
+                imageFile
             }));
             
-            // Clear form fields and imageFiles state
+            // Clear form fields and imageFile state
             setName('');
             setDescription('');
-            setImageFiles(null);
+            setImageFile(null);
     
             // Navigate to service list or any other desired location
             navigate('/service'); // Example: navigate to service list page
@@ -56,10 +54,9 @@ export default function CreateService() {
         }
     };
     
-
     // Function to handle file input change
     const handleFileChange = (e) => {
-        setImageFiles(e.target.files);
+        setImageFile(e.target.files[0]); // Get the first selected file
     };
 
     return (
@@ -96,7 +93,6 @@ export default function CreateService() {
                         className="form-control"
                         id="formFile"
                         onChange={handleFileChange}
-                        multiple // Allow multiple file selection
                     />
                 </div>
 

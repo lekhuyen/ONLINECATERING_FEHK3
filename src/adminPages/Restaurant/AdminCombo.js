@@ -1,65 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { BsInfoCircle } from 'react-icons/bs';
-import { deleteServiceItem, fetchServiceData } from '../../redux/Restaurant/ServiceSlice';
+import { deleteComboItem, fetchComboData } from '../../redux/Restaurant/comboSlice';
 
-// Function to limit content to 10 words
-const limitContent = (content) => {
-    const words = content.split(' ');
-    if (words.length > 10) {
-        return words.slice(0, 10).join(' ') + '...';
-    }
-    return content;
-};
 
-export default function Service() {
+export default function AdminCombo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const serviceData = useSelector((state) => state.service.items);
-    const status = useSelector((state) => state.service.status);
-    const error = useSelector((state) => state.service.error);
+    const comboData = useSelector((state) => state.combo.items);
+    const status = useSelector((state) => state.combo.status);
+    const error = useSelector((state) => state.combo.error);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 5; // Adjust as needed
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedService, setSelectedService] = useState(null);
+    const [selectedCombo, setSelectedCombo] = useState(null);
 
     useEffect(() => {
-        dispatch(fetchServiceData());
+        dispatch(fetchComboData());
     }, [dispatch]);
 
     const handleDelete = (id) => {
-        dispatch(deleteServiceItem(id));
+        dispatch(deleteComboItem(id));
     };
 
     const handleEdit = (id) => {
-        navigate(`/service/edit-service/${id}`);
+        navigate(`/combo/edit-combo/${id}`);
     };
 
-    const handleInfoClick = (service) => {
-        setSelectedService(service);
+    const handleInfoClick = (combo) => {
+        setSelectedCombo(combo);
         // Show modal
-        const modal = new window.bootstrap.Modal(document.getElementById('serviceModal'));
+        const modal = new window.bootstrap.Modal(document.getElementById('comboModal'));
         modal.show();
     };
 
-    const filteredServiceData = serviceData.filter((service) => {
+    const filteredComboData = comboData.filter((combo) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
         return (
-            service.name.toLowerCase().includes(searchTermLowerCase) ||
-            service.description.toLowerCase().includes(searchTermLowerCase)
+            combo.name.toLowerCase().includes(searchTermLowerCase) ||
+            combo.type.toLowerCase().includes(searchTermLowerCase)
         );
     });
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentServiceData = filteredServiceData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentComboData = filteredComboData.slice(indexOfFirstItem, indexOfLastItem);
 
-    const pageNumbers = Math.ceil(filteredServiceData.length / itemsPerPage);
+    const pageNumbers = Math.ceil(filteredComboData.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (status === 'loading') {
@@ -72,12 +64,12 @@ export default function Service() {
 
     return (
         <div className='container'>
-            <h2>Service Table</h2>
+            <h2>Combo Table</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
-                        Search Name/Description:
+                        Search Name/Type:
                     </label>
                     <div className="input-group">
                         <input
@@ -95,7 +87,7 @@ export default function Service() {
                 </div>
 
                 <div className="col-sm-3">
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/service/create-service')}>Add Service</button>
+                    <button className="btn btn-success mb-3" onClick={() => navigate('/combo/create-combo')}>Add Combo</button>
                 </div>
             </div>
 
@@ -105,24 +97,25 @@ export default function Service() {
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Description</th>
+                            <th>Price</th>
                             <th>Status</th>
                             <th>Image</th>
+                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentServiceData.map((service) => (
-                            <tr key={service.id}>
-                                <td>{service.id}</td>
-                                <td>{service.name}</td>
-                                <td>{limitContent(service.description)}</td> {/* Apply limitContent here */}
-                                <td>{service.status ? 'Active' : 'Inactive'}</td>
+                        {currentComboData.map((combo) => (
+                            <tr key={combo.id}>
+                                <td>{combo.id}</td>
+                                <td>{combo.name}</td>
+                                <td>{combo.price}</td>
+                                <td>{combo.status}</td>
                                 <td>
-                                    {service.imagePath && (
+                                    {combo.imagePaths && combo.imagePaths.length > 0 && (
                                         <img
-                                            src={service.imagePath}
-                                            alt={`Service ${service.id}`}
+                                            src={`http://localhost:5265${combo.imagePaths[0]}`}
+                                            alt={`Combo ${combo.id}`}
                                             style={{
                                                 width: "100px",
                                                 height: "100px",
@@ -131,22 +124,23 @@ export default function Service() {
                                         />
                                     )}
                                 </td>
+                                <td>{combo.type}</td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
-                                        onClick={() => handleInfoClick(service)}
+                                        onClick={() => handleInfoClick(combo)}
                                     >
                                         <BsInfoCircle />
                                     </button>
                                     <button
                                         className="btn btn-outline-warning"
-                                        onClick={() => handleEdit(service.id)}
+                                        onClick={() => handleEdit(combo.id)}
                                     >
                                         <HiOutlinePencilSquare />
                                     </button>
                                     <button
                                         className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(service.id)}
+                                        onClick={() => handleDelete(combo.id)}
                                     >
                                         <FaRegTrashAlt />
                                     </button>
@@ -157,13 +151,13 @@ export default function Service() {
                 </table>
             </div>
 
-            {/* Modal for Service Details */}
-            <div className="modal fade" id="serviceModal" tabIndex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
+            {/* Modal for Combo Details */}
+            <div className="modal fade" id="comboModal" tabIndex="-1" role="dialog" aria-labelledby="comboModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h4 className="modal-title" id="serviceModalLabel">
-                                Service Details: {selectedService ? selectedService.name : ''}
+                            <h4 className="modal-title" id="comboModalLabel">
+                                Combo Details: {selectedCombo ? selectedCombo.name : ''}
                             </h4>
                             <button
                                 type="button"
@@ -175,15 +169,19 @@ export default function Service() {
                             </button>
                         </div>
                         <div className="modal-body">
-                            {selectedService && (
+                            {selectedCombo && (
                                 <div>
-                                    <h5>Description:</h5>
-                                    <p>{selectedService.description}</p>
+                                    <h5>Price:</h5>
+                                    <p>{selectedCombo.price}</p>
+                                    <h5>Status:</h5>
+                                    <p>{selectedCombo.status}</p>
+                                    <h5>Type:</h5>
+                                    <p>{selectedCombo.type}</p>
                                     <h5>Image:</h5>
-                                    {selectedService.imagePath ? (
+                                    {selectedCombo.imagePaths && selectedCombo.imagePaths.length > 0 ? (
                                         <img
-                                            src={selectedService.imagePath}
-                                            alt={`Service ${selectedService.id}`}
+                                            src={`http://localhost:5265${selectedCombo.imagePaths[0]}`}
+                                            alt={`Combo ${selectedCombo.id}`}
                                             style={{
                                                 width: "20%",
                                                 height: "auto",
