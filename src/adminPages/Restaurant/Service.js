@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { BsInfoCircle } from 'react-icons/bs';
 import { deleteServiceItem, fetchServiceData } from '../../redux/Restaurant/ServiceSlice';
+
+// Function to limit content to 10 words
+const limitContent = (content) => {
+    const words = content.split(' ');
+    if (words.length > 10) {
+        return words.slice(0, 10).join(' ') + '...';
+    }
+    return content;
+};
 
 export default function Service() {
     const dispatch = useDispatch();
@@ -108,7 +116,7 @@ export default function Service() {
                             <tr key={service.id}>
                                 <td>{service.id}</td>
                                 <td>{service.name}</td>
-                                <td>{service.description}</td>
+                                <td>{limitContent(service.description)}</td> {/* Apply limitContent here */}
                                 <td>{service.status ? 'Active' : 'Inactive'}</td>
                                 <td>
                                     {service.imagePath && (
