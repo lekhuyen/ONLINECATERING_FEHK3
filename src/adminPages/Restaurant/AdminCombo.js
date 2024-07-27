@@ -1,57 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import { BsInfoCircle } from 'react-icons/bs';
-import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { deletePromotionItem, fetchPromotionData } from '../../redux/Restaurant/promotionSlice';
+import { HiOutlinePencilSquare } from 'react-icons/hi2';
+import { BsInfoCircle } from 'react-icons/bs';
+import { deleteComboItem, fetchComboData } from '../../redux/Restaurant/comboSlice';
 
-export default function Promotion() {
+
+export default function AdminCombo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const promotionData = useSelector((state) => state.promotion.items);
-    const status = useSelector((state) => state.promotion.status);
-    const error = useSelector((state) => state.promotion.error);
+    const comboData = useSelector((state) => state.combo.items);
+    const status = useSelector((state) => state.combo.status);
+    const error = useSelector((state) => state.combo.error);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 5; // Adjust as needed
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedPromotion, setSelectedPromotion] = useState(null);
+    const [selectedCombo, setSelectedCombo] = useState(null);
 
     useEffect(() => {
-        dispatch(fetchPromotionData());
+        dispatch(fetchComboData());
     }, [dispatch]);
 
     const handleDelete = (id) => {
-        dispatch(deletePromotionItem(id));
+        dispatch(deleteComboItem(id));
     };
 
     const handleEdit = (id) => {
-        navigate(`/promotion/edit-promotion/${id}`);
+        navigate(`/combo/edit-combo/${id}`);
     };
 
-    const handleInfoClick = (promotion) => {
-        setSelectedPromotion(promotion);
+    const handleInfoClick = (combo) => {
+        setSelectedCombo(combo);
         // Show modal
-        const modal = new window.bootstrap.Modal(document.getElementById('promotionModal'));
+        const modal = new window.bootstrap.Modal(document.getElementById('comboModal'));
         modal.show();
     };
 
-    const filteredPromotionData = promotionData.filter((promotion) => {
+    const filteredComboData = comboData.filter((combo) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
         return (
-            promotion.name.toLowerCase().includes(searchTermLowerCase) ||
-            promotion.description.toLowerCase().includes(searchTermLowerCase)
+            combo.name.toLowerCase().includes(searchTermLowerCase) ||
+            combo.type.toLowerCase().includes(searchTermLowerCase)
         );
     });
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentPromotionData = filteredPromotionData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentComboData = filteredComboData.slice(indexOfFirstItem, indexOfLastItem);
 
-    const pageNumbers = Math.ceil(filteredPromotionData.length / itemsPerPage);
+    const pageNumbers = Math.ceil(filteredComboData.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (status === 'loading') {
@@ -64,12 +64,12 @@ export default function Promotion() {
 
     return (
         <div className='container'>
-            <h2>Promotion Table</h2>
+            <h2>Combo Table</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
-                        Search Name/Description:
+                        Search Name/Type:
                     </label>
                     <div className="input-group">
                         <input
@@ -87,7 +87,7 @@ export default function Promotion() {
                 </div>
 
                 <div className="col-sm-3">
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/promotion/create-promotion')}>Add Promotion</button>
+                    <button className="btn btn-success mb-3" onClick={() => navigate('/combo/create-combo')}>Add Combo</button>
                 </div>
             </div>
 
@@ -97,28 +97,25 @@ export default function Promotion() {
                         <tr>
                             <th>Id</th>
                             <th>Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Quantity Table</th>
                             <th>Price</th>
+                            <th>Status</th>
                             <th>Image</th>
+                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentPromotionData.map((promotion) => (
-                            <tr key={promotion.id}>
-                                <td>{promotion.id}</td>
-                                <td>{promotion.name}</td>
-                                <td>{promotion.description}</td>
-                                <td>{promotion.status ? 'Active' : 'Inactive'}</td>
-                                <td>{promotion.quantityTable}</td>
-                                <td>{promotion.price}</td>
+                        {currentComboData.map((combo) => (
+                            <tr key={combo.id}>
+                                <td>{combo.id}</td>
+                                <td>{combo.name}</td>
+                                <td>{combo.price}</td>
+                                <td>{combo.status}</td>
                                 <td>
-                                    {promotion.imagePath && (
+                                    {combo.imagePaths && combo.imagePaths.length > 0 && (
                                         <img
-                                            src={promotion.imagePath}
-                                            alt={`Promotion ${promotion.id}`}
+                                            src={`http://localhost:5265${combo.imagePaths[0]}`}
+                                            alt={`Combo ${combo.id}`}
                                             style={{
                                                 width: "100px",
                                                 height: "100px",
@@ -127,22 +124,23 @@ export default function Promotion() {
                                         />
                                     )}
                                 </td>
+                                <td>{combo.type}</td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
-                                        onClick={() => handleInfoClick(promotion)}
+                                        onClick={() => handleInfoClick(combo)}
                                     >
                                         <BsInfoCircle />
                                     </button>
                                     <button
                                         className="btn btn-outline-warning"
-                                        onClick={() => handleEdit(promotion.id)}
+                                        onClick={() => handleEdit(combo.id)}
                                     >
                                         <HiOutlinePencilSquare />
                                     </button>
                                     <button
                                         className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(promotion.id)}
+                                        onClick={() => handleDelete(combo.id)}
                                     >
                                         <FaRegTrashAlt />
                                     </button>
@@ -153,13 +151,13 @@ export default function Promotion() {
                 </table>
             </div>
 
-            {/* Modal for Promotion Details */}
-            <div className="modal fade" id="promotionModal" tabIndex="-1" role="dialog" aria-labelledby="promotionModalLabel" aria-hidden="true">
+            {/* Modal for Combo Details */}
+            <div className="modal fade" id="comboModal" tabIndex="-1" role="dialog" aria-labelledby="comboModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h4 className="modal-title" id="promotionModalLabel">
-                                Promotion Details: {selectedPromotion ? selectedPromotion.name : ''}
+                            <h4 className="modal-title" id="comboModalLabel">
+                                Combo Details: {selectedCombo ? selectedCombo.name : ''}
                             </h4>
                             <button
                                 type="button"
@@ -171,15 +169,19 @@ export default function Promotion() {
                             </button>
                         </div>
                         <div className="modal-body">
-                            {selectedPromotion && (
+                            {selectedCombo && (
                                 <div>
-                                    <h5>Description:</h5>
-                                    <p>{selectedPromotion.description}</p>
+                                    <h5>Price:</h5>
+                                    <p>{selectedCombo.price}</p>
+                                    <h5>Status:</h5>
+                                    <p>{selectedCombo.status}</p>
+                                    <h5>Type:</h5>
+                                    <p>{selectedCombo.type}</p>
                                     <h5>Image:</h5>
-                                    {selectedPromotion.imagePath ? (
+                                    {selectedCombo.imagePaths && selectedCombo.imagePaths.length > 0 ? (
                                         <img
-                                            src={selectedPromotion.imagePath}
-                                            alt={`Promotion ${selectedPromotion.id}`}
+                                            src={`http://localhost:5265${selectedCombo.imagePaths[0]}`}
+                                            alt={`Combo ${selectedCombo.id}`}
                                             style={{
                                                 width: "20%",
                                                 height: "auto",

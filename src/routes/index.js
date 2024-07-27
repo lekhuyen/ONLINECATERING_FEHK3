@@ -26,6 +26,12 @@ import Service from "../adminPages/Restaurant/Service"
 import CreateService from "../adminPages/Restaurant/CreateService"
 import EditService from "../adminPages/Restaurant/EditService"
 import MenuDish from "../clientPages/MenuDish"
+import Promotion from "../adminPages/Restaurant/Promotion"
+import AdminOrder from "../adminPages/Restaurant/AdminOrder"
+import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+import AdminDish from "../adminPages/Restaurant/AdminDish"
+import CreateDish from "../adminPages/Restaurant/CreateDish"
+import EditDish from "../adminPages/Restaurant/EditDish"
 
 
 
@@ -61,7 +67,12 @@ const privateRoutes = [
     {path: "/service", component: Service},
     {path: "/service/create-service", component: CreateService},
     {path: "/service/edit-service/:id", component: EditService},
-
+    {path: "/promotion", component: Promotion},
+    {path: "/combo-admin", component: AdminCombo},
+    {path: "/order-admin", component: AdminOrder},
+    {path: "/dish-admin", component: AdminDish},
+    {path: "/dish-admin/create-dish-admin", component: CreateDish},
+    {path: "/dish-admin/edit-dish-admin/:id", component: EditDish},
 
 ]
 
