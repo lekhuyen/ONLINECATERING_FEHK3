@@ -18,6 +18,7 @@ import { persistReducer, persistStore,FLUSH,
 import comboSlice from './Restaurant/comboSlice'
 import accountsSlice from './Accounts/accountsSlice'
 import ServiceSlice from './Restaurant/ServiceSlice'
+import dishSlice from './Restaurant/dishSlice'
 
 
 
@@ -41,7 +42,8 @@ export const store = configureStore({
         contacts: contactSlice,
         combo: comboSlice,
         accounts : accountsSlice,
-        service : ServiceSlice
+        service : ServiceSlice,
+        dish: dishSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

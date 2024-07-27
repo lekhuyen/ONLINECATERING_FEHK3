@@ -9,7 +9,7 @@ export const fetchDishData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data;
+            return response.data.data.$values; // Extract the array of dishes
         } catch (error) {
             throw new Error('Error fetching dish data:', error.response.data);
         }
@@ -26,8 +26,8 @@ export const createDishItem = createAsyncThunk(
             formData.append('price', newDishItem.price);
             formData.append('status', newDishItem.status);
 
-            if (newDishItem.imageFile) {
-                formData.append('imageFile', newDishItem.imageFile);
+            if (newDishItem.formFile) {
+                formData.append('formFile', newDishItem.formFile);
             }
 
             const response = await axios.post(apiEndpoint, formData, {
@@ -46,7 +46,7 @@ export const createDishItem = createAsyncThunk(
 // Async thunk to update dish item
 export const updateDishItem = createAsyncThunk(
     "dish/updateDishItem",
-    async ({ id, name, price, status, customComboId, imageFile }) => {
+    async ({ id, name, price, status, imagePath,  formFile }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
@@ -54,8 +54,12 @@ export const updateDishItem = createAsyncThunk(
             formData.append("price", price);
             formData.append("status", status);
 
-            if (imageFile) {
-                formData.append('imageFile', imageFile);
+            if (formFile) {
+                formData.append("formFile", formFile);
+            }
+
+            if (imagePath && imagePath.length > 0) {
+                formData.append("imagePath", JSON.stringify(imagePath));
             }
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
@@ -99,7 +103,7 @@ const dishSlice = createSlice({
             })
             .addCase(fetchDishData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = action.payload.data || [];
+                state.items = action.payload || [];
             })
             .addCase(fetchDishData.rejected, (state, action) => {
                 state.status = "failed";
@@ -110,7 +114,7 @@ const dishSlice = createSlice({
             })
             .addCase(createDishItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items.push(action.payload.data);
+                state.items.push(action.payload);
             })
             .addCase(createDishItem.rejected, (state, action) => {
                 state.status = "failed";
@@ -122,7 +126,7 @@ const dishSlice = createSlice({
             .addCase(updateDishItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.items = state.items.map(item =>
-                    item.id === action.payload.data.id ? action.payload.data : item
+                    item.id === action.payload.id ? action.payload : item
                 );
             })
             .addCase(updateDishItem.rejected, (state, action) => {

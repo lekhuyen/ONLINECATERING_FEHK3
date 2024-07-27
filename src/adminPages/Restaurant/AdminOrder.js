@@ -1,31 +1,29 @@
 import React from 'react'
 
-export default function Order() {
+export default function AdminOrder() {
     return (
         <div className="container mt-5">
                     <table className="table table-hover">
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>UserId</th>
-                                <th>CustomComboId</th>
+                                <th>UserName</th>
+                                <th>ComboName</th>
+                                <th>DishOrder</th>
+                                <th>Promotion</th>
                                 <th>TotalPrice</th>
-                                <th>QuantityTable</th>
-                                <th>StatusPayment</th>
-                                <th>Deposit</th>
-                                <th>Oganization</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredOrderData.map((user) => (
+                            {/* {filteredOrderData.map((user) => (
                                 <tr key={user.id}>
                                     <td>{user.userid}</td>
-                                    <td>{user.customcomboid}</td>
-                                    <td>{user.totalprice}</td>
-                                    <td>{user.quantitytable}</td>
-                                    <td>{user.statuspayment}</td>                                    
-                                    <td>{user.deposit}</td>                                    
-                                    <td>{user.oganization}</td>                                    
+                                    <td>{user.username}</td>
+                                    <td>{user.comboname}</td>
+                                    <td>{user.dishorder}</td>
+                                    <td>{user.promotion}</td>                                    
+                                    <td>{user.totalprice}</td>                                    
+                                
                                     <td>
                                         <button
                                             className="btn btn-outline-primary"
@@ -49,7 +47,7 @@ export default function Order() {
                                         </button>
                                     </td>
                                 </tr>
-                            ))}
+                            ))} */}
                         </tbody>
                     </table>
                 </div>
