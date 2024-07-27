@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import FormBooking from '../FormBooking';
 import classNames from 'classnames/bind';
 import { useParams } from 'react-router-dom';
-import { apiGetAppetizerComboId, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
+import { apiGetAppetizerComboId, apiGetComboById, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
 
 const cx = classNames.bind(styles)
 
@@ -22,7 +22,15 @@ const Menu = () => {
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
     const [mainPromotion, setPromotion] = useState(null)
+    const [comboPrice, setComboPrice] = useState(null)
 
+    // book form
+    const [quantityTable, setQuantityTable] = useState(1)
+    const [lobbyPrice, setLobbyPrice] = useState(0)
+
+    const totalPrice = (quantityTable * comboPrice) + lobbyPrice
+    const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
+    
     const { comboid } = useParams()
 
     const getOneCombo = async () => {
@@ -30,7 +38,12 @@ const Menu = () => {
         const responseDessert = await apiGetDessertComboId(comboid)
         const responseAppetizer = await apiGetAppetizerComboId(comboid)
         const responsePromotion = await apiGetPromotionByComboId(comboid)
+        const responseComboOne = await apiGetComboById(comboid)
 
+
+        if (responseComboOne.status === 0) {
+            setComboPrice(responseComboOne.data.price)
+        }
         if (responsePromotion.status === 0) {
             setPromotion(responsePromotion.data.promotions.$values)
         }
@@ -131,9 +144,9 @@ const Menu = () => {
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_3)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item?.dessertImage} /></div>
-                                                <div className={styles.icon_cart}>
+                                                {/* <div className={styles.icon_cart}>
                                                     <FaCartPlus />
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className={styles.menu_price}>
                                                 <span>{item?.dessertName}</span>
@@ -192,6 +205,11 @@ const Menu = () => {
                     showFormOrderStatus && (
                         <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
                             <FormBooking
+                                totalPrice={totalPrice}
+                                deposit={deposit}
+                                setQuantityTable={setQuantityTable}
+                                setLobbyPrice={setLobbyPrice}
+                                
                                 showFormOrderStatus={showFormOrderStatus}
                                 handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
                         </div>

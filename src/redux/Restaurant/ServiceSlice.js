@@ -48,10 +48,9 @@ export const updateServiceItem = createAsyncThunk(
             formData.append("id", id);
             formData.append("name", name);
             formData.append("description", description);
-            if (formFile && formFile.length > 0) {
-                for (let i = 0; i < formFile.length; i++) {
-                    formData.append("formFile", formFile[i]);
-                }
+            
+            if (formFile) {
+                formData.append("formFile", formFile);
             }
 
             if (imagePath && imagePath.length > 0) {
@@ -66,7 +65,7 @@ export const updateServiceItem = createAsyncThunk(
 
             return response.data.data;
         } catch (error) {
-            throw new Error("Error updating service item:", error);
+            throw new Error(`Error updating service item: ${error.message}`);
         }
     }
 );

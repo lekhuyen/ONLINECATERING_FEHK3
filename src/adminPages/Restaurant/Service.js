@@ -29,12 +29,14 @@ export default function Service() {
     };
 
     const handleEdit = (id) => {
-        // Navigate to edit service item page
         navigate(`/service/edit-service/${id}`);
     };
 
     const handleInfoClick = (service) => {
         setSelectedService(service);
+        // Show modal
+        const modal = new window.bootstrap.Modal(document.getElementById('serviceModal'));
+        modal.show();
     };
 
     const filteredServiceData = serviceData.filter((service) => {
@@ -109,9 +111,9 @@ export default function Service() {
                                 <td>{service.description}</td>
                                 <td>{service.status ? 'Active' : 'Inactive'}</td>
                                 <td>
-                                    {service.formFile && (
+                                    {service.imagePath && (
                                         <img
-                                            src={`http://localhost:5265/${service.formFile}`}
+                                            src={service.imagePath}
                                             alt={`Service ${service.id}`}
                                             style={{
                                                 width: "100px",
@@ -125,8 +127,6 @@ export default function Service() {
                                     <button
                                         className="btn btn-outline-primary"
                                         onClick={() => handleInfoClick(service)}
-                                        data-toggle="modal"
-                                        data-target="#myModal"
                                     >
                                         <BsInfoCircle />
                                     </button>
@@ -147,6 +147,58 @@ export default function Service() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Modal for Service Details */}
+            <div className="modal fade" id="serviceModal" tabIndex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title" id="serviceModalLabel">
+                                Service Details: {selectedService ? selectedService.name : ''}
+                            </h4>
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {selectedService && (
+                                <div>
+                                    <h5>Description:</h5>
+                                    <p>{selectedService.description}</p>
+                                    <h5>Image:</h5>
+                                    {selectedService.imagePath ? (
+                                        <img
+                                            src={selectedService.imagePath}
+                                            alt={`Service ${selectedService.id}`}
+                                            style={{
+                                                width: "20%",
+                                                height: "auto",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                    ) : (
+                                        <p>No image available</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                data-bs-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <nav>
