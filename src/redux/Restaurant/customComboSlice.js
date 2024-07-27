@@ -9,9 +9,9 @@ export const fetchCustomComboData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data;
+            return response.data.data.$values; // Correctly access the data
         } catch (error) {
-            throw new Error('Error fetching custom combo data:', error.response.data);
+            throw new Error('Error fetching custom combo data:', error.response?.data || error.message);
         }
     }
 );
@@ -24,7 +24,7 @@ export const createCustomCombo = createAsyncThunk(
             const response = await axios.post(apiEndpoint, newCustomCombo);
             return response.data;
         } catch (error) {
-            throw new Error('Error creating custom combo:', error.response.data);
+            throw new Error('Error creating custom combo:', error.response?.data || error.message);
         }
     }
 );
@@ -37,7 +37,7 @@ export const deleteCustomCombo = createAsyncThunk(
             await axios.delete(`${apiEndpoint}/${id}`);
             return id; // Return the deleted custom combo ID for Redux state update
         } catch (error) {
-            throw new Error('Error deleting custom combo:', error.response.data);
+            throw new Error('Error deleting custom combo:', error.response?.data || error.message);
         }
     }
 );
@@ -45,7 +45,7 @@ export const deleteCustomCombo = createAsyncThunk(
 const customComboSlice = createSlice({
     name: "customCombo",
     initialState: {
-        customCombos: [], 
+        customCombos: [],
         status: "idle",
         error: null,
     },
@@ -57,7 +57,7 @@ const customComboSlice = createSlice({
             })
             .addCase(fetchCustomComboData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.customCombos = action.payload.data || [];
+                state.customCombos = action.payload || []; // Correctly assign the data
             })
             .addCase(fetchCustomComboData.rejected, (state, action) => {
                 state.status = "failed";
@@ -68,7 +68,7 @@ const customComboSlice = createSlice({
             })
             .addCase(createCustomCombo.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.customCombos.push(action.payload.data);
+                state.customCombos.push(action.payload);
             })
             .addCase(createCustomCombo.rejected, (state, action) => {
                 state.status = "failed";
