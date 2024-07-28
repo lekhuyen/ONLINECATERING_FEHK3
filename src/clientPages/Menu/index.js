@@ -28,6 +28,7 @@ const Menu = () => {
     const [bookingDate, setBookingDate] = useState('')
     const [bookingTime, setBookingTime] = useState('')
     const { isLoggedIn } = useSelector(state => state.user)
+    const [lobbyId, setLobbyId] = useState(null)
 
     // book form
     const [quantityTable, setQuantityTable] = useState(1)
@@ -41,6 +42,7 @@ const Menu = () => {
     const order = {
         userId: userCurrent,
         comboId: comboid,
+        lobbyId: lobbyId,
         totalPrice: totalPrice,
         quantityTable: quantityTable,
         deposit: deposit,
@@ -234,6 +236,7 @@ const Menu = () => {
                                 quantityTable={quantityTable}
                                 setBookingDate={setBookingDate}
                                 setBookingTime={setBookingTime}
+                                setLobbyId={setLobbyId}
                                 order={order}
                                 
                                 showFormOrderStatus={showFormOrderStatus}
