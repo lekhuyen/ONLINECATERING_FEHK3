@@ -28,21 +28,18 @@ const Accounts = () => {
         setFilteredAccountsData(accountsData);
     }, [accountsData]);
 
-    const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this account?")) {
-            dispatch(deleteAccount(id));
-        }
-    };
+    // const handleDelete = (id) => {
+    //     if (window.confirm("Are you sure you want to delete this account?")) {
+    //         dispatch(deleteAccount(id));
+    //     }
+    // };
 
     const handleEdit = (id) => {
-        // Navigate to edit page, adjust as per your application's routing
-        navigate(`/accounts/edit/${id}`);
+
+        navigate(`/admin-accounts/edit-admin-accounts/${id}`);
     };
 
-    const handleInfoClick = (account) => {
-        // Handle displaying account info, modal, etc.
-        console.log(account);
-    };
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -107,6 +104,7 @@ const Accounts = () => {
                             <th>UserName</th>
                             <th>UserEmail</th>
                             <th>Phone</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -118,26 +116,26 @@ const Accounts = () => {
                                 <td>{account.userEmail}</td>
                                 <td>{account.phone}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-outline-primary"
-                                        onClick={() => handleInfoClick(account)}
-                                        data-toggle="modal"
-                                        data-target="#myModal"
-                                    >
-                                        <BsInfoCircle />
-                                    </button>
+                                    {account.status ? (
+                                        <span className="badge bg-success">Active</span>
+                                    ) : (
+                                        <span className="badge bg-danger">Banned</span>
+                                    )}
+                                </td>
+                                <td>
+
                                     <button
                                         className="btn btn-outline-warning"
                                         onClick={() => handleEdit(account.id)}
                                     >
                                         <HiOutlinePencilSquare />
                                     </button>
-                                    <button
+                                    {/* <button
                                         className="btn btn-outline-danger"
                                         onClick={() => handleDelete(account.id)}
                                     >
                                         <FaRegTrashAlt />
-                                    </button>
+                                    </button> */}
                                 </td>
                             </tr>
                         ))}

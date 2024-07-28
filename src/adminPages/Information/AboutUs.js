@@ -186,7 +186,7 @@ function AboutUs() {
                                 <td>
                                     {about.imagePaths && about.imagePaths.length > 0 && (
                                         <img
-                                            src={`http://localhost:5034${about.imagePaths[0]}`}
+                                            src={about.imagePaths}
                                             alt={`About ${about.id}`}
                                             style={{
                                                 width: "100px",

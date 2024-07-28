@@ -36,6 +36,10 @@ import EditDish from "../adminPages/Restaurant/EditDish"
 import AdminAppetizer from "../adminPages/Restaurant/AdminAppetizer"
 import CreateAppetizer from "../adminPages/Restaurant/CreateAppetizer"
 import EditAdminAppetizer from "../adminPages/Restaurant/EditAdminAppetizer"
+import EditAccount from "../adminPages/Accounts/EditAccount"
+import AdminDessert from "../adminPages/Restaurant/AdminDessert"
+import CreateAdminDessert from "../adminPages/Restaurant/CreateAdminDessert"
+import EditAdminDessert from "../adminPages/Restaurant/EditAdminDessert"
 
 
 
@@ -68,6 +72,7 @@ const privateRoutes = [
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
     {path: "/admin-accounts", component: Accounts},
+    {path: "/admin-accounts/edit-admin-accounts/:id", component: EditAccount},
     {path: "/product-manager", component: ProductManager},
     {path: "/service", component: Service},
     {path: "/service/create-service", component: CreateService},
@@ -81,7 +86,9 @@ const privateRoutes = [
     {path: "/appetizer-admin", component: AdminAppetizer},
     {path: "/appetizer-admin/create-appetizer-admin", component: CreateAppetizer},
     {path: "/appetizer-admin/edit-appetizer-admin/:id", component: EditAdminAppetizer},
-
+    {path: "/dessert-admin", component: AdminDessert},
+    {path: "/dessert-admin/create-dessert-admin", component: CreateAdminDessert},
+    {path: "/dessert-admin/edit-dessert-admin/:id", component: EditAdminDessert},
 ]
 
 export {publicRoutes, privateRoutes} 
