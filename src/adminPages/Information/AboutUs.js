@@ -184,15 +184,15 @@ function AboutUs() {
                                 <td>{limitContent(about.content)}</td>
                                 <td>{about.aboutTypeName}</td>
                                 <td>
-                                    {about.imagePaths && about.imagePaths.length > 0 && (
+                                {about.imagePaths && about.imagePaths.length > 0 && (
                                         <img
-                                            src={about.imagePaths}
-                                            alt={`About ${about.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                objectFit: "cover",
-                                            }}
+                                        src={about.imagePaths}
+                                        alt={`about ${about.id}`}
+                                        style={{
+                                            width: "100px",
+                                            height: "50%",
+                                            objectFit: "cover",
+                                        }}
                                         />
                                     )}
                                 </td>
