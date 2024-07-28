@@ -24,7 +24,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     setBookingDate,
     setBookingTime,
     order,
-    typeBooking
+    setLobbyId,
 }) => {
     const [lobby, setLobby] = useState(null)
     const [combos, setCombos] = useState([])
@@ -59,6 +59,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
+        if(setLobbyId) setLobbyId(selectedId)
     }
 
     const handleChangeTable = (e) => {

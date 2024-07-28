@@ -20,6 +20,7 @@ const Order = () => {
     const [quantityTable, setQuantityTable] = useState(1)
     const [lobbyPrice, setLobbyPrice] = useState(0)
     const [comboPrice, setComboPrice] = useState(null)
+    const [lobbyId, setLobbyId] = useState(null)
 
     const totalPrice = (totalDesserts + totalAppetizer + totalDish) + (quantityTable * comboPrice) + lobbyPrice
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
@@ -40,6 +41,7 @@ const Order = () => {
     const order = {
         userId: userCurrent,
         comboId: comboid,
+        lobbyId: lobbyId,
         totalPrice: totalPrice,
         quantityTable: quantityTable,
         deposit: deposit,
@@ -339,8 +341,8 @@ console.log(order);
                             setBookingTime={setBookingTime}
                             order={order}
                             setComboid={setComboid}
+                            setLobbyId={setLobbyId}
                             table
-                            typeBooking={1}
 
                             showFormOrderStatus={showFormOrderStatus}
                             handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
