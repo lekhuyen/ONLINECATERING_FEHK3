@@ -3,11 +3,8 @@ import icons from '../../ultil/icons'
 import styles from './Menu.module.scss'
 import { menuDish } from '../../ultil/menu';
 import { useEffect, useState } from 'react';
-import FormBooking from '../FormBooking';
-import classNames from 'classnames/bind';
 import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish } from '../../apis/menu';
 
-const cx = classNames.bind(styles)
 
 const {
     FaCartPlus,
@@ -20,7 +17,7 @@ const MenuDish = () => {
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
     const [menuChoose, setMenuChoose] = useState(1)
-    const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
+    
 
     const [cartAppetizer, setCartAppetizer] = useState(() => {
         const storedCart = localStorage.getItem('appetizer');
@@ -50,18 +47,18 @@ const MenuDish = () => {
             setMainDish(responseDish.data.$values)
         }
     }
-    console.log(mainDish);
+    
     useEffect(() => {
         getOneCombo()
     }, [])
 
 
-    const handleClickBtnShowFormOrder = () => {
-        setShowFormOrderStatus(true)
-    }
-    const handleClickBtnCloseFormOrder = () => {
-        setShowFormOrderStatus(false)
-    }
+    // const handleClickBtnShowFormOrder = () => {
+    //     setShowFormOrderStatus(true)
+    // }
+    // const handleClickBtnCloseFormOrder = () => {
+    //     setShowFormOrderStatus(false)
+    // }
 
     const handleOnclickMenu = (index) => {
         setMenuChoose(index)

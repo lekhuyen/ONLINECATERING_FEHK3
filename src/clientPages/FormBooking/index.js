@@ -20,10 +20,11 @@ const {
 const FormBooking = ({ handleClickBtnCloseFormOrder,
     showFormOrderStatus, setQuantityTable,
     setLobbyPrice, totalPrice, deposit, table, setComboPrice,
-
+    setComboid,
     setBookingDate,
     setBookingTime,
-    order
+    order,
+    typeBooking
 }) => {
     const [lobby, setLobby] = useState(null)
     const [combos, setCombos] = useState([])
@@ -63,7 +64,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleChangeTable = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
-
+        if(setComboid) setComboid(selectedId)
         
     }
     const getOneCombo = async () => {
@@ -112,10 +113,9 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
     
     const handleClickCreateOrder = async() => {
-        const response = await apiCreateOrder(order)
-
-        console.log(response);
-
+            // const response = await apiCreateOrder(order)
+            // console.log(response);
+            console.log(order);
     }
 
     return (
