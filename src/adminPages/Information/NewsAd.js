@@ -181,17 +181,18 @@ function NewsAd() {
                             <td>{news.newsTypeName}</td>
                             <td>
                                 {news.imagePaths && news.imagePaths.length > 0 && (
-                                    <img
-                                        src={`http://localhost:5034${news.imagePaths[0]}`}
+                                        <img
+                                        src={news.imagePaths}
                                         alt={`News ${news.id}`}
                                         style={{
                                             width: "100px",
                                             height: "100px",
                                             objectFit: "cover",
                                         }}
-                                    />
-                                )}
+                                        />
+                                    )}
                             </td>
+                            
                             <td>
                                 <button
                                     className="btn btn-outline-primary"

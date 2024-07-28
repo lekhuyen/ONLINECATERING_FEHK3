@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { fetchNewsData } from '../../redux/Information/newsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './News.module.scss'
+import styles from './News.module.scss';
 import clsx from 'clsx';
-import classNames from "classnames/bind";
-const cx = classNames.bind(styles)
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
 
 const News = () => {
-
     const dispatch = useDispatch();
 
     // Selecting state from Redux store
@@ -20,12 +19,12 @@ const News = () => {
     }, [dispatch]);
 
     // Handling initial loading state
-    if (status === "loading") {
+    if (status === 'loading') {
         return <div>Loading...</div>;
     }
 
     // Handling fetch error state
-    if (status === "failed") {
+    if (status === 'failed') {
         return <div>Error: {error}</div>;
     }
 
@@ -34,31 +33,48 @@ const News = () => {
         return null; // or handle the case where newsData is not an array
     }
 
+    const truncateWords = (text, limit) => {
+        const words = text.split(' ');
+        if (words.length > limit) {
+            return words.slice(0, limit).join(' ') + '...';
+        }
+        return text;
+    };
+
     return (
-        <div className={clsx(styles.news_container, "app__bg")}>
-            <div className={cx("news_header_title")}><h1>News & Blog</h1></div>
-            <div className={cx("news_row")}>
+        <div className={clsx(styles.news_container, 'app__bg')}>
+            <div className={cx('news_header_title')}>
+                <h1>News & Blog</h1>
+            </div>
+            <div className={cx('news_row')}>
                 <div className="container pt-5 mt-5">
                     <div className="container-fluid">
                         <div className="row">
                             {newsData.map((news) => (
                                 <div className="col-md-4 mb-3" key={news.id}>
-                                    <div className="card border-light">
-                                        <div className="card-body">
-                                            <h4 className="card-title">{news.title}</h4>
-                                            <p className="card-text">{news.content}</p>
-                                            <div className="row">
-                                                {news.imagePaths && news.imagePaths.map((image, index) => (
-                                                    <div className="col-md-4" key={index}>
-                                                        <img
-                                                            src={`http://localhost:5034${image}`}
-                                                            alt={`News ${index}`}
-                                                            className="img-fluid"
-                                                            style={{ marginBottom: '10px' }}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
+                                    <div className="card border-light h-100">
+                                        <div >
+                                            {news.imagePaths && news.imagePaths.length > 0 && (
+                                                <img
+                                                    src={news.imagePaths[0]} // Assuming you want to display only the first image
+                                                    alt={`News ${news.id}`}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                        objectFit: 'cover',
+                                                    }}
+                                                />
+                                            )}
+                                            <h4 className="card-title text-center">{news.title}</h4>
+                                            <p className="card-text">
+                                                {truncateWords(news.content, 10)}
+                                                {news.content.split(' ').length > 10 && (
+                                                    <span>
+                                                        {' '}
+                                                        <button className="btn btn-link">Learn More</button>
+                                                    </span>
+                                                )}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
