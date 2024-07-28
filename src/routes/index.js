@@ -26,6 +26,7 @@ import Service from "../adminPages/Restaurant/Service"
 import CreateService from "../adminPages/Restaurant/CreateService"
 import EditService from "../adminPages/Restaurant/EditService"
 import MenuDish from "../clientPages/MenuDish"
+import CheckoutBook from "../clientPages/CheckoutBook"
 import Promotion from "../adminPages/Restaurant/Promotion"
 import AdminOrder from "../adminPages/Restaurant/AdminOrder"
 import AdminCombo from "../adminPages/Restaurant/AdminCombo"
@@ -53,6 +54,7 @@ const publicRoutes = [
     {path: "/user", component: User},
     {path: "/lobby", component: Lobby},
     {path: "/ordercombo", component: OrderCombo},
+    {path: "/checkoutBook", component: CheckoutBook},
 ]
 
 const privateRoutes = [

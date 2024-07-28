@@ -3,8 +3,10 @@ import classNames from 'classnames/bind';
 import icons from '../../ultil/icons';
 import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
-import { useParams } from 'react-router-dom';
 import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
+import { useNavigate } from 'react-router-dom';
+import { apiCreateOrder } from '../../apis/order';
+
 
 
 const cx = classNames.bind(styles)
@@ -14,18 +16,24 @@ const {
     FaTable,
     IoTabletLandscapeOutline,
 } = icons
+
 const FormBooking = ({ handleClickBtnCloseFormOrder,
     showFormOrderStatus, setQuantityTable,
-    setLobbyPrice, totalPrice, deposit, table, setComboPrice }) => {
+    setLobbyPrice, totalPrice, deposit, table, setComboPrice,
+
+    setBookingDate,
+    setBookingTime,
+    order
+}) => {
     const [lobby, setLobby] = useState(null)
     const [combos, setCombos] = useState([])
 
+    const navigate = useNavigate()
+
     // ---------------
-    // const [quantityTable, setQuantityTable] = useState(1)
     const [lobbySelect, setLobbySelect] = useState(null)
     const [selectTable, setSelectTable] = useState(null)
-    // const [lobbyPrice, setLobbyPrice] = useState(0)
-    // const [comboPrice, setComboPrice] = useState(null)
+
 
 
     const getAllLobby = async () => {
@@ -41,6 +49,12 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleSelectTable = (e) => {
         if (setQuantityTable) setQuantityTable(e.target.value);
     }
+    const handleChangeDate = (e) => {
+        setBookingDate(e.target.value);
+    }
+    const handleChangeTime = (e) => {
+        setBookingTime(e.target.value);
+    }
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
@@ -49,6 +63,8 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleChangeTable = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
+
+        
     }
     const getOneCombo = async () => {
         if (selectTable == null) {
@@ -63,7 +79,6 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     useEffect(() => {
         getOneCombo()
     }, [selectTable])
-    // console.log(comboPrice);
 
 
     const getOneLobby = async () => {
@@ -94,6 +109,14 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     useEffect(() => {
         getAllCombo()
     }, [])
+
+    
+    const handleClickCreateOrder = async() => {
+        const response = await apiCreateOrder(order)
+
+        console.log(response);
+
+    }
 
     return (
         <>
@@ -155,11 +178,13 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                             <div>
                                 <p><MdAccessTime /><span>Booking Date:</span></p>
                             </div>
-                            <input type="date" className={cx(!showFormOrderStatus ? "bg" : "")} />
+                            <input 
+                            onChange={handleChangeDate} type="date" className={cx(!showFormOrderStatus ? "bg" : "")} />
                         </div>
                         <div className={cx("time")}>
                             <p><MdAccessTime /><span>Booking Time:</span></p>
-                            <input type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
+                            <input 
+                            onChange={handleChangeTime} type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
                         </div>
                     </div>
                     <div className={cx("total_price")}>
@@ -172,6 +197,8 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                     </div>
                     <div className={cx("order-now")}>
                         <button
+                            // onClick={handleClickCheckout}
+                            onClick={handleClickCreateOrder}
                             className={cx("order-now", !showFormOrderStatus ? "bg" : "")}>Book</button>
                     </div>
                 </div>

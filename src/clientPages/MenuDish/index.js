@@ -205,14 +205,14 @@ const MenuDish = () => {
                     }
 
                     {/* Form Booking Button */}
-                    <div className={styles.book_btn}>
+                    {/* <div className={styles.book_btn}>
                         <button
                             onClick={handleClickBtnShowFormOrder}
                         >BOOK NOW</button>
-                    </div>
+                    </div> */}
                 </div>
                 {/* form booking */}
-                {
+                {/* {
                     showFormOrderStatus && (
                         <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
                             <FormBooking
@@ -220,7 +220,7 @@ const MenuDish = () => {
                                 handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
                         </div>
                     )
-                }
+                } */}
             </div>
 
         </div>
