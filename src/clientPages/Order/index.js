@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import classNames from "classnames/bind";
 import { FaMinusCircle, FaPlus } from 'react-icons/fa';
 import FormBooking from '../FormBooking';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles)
 
 
@@ -23,13 +24,34 @@ const Order = () => {
     const totalPrice = (totalDesserts + totalAppetizer + totalDish) + (quantityTable * comboPrice) + lobbyPrice
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
 
+    const [userCurrent, setUserCurrent] = useState('')
+    const [bookingDate, setBookingDate] = useState('')
+    const [bookingTime, setBookingTime] = useState('')
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [comboid, setComboid] = useState(null)
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user.id);
+        }
+    }, [isLoggedIn])
+
+    const order = {
+        userId: userCurrent,
+        comboId: comboid,
+        totalPrice: totalPrice,
+        quantityTable: quantityTable,
+        deposit: deposit,
+        oganization: bookingDate + ' ' + bookingTime
+    }
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
     }
     const handleClickBtnCloseFormOrder = () => {
         setShowFormOrderStatus(false)
     }
-
+console.log(order);
     //handle book
     const [cartAppetizer, setCartAppetizer] = useState(() => {
         const storedCart = localStorage.getItem('appetizer');
@@ -313,7 +335,12 @@ const Order = () => {
                             setLobbyPrice={setLobbyPrice}
                             setComboPrice={setComboPrice}
                             deposit={deposit}
+                            setBookingDate={setBookingDate}
+                            setBookingTime={setBookingTime}
+                            order={order}
+                            setComboid={setComboid}
                             table
+                            typeBooking={1}
 
                             showFormOrderStatus={showFormOrderStatus}
                             handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />

@@ -32,6 +32,7 @@ const Menu = () => {
     // book form
     const [quantityTable, setQuantityTable] = useState(1)
     const [lobbyPrice, setLobbyPrice] = useState(0)
+    
 
     const totalPrice = (quantityTable * comboPrice) + lobbyPrice
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
