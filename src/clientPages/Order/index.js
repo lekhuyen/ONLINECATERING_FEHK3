@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import classNames from "classnames/bind";
 import { FaMinusCircle, FaPlus } from 'react-icons/fa';
 import FormBooking from '../FormBooking';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles)
 
 
@@ -19,17 +20,40 @@ const Order = () => {
     const [quantityTable, setQuantityTable] = useState(1)
     const [lobbyPrice, setLobbyPrice] = useState(0)
     const [comboPrice, setComboPrice] = useState(null)
+    const [lobbyId, setLobbyId] = useState(null)
 
     const totalPrice = (totalDesserts + totalAppetizer + totalDish) + (quantityTable * comboPrice) + lobbyPrice
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
 
+    const [userCurrent, setUserCurrent] = useState('')
+    const [bookingDate, setBookingDate] = useState('')
+    const [bookingTime, setBookingTime] = useState('')
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [comboid, setComboid] = useState(null)
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user.id);
+        }
+    }, [isLoggedIn])
+
+    const order = {
+        userId: userCurrent,
+        comboId: comboid,
+        lobbyId: lobbyId,
+        totalPrice: totalPrice,
+        quantityTable: quantityTable,
+        deposit: deposit,
+        oganization: bookingDate + ' ' + bookingTime
+    }
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
     }
     const handleClickBtnCloseFormOrder = () => {
         setShowFormOrderStatus(false)
     }
-
+console.log(order);
     //handle book
     const [cartAppetizer, setCartAppetizer] = useState(() => {
         const storedCart = localStorage.getItem('appetizer');
@@ -313,6 +337,11 @@ const Order = () => {
                             setLobbyPrice={setLobbyPrice}
                             setComboPrice={setComboPrice}
                             deposit={deposit}
+                            setBookingDate={setBookingDate}
+                            setBookingTime={setBookingTime}
+                            order={order}
+                            setComboid={setComboid}
+                            setLobbyId={setLobbyId}
                             table
 
                             showFormOrderStatus={showFormOrderStatus}
