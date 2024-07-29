@@ -1,51 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
+import { deleteComboItem, fetchComboData } from '../../redux/Restaurant/comboSlice';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { BsInfoCircle } from 'react-icons/bs';
-import { deleteComboItem, fetchComboData } from '../../redux/Restaurant/comboSlice';
-
 
 export default function AdminCombo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const comboData = useSelector((state) => state.combo.items);
-    const status = useSelector((state) => state.combo.status);
+    const comboStatus = useSelector((state) => state.combo.status);
     const error = useSelector((state) => state.combo.error);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5; // Adjust as needed
+    const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCombo, setSelectedCombo] = useState(null);
 
     useEffect(() => {
         dispatch(fetchComboData());
     }, [dispatch]);
 
     const handleDelete = (id) => {
-        dispatch(deleteComboItem(id));
+        if (window.confirm('Are you sure you want to delete this combo item?')) {
+            dispatch(deleteComboItem(id));
+        }
     };
 
     const handleEdit = (id) => {
-        navigate(`/combo/edit-combo/${id}`);
+        navigate(`/combo-admin/edit-combo-admin/${id}`);
     };
 
-    const handleInfoClick = (combo) => {
-        setSelectedCombo(combo);
-        // Show modal
-        const modal = new window.bootstrap.Modal(document.getElementById('comboModal'));
-        modal.show();
-    };
-
-    const filteredComboData = comboData.filter((combo) => {
+    const filterBySearchTerm = (combo) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
-        return (
-            combo.name.toLowerCase().includes(searchTermLowerCase) ||
-            combo.type.toLowerCase().includes(searchTermLowerCase)
-        );
-    });
+        const nameMatches = combo.name?.toLowerCase().includes(searchTermLowerCase);
+        const priceMatches = combo.price.toString().includes(searchTermLowerCase);
+        const typeMatches = combo.type === parseInt(searchTermLowerCase); // Assuming type is an integer
+
+        return nameMatches || priceMatches || typeMatches; // Add more conditions as needed
+    };
+
+    const filteredComboData = comboData.filter(filterBySearchTerm);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -54,22 +50,22 @@ export default function AdminCombo() {
     const pageNumbers = Math.ceil(filteredComboData.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    if (status === 'loading') {
+    if (comboStatus === 'loading') {
         return <div>Loading...</div>;
     }
 
-    if (status === 'failed') {
+    if (comboStatus === 'failed') {
         return <div>Error: {error}</div>;
     }
 
     return (
-        <div className='container'>
+        <div className="container mt-5">
             <h2>Combo Table</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">
                     <label htmlFor="searchTerm" className="form-label">
-                        Search Name/Type:
+                        Search Name/Price/Type:
                     </label>
                     <div className="input-group">
                         <input
@@ -87,7 +83,9 @@ export default function AdminCombo() {
                 </div>
 
                 <div className="col-sm-3">
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/combo/create-combo')}>Add Combo</button>
+                    <button className="btn btn-success mb-3" onClick={() => navigate('/combo-admin/create-combo-admin')}>
+                        Add Combo
+                    </button>
                 </div>
             </div>
 
@@ -98,9 +96,9 @@ export default function AdminCombo() {
                             <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Type</th>
                             <th>Status</th>
                             <th>Image</th>
-                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -110,12 +108,13 @@ export default function AdminCombo() {
                                 <td>{combo.id}</td>
                                 <td>{combo.name}</td>
                                 <td>{combo.price}</td>
-                                <td>{combo.status}</td>
+                                <td>{combo.type}</td>
+                                <td>{combo.status ? 'Active' : 'Inactive'}</td>
                                 <td>
-                                    {combo.imagePaths && combo.imagePaths.length > 0 && (
+                                    {combo.imagePath && combo.imagePath.length > 0 && (
                                         <img
-                                            src={`http://localhost:5265${combo.imagePaths[0]}`}
-                                            alt={`Combo ${combo.id}`}
+                                            src={combo.imagePath}
+                                            alt={`Dish ${combo.id}`}
                                             style={{
                                                 width: "100px",
                                                 height: "100px",
@@ -124,11 +123,10 @@ export default function AdminCombo() {
                                         />
                                     )}
                                 </td>
-                                <td>{combo.type}</td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
-                                        onClick={() => handleInfoClick(combo)}
+                                        onClick={() => navigate(`/combo-admin/view-combo-admin/${combo.id}`)}
                                     >
                                         <BsInfoCircle />
                                     </button>
@@ -149,62 +147,6 @@ export default function AdminCombo() {
                         ))}
                     </tbody>
                 </table>
-            </div>
-
-            {/* Modal for Combo Details */}
-            <div className="modal fade" id="comboModal" tabIndex="-1" role="dialog" aria-labelledby="comboModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title" id="comboModalLabel">
-                                Combo Details: {selectedCombo ? selectedCombo.name : ''}
-                            </h4>
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            {selectedCombo && (
-                                <div>
-                                    <h5>Price:</h5>
-                                    <p>{selectedCombo.price}</p>
-                                    <h5>Status:</h5>
-                                    <p>{selectedCombo.status}</p>
-                                    <h5>Type:</h5>
-                                    <p>{selectedCombo.type}</p>
-                                    <h5>Image:</h5>
-                                    {selectedCombo.imagePaths && selectedCombo.imagePaths.length > 0 ? (
-                                        <img
-                                            src={`http://localhost:5265${selectedCombo.imagePaths[0]}`}
-                                            alt={`Combo ${selectedCombo.id}`}
-                                            style={{
-                                                width: "20%",
-                                                height: "auto",
-                                                objectFit: "cover",
-                                            }}
-                                        />
-                                    ) : (
-                                        <p>No image available</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-bs-dismiss="modal"
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <nav>

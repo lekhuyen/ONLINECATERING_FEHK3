@@ -1,14 +1,15 @@
+// AdminLobby.js
+
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
-
 import { BsInfoCircle } from 'react-icons/bs';
-import { deleteLobbyItem, fetchLobbyData } from '../../redux/Restaurant/adminlobbySlice';
-import { fetchLobbyImages } from '../../redux/Restaurant/adminlobbyimageSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 
-// Function to limit content to 10 words
+import { deleteLobbyItem, fetchLobbyData } from '../../redux/Restaurant/adminlobbySlice';
+import { fetchLobbyImages } from '../../redux/Restaurant/adminlobbyimageSlice';
+
 const limitContent = (content) => {
     const words = content.split(' ');
     if (words.length > 10) {
@@ -21,22 +22,19 @@ export default function AdminLobby() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Redux state
     const lobbyState = useSelector((state) => state.lobby || {});
     const lobbyData = lobbyState.items || [];
     const status = lobbyState.status;
     const error = lobbyState.error;
 
-    // Lobby Images State
-    const [selectedLobby, setSelectedLobby] = useState(null);
-    const [lobbyImages, setLobbyImages] = useState({ $values: [] }); // Initialize as an object with an empty array
-    const [imagesStatus, setImagesStatus] = useState("idle");
-    const [imagesError, setImagesError] = useState(null);
-
-    // Component state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [selectedLobby, setSelectedLobby] = useState(null);
+    const [lobbyImages, setLobbyImages] = useState([]);
+    const [imagesStatus, setImagesStatus] = useState("idle");
+    const [imagesError, setImagesError] = useState(null);
 
     useEffect(() => {
         dispatch(fetchLobbyData());
@@ -54,16 +52,15 @@ export default function AdminLobby() {
         setSelectedLobby(lobby);
         try {
             setImagesStatus("loading");
-            const images = await dispatch(fetchLobbyImages(lobby.id)).unwrap(); // Assuming fetchLobbyImages returns the images data
-            setLobbyImages(images); // Update state with fetched images
+            const action = await dispatch(fetchLobbyImages(lobby.id));
+            setLobbyImages(action.payload);
             setImagesStatus("succeeded");
         } catch (error) {
             setImagesStatus("failed");
             setImagesError(error.message);
-            console.error("Error fetching images:", error); // Log the error for debugging
+            console.error("Error fetching images:", error);
         }
-    
-        // Show modal
+
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.show();
     };
@@ -183,7 +180,6 @@ export default function AdminLobby() {
                 </table>
             </div>
 
-            {/* Modal for Lobby Details */}
             <div className="modal fade" id="lobbyModal" tabIndex="-1" role="dialog" aria-labelledby="lobbyModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
@@ -208,19 +204,19 @@ export default function AdminLobby() {
                                     <h5>Images:</h5>
                                     {imagesStatus === "loading" && <p>Loading images...</p>}
                                     {imagesStatus === "failed" && <p>{imagesError}</p>}
-                                    {lobbyImages && lobbyImages.$values && lobbyImages.$values.length > 0 ? (
+                                    {lobbyImages && lobbyImages.length > 0 ? (
                                         <div className="d-flex flex-wrap">
-                                            {lobbyImages.$values.map((image) => (
+                                            {lobbyImages.map((image, index) => (
                                                 <img
-                                                    key={image.id}
+                                                    key={index}
                                                     src={image.imagesUrl}
-                                                    alt={`lobby ${selectedLobby.id}`}
+                                                    alt={`Lobby ${selectedLobby.id}`}
                                                     style={{
                                                         width: "20%",
                                                         height: "auto",
                                                         objectFit: "cover",
                                                         marginRight: "10px",
-                                                        marginBottom: "10px" // Add some spacing between images
+                                                        marginBottom: "10px"
                                                     }}
                                                 />
                                             ))}
