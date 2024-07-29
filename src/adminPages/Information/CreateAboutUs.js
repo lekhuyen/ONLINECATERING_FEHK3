@@ -40,12 +40,12 @@ export default function CreateAboutUs() {
         formData.append('content', content);
         formData.append('aboutTypeId', aboutTypeId); // Append aboutTypeId to formData
         
-        // Append multiple image files
-        if (imageFiles) {
-            for (let i = 0; i < imageFiles.length; i++) {
-                formData.append('imageFiles', imageFiles[i]);
-            }
-        }
+
+        // Append each image file to formData
+        Array.from(imageFiles).forEach(file => {
+            formData.append('imageFiles', file);
+        });
+    
 
         try {
             const response = await axios.post(apiEndpoint, formData, {

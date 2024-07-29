@@ -40,6 +40,7 @@ import EditAccount from "../adminPages/Accounts/EditAccount"
 import AdminDessert from "../adminPages/Restaurant/AdminDessert"
 import CreateAdminDessert from "../adminPages/Restaurant/CreateAdminDessert"
 import EditAdminDessert from "../adminPages/Restaurant/EditAdminDessert"
+import NewsDetail from "../clientPages/News/NewsDetail"
 
 
 
@@ -51,6 +52,7 @@ const publicRoutes = [
     {path: "/forgot-password", component: EmailInput, layout: null},
     {path: "/contact", component: Contact},
     {path: "/news", component: News},
+    {path: "/news/:id", component: NewsDetail},
     {path: "/account", component: Account},
     {path: "/menu-combo/:comboid", component: Menu},
     {path: "/menu/", component: MenuDish},

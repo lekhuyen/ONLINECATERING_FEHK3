@@ -2,37 +2,32 @@
 import React, { useEffect } from 'react';
 import styles from './About.module.scss';
 import clsx from 'clsx';
-import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAboutData } from '../../redux/Information/aboutSlice';
 import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
-import { images } from '../../constants';
 
-const cx = classNames.bind(styles);
-
-const AboutSection = ({  aboutData, aboutTypeName }) => {
+const AboutSection = ({ aboutData, aboutTypeName }) => {
     return (
-        <div className=''>
-
-            {aboutData.map((about) => {
+        <div className={styles.aboutSection}>
+            {aboutData.map((about, index) => {
                 if (about.aboutTypeName === aboutTypeName) {
+                    const isEven = index % 2 === 0;
                     return (
-                        <div className="about_us_card card" key={about.id}>
-                            <div className="about_us_card_body">
-                                <h1 className="about_us_card_title card-title">{about.title}</h1>
-                                <p className="about_us_card_text card-text">{about.content}</p>
-                                <div className="about_us_row row justify-content-center">
-                                    {about.imagePaths && about.imagePaths.slice(0, 3).map(( index) => (
-                                        <div className="about_us_image_col col-md-4" key={index}>
-                                            <img
-                                                src={about.imagePaths}
-                                                alt={`about ${about.id}`}
-                                                className="about_us_image img-fluid"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
+                        <div className={clsx(styles.aboutCard, isEven ? styles.even : styles.odd)} key={about.id}>
+                            <div className={clsx(styles.imageContainer, isEven ? styles.left : styles.right)}>
+                                {about.imagePaths && about.imagePaths.slice(0, 3).map((imagePath, imgIndex) => (
+                                    <img
+                                        src={imagePath}
+                                        alt={`about ${about.id}`}
+                                        key={imgIndex}
+                                        className={styles.aboutImage}
+                                    />
+                                ))}
+                            </div>
+                            <div className={clsx(styles.textContainer, isEven ? styles.right : styles.left)}>
+                                <h1 className={styles.aboutTitle}>{about.title}</h1>
+                                <p className={styles.aboutText}>{about.content}</p>
                             </div>
                         </div>
                     );
@@ -71,9 +66,9 @@ const About = () => {
     }
 
     return (
-        <div className={clsx(styles.aboutUs_container, "app__bg")}>
-            <div className={cx("aboutUs_header_title")}><h1>Welcome to OnlineCatering.in</h1></div>
-            <div className={cx("aboutUs_row")}>
+        <div className={clsx(styles.aboutUsContainer, "app__bg")}>
+            <div className={styles.aboutUsHeaderTitle}><h1>Welcome to OnlineCatering.in</h1></div>
+            <div className={styles.aboutUsRow}>
                 <div className="about_us container-fluid mt-5">
                     {aboutTypes.map((type) => (
                         <AboutSection

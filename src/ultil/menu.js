@@ -41,7 +41,7 @@ export const menuItems = [
   { icon: <BiDish />, title: "Menu Management", path: "/dishadmin" },
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/comboadmin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
   {
     icon: <RiCustomerService2Line />,
     title: "Service",
