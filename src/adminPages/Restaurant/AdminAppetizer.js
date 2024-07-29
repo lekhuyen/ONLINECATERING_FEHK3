@@ -76,7 +76,7 @@ export default function AdminAppetizer() {
             <h2>Appetizer Table</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-9">
+                <div >
                     <label htmlFor="searchTerm" className="form-label">
                         Search Name/Price:
                     </label>
@@ -94,14 +94,12 @@ export default function AdminAppetizer() {
                         </button>
                     </div>
                 </div>
-
-                <div className="col-sm-3">
+            </div>
+            <div>
                     <button className="btn btn-success mb-3" onClick={() => navigate('/appetizer-admin/create-appetizer-admin')}>
                         Add Appetizer
                     </button>
                 </div>
-            </div>
-
             <div className="container mt-5">
                 <table className="table table-hover">
                     <thead>

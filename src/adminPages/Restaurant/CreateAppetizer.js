@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { createAdminAppetizerItem } from '../../redux/Restaurant/adminappetizersSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function CreateAppetizer() {
     const [appetizerName, setAppetizerName] = useState('');
@@ -44,9 +45,18 @@ export default function CreateAppetizer() {
         setFormFile(e.target.files[0]); // Assuming only a single file is allowed
     };
 
+    const handleGoBack = () => {
+        navigate('/appetizer-admin'); // Navigate back to dessert list page
+    };
+
     return (
         <div className="container">
             <h2>Create Appetizer</h2>
+
+                <button className="btn btn-secondary" onClick={handleGoBack}>
+                    <RiArrowGoBackLine /> Go Back
+                </button>
+
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="appetizerName">Appetizer Name</label>

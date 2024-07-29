@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { createComboItem } from '../../redux/Restaurant/comboSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function CreateAdminCombo() {
     const [name, setName] = useState('');
@@ -46,9 +47,16 @@ export default function CreateAdminCombo() {
         setImageFile(e.target.files[0]); // Assuming only a single file is allowed
     };
 
+    const handleGoBack = () => {
+        navigate("/combo-admin");
+    };
+
     return (
         <div className="container">
             <h2>Create Admin Combo</h2>
+            <div className="mt-3">
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /></button>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Name</label>

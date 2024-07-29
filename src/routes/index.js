@@ -46,6 +46,7 @@ import CreateAdminLobby from "../adminPages/Restaurant/CreateAdminLobby"
 import EditAdminLobby from "../adminPages/Restaurant/EditAdminLobby"
 import AdminCombo from "../adminPages/Restaurant/AdminCombo"
 import CreateAdminCombo from "../adminPages/Restaurant/CreateAdminCombo"
+import EditAdminCombo from "../adminPages/Restaurant/EditAdminCombo"
 
 
 
@@ -89,6 +90,7 @@ const privateRoutes = [
     {path: "/promotion", component: Promotion},
     {path: "/combo-admin", component: AdminCombo},
     {path: "/combo-admin/create-combo-admin", component: CreateAdminCombo},
+    {path: "/combo-admin/edit-combo-admin/:id", component: EditAdminCombo},
     {path: "/order-admin", component: AdminOrder},
     {path: "/dish-admin", component: AdminDish},
     {path: "/dish-admin/create-dish-admin", component: CreateDish},

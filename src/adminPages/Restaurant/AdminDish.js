@@ -80,7 +80,7 @@ export default function AdminDish() {
             <h2>Dish Table</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-9">
+                <div>
                     <label htmlFor="searchTerm" className="form-label">
                         Search Name/Price/Status:
                     </label>
@@ -98,13 +98,13 @@ export default function AdminDish() {
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="col-sm-3">
+                <div>
                     <button className="btn btn-success mb-3" onClick={() => navigate('/dish-admin/create-dish-admin')}>
                         Add Dish
                     </button>
                 </div>
-            </div>
 
             <div className="container mt-5">
                 <table className="table table-hover">

@@ -47,7 +47,7 @@ export const createComboItem = createAsyncThunk(
 // Async thunk to update combo item
 export const updateComboItem = createAsyncThunk(
     "combo/updateComboItem",
-    async ({ id, name, price, type, status, formFile }) => {
+    async ({ id, name, price, type, status, imagePath, formFile }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
@@ -59,6 +59,14 @@ export const updateComboItem = createAsyncThunk(
                 formData.append('formFile', formFile);
             }
             // Add other properties as needed based on your API endpoint requirements
+
+            if (formFile) {
+                formData.append("formFile", formFile);
+            }
+
+            if (imagePath && imagePath.length > 0) {
+                formData.append("imagePath", JSON.stringify(imagePath));
+            }
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
                 headers: {
