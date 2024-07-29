@@ -1,3 +1,5 @@
+// adminlobbyimageSlice.js
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -10,8 +12,8 @@ export const fetchLobbyImages = createAsyncThunk(
     async (lobbyId) => {
         try {
             const response = await axios.get(`${apiEndpoint}/lobby/${lobbyId}`);
-            // Adjust this line according to your API response
-            return response.data.data.$values;
+            // Adjust this line according to your API response structure
+            return response.data.$values; // Assuming your API response is structured like this
         } catch (error) {
             throw new Error('Error fetching lobby images:', error.response?.data || error.message);
         }
@@ -21,7 +23,7 @@ export const fetchLobbyImages = createAsyncThunk(
 const adminlobbyimageSlice = createSlice({
     name: "lobbyImages",
     initialState: {
-        images: [],
+        images: [], // Initialize as empty array
         status: "idle",
         error: null,
     },
@@ -33,7 +35,7 @@ const adminlobbyimageSlice = createSlice({
             })
             .addCase(fetchLobbyImages.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.images = Array.isArray(action.payload) ? action.payload : [];
+                state.images = action.payload; // Assuming action.payload is an array of images
             })
             .addCase(fetchLobbyImages.rejected, (state, action) => {
                 state.status = "failed";

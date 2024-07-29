@@ -29,7 +29,7 @@ import MenuDish from "../clientPages/MenuDish"
 import CheckoutBook from "../clientPages/CheckoutBook"
 import Promotion from "../adminPages/Restaurant/Promotion"
 import AdminOrder from "../adminPages/Restaurant/AdminOrder"
-import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+
 import AdminDish from "../adminPages/Restaurant/AdminDish"
 import CreateDish from "../adminPages/Restaurant/CreateDish"
 import EditDish from "../adminPages/Restaurant/EditDish"
@@ -44,6 +44,8 @@ import NewsDetail from "../clientPages/News/NewsDetail"
 import AdminLobby from "../adminPages/Restaurant/AdminLobby"
 import CreateAdminLobby from "../adminPages/Restaurant/CreateAdminLobby"
 import EditAdminLobby from "../adminPages/Restaurant/EditAdminLobby"
+import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+import CreateAdminCombo from "../adminPages/Restaurant/CreateAdminCombo"
 
 
 
@@ -86,6 +88,7 @@ const privateRoutes = [
     {path: "/service/edit-service/:id", component: EditService},
     {path: "/promotion", component: Promotion},
     {path: "/combo-admin", component: AdminCombo},
+    {path: "/combo-admin/create-combo-admin", component: CreateAdminCombo},
     {path: "/order-admin", component: AdminOrder},
     {path: "/dish-admin", component: AdminDish},
     {path: "/dish-admin/create-dish-admin", component: CreateDish},

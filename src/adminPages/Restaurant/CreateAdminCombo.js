@@ -1,3 +1,4 @@
+// CreateAdminCombo.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { createComboItem } from '../../redux/Restaurant/comboSlice';
 export default function CreateAdminCombo() {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
-    const [formFile, setFormFile] = useState(null); // State to hold the image file
+    const [formFile, setImageFile] = useState(null); // State to hold the image file
     const [type, setType] = useState(''); // State to hold the combo type
 
     const dispatch = useDispatch();
@@ -22,17 +23,17 @@ export default function CreateAdminCombo() {
             price: parseFloat(price),
             status: false, // Always false by default
             type: parseInt(type), // Parse the type to integer
-            imageFile: formFile
+            formFile
         })).unwrap() // unwrap to handle the promise
         .then(() => {
             // Clear form fields
             setName('');
             setPrice('');
-            setFormFile(null);
+            setImageFile(null);
             setType('');
 
             // Navigate to the admin combos list or any other desired location
-            navigate('/admin-combo'); // Example: navigate to the admin combos list page
+            navigate('/combo-admin'); // Example: navigate to the admin combos list page
         })
         .catch((error) => {
             console.error('Error creating combo:', error);
@@ -42,7 +43,7 @@ export default function CreateAdminCombo() {
 
     // Function to handle file input change
     const handleFileChange = (e) => {
-        setFormFile(e.target.files[0]); // Assuming only a single file is allowed
+        setImageFile(e.target.files[0]); // Assuming only a single file is allowed
     };
 
     return (
@@ -81,9 +82,8 @@ export default function CreateAdminCombo() {
                         className="form-control"
                         id="type"
                         value={type}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => setType(e.target.value)}
                         required
-
                     />
                 </div>
 
