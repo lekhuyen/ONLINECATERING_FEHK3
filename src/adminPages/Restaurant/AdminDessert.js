@@ -61,7 +61,7 @@ export default function AdminDessert() {
             <h2>Dessert Table</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-9">
+                <div>
                     <label htmlFor="searchTerm" className="form-label">
                         Search Name/Price:
                     </label>
@@ -79,13 +79,13 @@ export default function AdminDessert() {
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="col-sm-3">
+                <div >
                     <button className="btn btn-success mb-3" onClick={() => navigate('/dessert-admin/create-dessert-admin')}>
                         Add Dessert
                     </button>
                 </div>
-            </div>
 
             <div className="container mt-5">
                 <table className="table table-hover">

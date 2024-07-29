@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createLobbyItem } from '../../redux/Restaurant/adminlobbySlice'; // Adjust import based on your file structure
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function CreateAdminLobby() {
     const [lobbyName, setLobbyName] = useState('');
@@ -42,9 +43,18 @@ export default function CreateAdminLobby() {
         }
     };
 
+    const handleGoBack = () => {
+        navigate('/lobby-admin'); // Navigate back to dessert list page
+    };
+
     return (
         <div className="container">
             <h2>Create Lobby</h2>
+
+                <button className="btn btn-secondary" onClick={handleGoBack}>
+                    <RiArrowGoBackLine /> Go Back
+                </button>
+
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="lobbyName">Lobby Name</label>
