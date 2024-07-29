@@ -41,6 +41,11 @@ import AdminDessert from "../adminPages/Restaurant/AdminDessert"
 import CreateAdminDessert from "../adminPages/Restaurant/CreateAdminDessert"
 import EditAdminDessert from "../adminPages/Restaurant/EditAdminDessert"
 import NewsDetail from "../clientPages/News/NewsDetail"
+import AdminLobby from "../adminPages/Restaurant/AdminLobby"
+import CreateAdminLobby from "../adminPages/Restaurant/CreateAdminLobby"
+import EditAdminLobby from "../adminPages/Restaurant/EditAdminLobby"
+
+
 
 
 
@@ -91,6 +96,10 @@ const privateRoutes = [
     {path: "/dessert-admin", component: AdminDessert},
     {path: "/dessert-admin/create-dessert-admin", component: CreateAdminDessert},
     {path: "/dessert-admin/edit-dessert-admin/:id", component: EditAdminDessert},
+    {path: "/lobby-admin", component: AdminLobby},
+    {path: "/lobby-admin/create-lobby-admin", component: CreateAdminLobby},
+    {path: "/lobby-admin/edit-lobby-admin/:id", component: EditAdminLobby},
+
 ]
 
 export {publicRoutes, privateRoutes} 

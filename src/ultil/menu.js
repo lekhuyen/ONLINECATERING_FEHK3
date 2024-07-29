@@ -38,7 +38,7 @@ export const menuItems = [
   { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
   { icon: <TiImage />, title: "Lobby", path: "/lobbyadmin" },
   { icon: <TbBrandBooking />, title: "Order", path: "/bookingadmin" },
-  { icon: <BiDish />, title: "Menu Management", path: "/dishadmin" },
+  { icon: <BiDish />, title: "Menu Management", path: "/dish-admin" },
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
   { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
