@@ -1,75 +1,74 @@
-/* src/clientPages/AboutUs/AboutUs.css */
-.aboutUs_container{
-  margin-top: 70px;
-  font-family: cursive;
+// src/clientPages/AboutUs/About.module.scss
+.aboutSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
-.aboutUs_header_title {
+
+.aboutCard {
+  display: flex;
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  box-shadow: none;
+  align-items: center;
+}
+
+.even {
+  flex-direction: row;
+}
+
+.odd {
+  flex-direction: row-reverse;
+}
+
+.imageContainer {
+  flex: 1;
   display: flex;
   justify-content: center;
-  padding-top: 20px;
-  color:#f7d794;
+  align-items: center;
+  padding: 1rem;
 }
-.aboutUs_title{
+
+.aboutImage {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.textContainer {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  background: transparent;
+}
+
+.aboutTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   color: #f7d794;
 }
-.aboutUs_text{  
+
+.aboutText {
+  font-size: 1rem;
+  line-height: 1.5;
   color: #CAD3C8;
 }
 
-// .container-fluid.about_us {
-//   /* background-color: black; */
-//   /* color: lightyellow; */
-//   padding: 20px;
+.aboutUsContainer {
+  padding: 2rem;
+  background: transparent;
+}
 
-// }
+.aboutUsHeaderTitle {
+  text-align: center;
+  margin-bottom: 2rem;
+}
 
-// .about_us_title {
-//   /* color: lightyellow; */
-//   text-align: center;
-//   margin-bottom: 20px;
-// }
-
-// .card.about_us_card {
-//   /* background-color: #333; */
-//   border: none;
-//   /* color: lightyellow; */
-//   margin-bottom: 20px;
-// }
-
-// .about_us_card_body {
-//   padding: 20px;
-// }
-
-// .about_us_card_title {
-//   /* color: lightyellow; */
-//   text-align: center;
-// }
-
-// .about_us_card_text {
-//   /* color: lightyellow; */
-//   text-align: center;
-// }
-
-// .about_us_image {
-//   width: 100%;
-//   max-width: 350px; /* Limit size for consistent appearance */
-//   height: 100%; /* Maintain aspect ratio */
-//   object-fit: cover; /* Ensure the image covers the box */
-//   border-radius: 5%; /* Make the image circular */
-//   border: 2px solid lightyellow; /* Add a border for better visibility */
-//   margin-bottom: 10px; /* Space between images */
-// }
-
-// .about_us_image_col {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin-bottom: 10px; /* Space between rows */
-// }
-
-// .row.about_us_row {
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: center; /* Center images horizontally */
-// }
-
+.aboutUsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}

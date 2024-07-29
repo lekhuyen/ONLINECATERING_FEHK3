@@ -1,0 +1,75 @@
+.news_container {
+    margin-top: 70px;
+    padding: 2rem;
+    background: transparent; 
+  }
+  
+  .news_detail_container {
+    margin-top: 2rem; // Margin to separate from top
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .news_detail_title {
+    color: #f7d794; // Title color
+    font-size: 2rem; // Font size for title
+    margin-bottom: 1rem;
+  }
+  
+  .news_image_container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  
+  .news_image {
+    max-width: 100%; // Responsive image size
+    height: auto; // Maintain aspect ratio
+    max-height: 400px; // Optional: Limit image height to fit content
+    object-fit: contain; // Ensure the image fits within its container
+    border-radius: 0.5rem; // Optional: Rounded corners for images
+  }
+  
+  .news_detail_text {
+    color: #CAD3C8; // Text color
+    font-size: 1rem;
+    line-height: 1.6; // Line height for readability
+    margin-bottom: 1.5rem;
+    padding: 0 200px 0 200px;
+  }
+  
+  .news_detail_controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .news_detail_control_button {
+    background: transparent;
+    border: 1px solid #B33771; // Border color for buttons
+    color: #B33771; // Text color for buttons
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.3rem;
+    transition: background-color 0.3s, color 0.3s;
+  
+    &:hover {
+      background-color: #B33771; // Background color on hover
+      color: #ffffff; // Text color on hover
+    }
+  }
+  
+  // For loading and error states
+  .loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #CAD3C8;
+  }
+  
+  .error {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #f44336; // Red color for errors
+  }
+  
