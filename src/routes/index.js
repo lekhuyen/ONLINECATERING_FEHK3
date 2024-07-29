@@ -29,7 +29,7 @@ import MenuDish from "../clientPages/MenuDish"
 import CheckoutBook from "../clientPages/CheckoutBook"
 import Promotion from "../adminPages/Restaurant/Promotion"
 import AdminOrder from "../adminPages/Restaurant/AdminOrder"
-import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+
 import AdminDish from "../adminPages/Restaurant/AdminDish"
 import CreateDish from "../adminPages/Restaurant/CreateDish"
 import EditDish from "../adminPages/Restaurant/EditDish"
@@ -41,6 +41,13 @@ import AdminDessert from "../adminPages/Restaurant/AdminDessert"
 import CreateAdminDessert from "../adminPages/Restaurant/CreateAdminDessert"
 import EditAdminDessert from "../adminPages/Restaurant/EditAdminDessert"
 import NewsDetail from "../clientPages/News/NewsDetail"
+import AdminLobby from "../adminPages/Restaurant/AdminLobby"
+import CreateAdminLobby from "../adminPages/Restaurant/CreateAdminLobby"
+import EditAdminLobby from "../adminPages/Restaurant/EditAdminLobby"
+import AdminCombo from "../adminPages/Restaurant/AdminCombo"
+import CreateAdminCombo from "../adminPages/Restaurant/CreateAdminCombo"
+
+
 
 
 
@@ -81,6 +88,7 @@ const privateRoutes = [
     {path: "/service/edit-service/:id", component: EditService},
     {path: "/promotion", component: Promotion},
     {path: "/combo-admin", component: AdminCombo},
+    {path: "/combo-admin/create-combo-admin", component: CreateAdminCombo},
     {path: "/order-admin", component: AdminOrder},
     {path: "/dish-admin", component: AdminDish},
     {path: "/dish-admin/create-dish-admin", component: CreateDish},
@@ -91,6 +99,10 @@ const privateRoutes = [
     {path: "/dessert-admin", component: AdminDessert},
     {path: "/dessert-admin/create-dessert-admin", component: CreateAdminDessert},
     {path: "/dessert-admin/edit-dessert-admin/:id", component: EditAdminDessert},
+    {path: "/lobby-admin", component: AdminLobby},
+    {path: "/lobby-admin/create-lobby-admin", component: CreateAdminLobby},
+    {path: "/lobby-admin/edit-lobby-admin/:id", component: EditAdminLobby},
+
 ]
 
 export {publicRoutes, privateRoutes} 

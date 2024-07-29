@@ -9,7 +9,7 @@ export const fetchComboData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data;
+            return response.data.data.$values; // Adjust according to your API response structure
         } catch (error) {
             throw new Error('Error fetching combo data:', error.response.data);
         }
@@ -24,11 +24,12 @@ export const createComboItem = createAsyncThunk(
             const formData = new FormData();
             formData.append('name', newComboItem.name);
             formData.append('price', newComboItem.price);
-            formData.append('type', newComboItem.type);
+            formData.append('type', newComboItem.type); // Ensure type is included in formData
             formData.append('status', newComboItem.status);
-            if (newComboItem.imageFile) {
-                formData.append('imageFile', newComboItem.imageFile);
+            if (newComboItem.formFile) {
+                formData.append('formFile', newComboItem.formFile);
             }
+            // Add other properties as needed based on your API endpoint requirements
 
             const response = await axios.post(apiEndpoint, formData, {
                 headers: {
@@ -36,7 +37,7 @@ export const createComboItem = createAsyncThunk(
                 }
             });
 
-            return response.data.data;
+            return response.data.data; // Ensure you correctly return data from response
         } catch (error) {
             throw new Error('Error creating combo item:', error.response.data);
         }
@@ -46,17 +47,18 @@ export const createComboItem = createAsyncThunk(
 // Async thunk to update combo item
 export const updateComboItem = createAsyncThunk(
     "combo/updateComboItem",
-    async ({ id, name, price, type, status, imageFile }) => {
+    async ({ id, name, price, type, status, formFile }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
             formData.append("name", name);
             formData.append("price", price);
-            formData.append("type", type);
+            formData.append("type", type); // Ensure type is included in formData
             formData.append("status", status);
-            if (imageFile) {
-                formData.append('imageFile', imageFile);
+            if (formFile) {
+                formData.append('formFile', formFile);
             }
+            // Add other properties as needed based on your API endpoint requirements
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
                 headers: {
@@ -64,7 +66,7 @@ export const updateComboItem = createAsyncThunk(
                 },
             });
 
-            return response.data.data;
+            return response.data.data; // Ensure you correctly return data from response
         } catch (error) {
             throw new Error("Error updating combo item:", error.response.data);
         }
@@ -99,7 +101,7 @@ const comboSlice = createSlice({
             })
             .addCase(fetchComboData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items = action.payload.data || [];
+                state.items = action.payload || []; // Ensure correct mapping of data
             })
             .addCase(fetchComboData.rejected, (state, action) => {
                 state.status = "failed";
@@ -110,7 +112,7 @@ const comboSlice = createSlice({
             })
             .addCase(createComboItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.items.push(action.payload.data);
+                state.items.push(action.payload); // Ensure correct mapping of data
             })
             .addCase(createComboItem.rejected, (state, action) => {
                 state.status = "failed";
@@ -122,7 +124,7 @@ const comboSlice = createSlice({
             .addCase(updateComboItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.items = state.items.map(item =>
-                    item.id === action.payload.data.id ? action.payload.data : item
+                    item.id === action.payload.id ? action.payload : item
                 );
             })
             .addCase(updateComboItem.rejected, (state, action) => {
