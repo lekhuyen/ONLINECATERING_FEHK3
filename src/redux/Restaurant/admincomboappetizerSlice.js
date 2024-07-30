@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const apiEndpoint = "http://localhost:5265/api/AdminComboAppetizer";
+const apiEndpoint = "http://localhost:5265/api/AppetizerCombo";
 
 // Async thunk to fetch combo-appetizer associations
 export const fetchAdminComboAppetizerData = createAsyncThunk(
@@ -9,7 +9,8 @@ export const fetchAdminComboAppetizerData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data;
+            console.log('API Response:', response.data); // Log the response
+            return response.data.data.$values;
         } catch (error) {
             throw new Error('Error fetching combo-appetizer data:', error.response.data);
         }
@@ -57,7 +58,7 @@ const adminComboAppetizerSlice = createSlice({
             })
             .addCase(fetchAdminComboAppetizerData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.adminComboAppetizers = action.payload.data || [];
+                state.adminComboAppetizers = action.payload || []; // Ensure it is an array
             })
             .addCase(fetchAdminComboAppetizerData.rejected, (state, action) => {
                 state.status = "failed";
@@ -68,7 +69,7 @@ const adminComboAppetizerSlice = createSlice({
             })
             .addCase(createAdminComboAppetizer.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.adminComboAppetizers.push(action.payload.data);
+                state.adminComboAppetizers.push(action.payload);
             })
             .addCase(createAdminComboAppetizer.rejected, (state, action) => {
                 state.status = "failed";

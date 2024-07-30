@@ -1,0 +1,54 @@
+.container {
+    margin: 2rem auto;
+  }
+  
+  .card {
+    margin-bottom: 2rem;
+  }
+  
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .img-thumbnail {
+    width: 100px; // Adjust as needed
+    height: auto;
+  }
+  
+  .detailsContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .detailsImage {
+    margin-right: 1rem;
+  }
+  
+  .detailsInfo {
+    flex: 1;
+  }
+  
+  .detailsInfo p {
+    margin: 0.5rem 0;
+  }
+  
+  .listGroupItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .listGroupItem img {
+    max-width: 80px; // Adjust as needed
+    margin-right: 1rem;
+  }
+  
+  .even {
+    background-color: #f9f9f9; // Light background for even items
+  }
+  
+  .odd {
+    background-color: #fff; // White background for odd items
+  }
+  
