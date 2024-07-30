@@ -4,11 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchComboData } from '../../redux/Restaurant/comboSlice';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { fetchAdminComboAppetizerData, deleteAdminComboAppetizer } from '../../redux/Restaurant/admincomboappetizerSlice';
-
-import styles from './AdminComboDetail.module.scss'; // Import the SCSS module
-import clsx from 'clsx'; // Import clsx
+import { fetchAdminComboDessertData, deleteAdminComboDessert } from '../../redux/Restaurant/admincombodessertSlice';
+import { fetchAdminComboDishData, deleteAdminComboDish } from '../../redux/Restaurant/admincombodishSlice';
+import styles from './AdminComboDetail.module.scss';
+import clsx from 'clsx';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { deleteAdminComboDessert, fetchAdminComboDessertData } from '../../redux/Restaurant/admincombodessertSlice';
 
 export default function AdminComboDetail() {
   const { id } = useParams();
@@ -21,14 +21,19 @@ export default function AdminComboDetail() {
   const comboError = useSelector((state) => state.combo.error);
   
   // Fetching Appetizers Data
-  const adminComboAppetizers = useSelector((state) => state.adminComboAppetizer.adminComboAppetizers);
+  const adminComboAppetizers = useSelector((state) => state.adminComboAppetizer.adminComboAppetizers || []);
   const appStatus = useSelector((state) => state.adminComboAppetizer.status);
   const appError = useSelector((state) => state.adminComboAppetizer.error);
   
   // Fetching Desserts Data
-  const adminComboDesserts = useSelector((state) => state.adminComboDessert.adminComboDesserts);
+  const adminComboDesserts = useSelector((state) => state.adminComboDessert.adminComboDesserts || []);
   const dessertStatus = useSelector((state) => state.adminComboDessert.status);
   const dessertError = useSelector((state) => state.adminComboDessert.error);
+  
+  // Fetching Dishes Data
+  const adminComboDishes = useSelector((state) => state.adminComboDish.adminComboDishes || []);
+  const dishStatus = useSelector((state) => state.adminComboDish.status);
+  const dishError = useSelector((state) => state.adminComboDish.error);
 
   useEffect(() => {
     if (!combo && comboStatus !== 'loading') {
@@ -36,6 +41,7 @@ export default function AdminComboDetail() {
     }
     dispatch(fetchAdminComboAppetizerData());
     dispatch(fetchAdminComboDessertData());
+    dispatch(fetchAdminComboDishData());
   }, [dispatch, combo, comboStatus, id]);
 
   const handleGoBack = () => {
@@ -44,8 +50,6 @@ export default function AdminComboDetail() {
 
   const handleCreateAppetizer = () => {
     // Display form or modal for creating a new appetizer
-    // Example:
-    // dispatch(createAdminComboAppetizer({ comboId: parseInt(id), appetizerId: selectedAppetizerId }));
   };
 
   const handleDeleteAppetizer = (comboAppetizerId) => {
@@ -56,8 +60,6 @@ export default function AdminComboDetail() {
 
   const handleCreateDessert = () => {
     // Display form or modal for creating a new dessert
-    // Example:
-    // dispatch(createAdminComboDessert({ comboId: parseInt(id), dessertId: selectedDessertId }));
   };
 
   const handleDeleteDessert = (comboDessertId) => {
@@ -66,13 +68,25 @@ export default function AdminComboDetail() {
     }
   };
 
-  if (comboStatus === 'loading' || appStatus === 'loading' || dessertStatus === 'loading') return <p>Loading...</p>;
+  const handleCreateDish = () => {
+    // Display form or modal for creating a new dish
+  };
+
+  const handleDeleteDish = (comboDishId) => {
+    if (window.confirm('Are you sure you want to delete this dish?')) {
+      dispatch(deleteAdminComboDish(comboDishId));
+    }
+  };
+
+  if (comboStatus === 'loading' || appStatus === 'loading' || dessertStatus === 'loading' || dishStatus === 'loading') return <p>Loading...</p>;
   if (comboStatus === 'failed') return <p>{comboError}</p>;
   if (appStatus === 'failed') return <p>{appError}</p>;
   if (dessertStatus === 'failed') return <p>{dessertError}</p>;
+  if (dishStatus === 'failed') return <p>{dishError}</p>;
 
   const relatedAppetizers = adminComboAppetizers.filter(app => app.comboId === parseInt(id));
   const relatedDesserts = adminComboDesserts.filter(dessert => dessert.comboId === parseInt(id));
+  const relatedDishes = adminComboDishes.filter(dish => dish.comboId === parseInt(id));
 
   return (
     <div className={clsx('container', styles.container)}>
@@ -126,100 +140,154 @@ export default function AdminComboDetail() {
         )}
       </div>
 
-      <div className='row'>
-        <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
-          <h3>Appetizers</h3>
-          <button className="btn btn-primary" onClick={handleCreateAppetizer}>
-            Create
-          </button>
-        </div>
-        {relatedAppetizers.length > 0 ? (
-          <ul className="list-group">
-            {relatedAppetizers.map((app, index) => (
-              <li
-                key={app.comboAppetizerId}
-                className={clsx('list-group-item', styles.listGroupItem, {
-                  [styles.even]: index % 2 === 0,
-                  [styles.odd]: index % 2 !== 0,
-                })}
-              >
-                <div className={styles.detailsContainer}>
-                  <div className={styles.detailsImage}>
-                    <img src={app.appetizerImage} alt={app.appetizerName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
-                  </div>
-                  <div className={styles.detailsInfo}>
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <p><strong>Id:</strong> {app.appetizerId}</p>
-                        <p><strong>Name:</strong> {app.appetizerName}</p>
-                        <p><strong>Price:</strong> ${app.appetizerPrice}</p>
-                        <p><strong>Quantity:</strong> {app.appetizerQuantity}</p>
+      <div className='container'>
+        <div className='row'>
+          {/* Appetizers Table */}
+          <div className='col-md-4'>
+            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+              <h3>Appetizers</h3>
+              <button className="btn btn-primary" onClick={handleCreateAppetizer}>
+                Create
+              </button>
+            </div>
+            {relatedAppetizers.length > 0 ? (
+              <ul className="list-group">
+                {relatedAppetizers.map((app, index) => (
+                  <li
+                    key={app.comboAppetizerId}
+                    className={clsx('list-group-item', styles.listGroupItem, {
+                      [styles.even]: index % 2 === 0,
+                      [styles.odd]: index % 2 !== 0,
+                    })}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={app.ImagePath} alt={app.appetizerName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
                       </div>
-                      <div className="col-sm-6 d-flex align-items-center justify-content-center">
-                        <button
-                          className={clsx("btn btn-danger", styles.deleteButton)}
-                          onClick={() => handleDeleteAppetizer(app.comboAppetizerId)}
-                        >
-                          <FaRegTrashAlt />
-                        </button>
+                      <div className={styles.detailsInfo}>
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <p><strong>Id:</strong> {app.appetizerId}</p>
+                            <p><strong>Name:</strong> {app.appetizerName}</p>
+                            <p><strong>Price:</strong> ${app.appetizerPrice}</p>
+                            <p><strong>Quantity:</strong> {app.appetizerQuantity}</p>
+                          </div>
+                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                            <button
+                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              onClick={() => handleDeleteAppetizer(app.comboAppetizerId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No appetizers found for this combo.</p>
-        )}
-      </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No appetizers found for this combo.</p>
+            )}
+          </div>
 
-      <div className='row'>
-        <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
-          <h3>Desserts</h3>
-          <button className="btn btn-primary" onClick={handleCreateDessert}>
-            Create
-          </button>
-        </div>
-        {relatedDesserts.length > 0 ? (
-          <ul className="list-group">
-            {relatedDesserts.map((dessert, index) => (
-              <li
-                key={dessert.comboDessertId} // Use comboDessertId as the unique ID
-                className={clsx('list-group-item', styles.listGroupItem, {
-                  [styles.even]: index % 2 === 0,
-                  [styles.odd]: index % 2 !== 0,
-                })}
-              >
-                <div className={styles.detailsContainer}>
-                  <div className={styles.detailsImage}>
-                    <img src={dessert.dessertImage} alt={dessert.dessertName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
-                  </div>
-                  <div className={styles.detailsInfo}>
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <p><strong>Id:</strong> {dessert.dessertId}</p>
-                        <p><strong>Name:</strong> {dessert.dessertName}</p>
-                        <p><strong>Price:</strong> ${dessert.dessertPrice}</p>
-                        <p><strong>Quantity:</strong> {dessert.dessertQuantity}</p>
+          {/* Desserts Table */}
+          <div className='col-md-4'>
+            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+              <h3>Desserts</h3>
+              <button className="btn btn-primary" onClick={handleCreateDessert}>
+                Create
+              </button>
+            </div>
+            {relatedDesserts.length > 0 ? (
+              <ul className="list-group">
+                {relatedDesserts.map((dessert, index) => (
+                  <li
+                    key={dessert.comboDessertId}
+                    className={clsx('list-group-item', styles.listGroupItem, {
+                      [styles.even]: index % 2 === 0,
+                      [styles.odd]: index % 2 !== 0,
+                    })}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={dessert.dessertImage} alt={dessert.dessertName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
                       </div>
-                      <div className="col-sm-6 d-flex align-items-center justify-content-center">
-                        <button
-                          className={clsx("btn btn-danger", styles.deleteButton)}
-                          onClick={() => handleDeleteDessert(dessert.comboDessertId)}
-                        >
-                          <FaRegTrashAlt />
-                        </button>
+                      <div className={styles.detailsInfo}>
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <p><strong>Id:</strong> {dessert.dessertId}</p>
+                            <p><strong>Name:</strong> {dessert.dessertName}</p>
+                            <p><strong>Price:</strong> ${dessert.dessertPrice}</p>
+                            <p><strong>Quantity:</strong> {dessert.dessertQuantity}</p>
+                          </div>
+                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                            <button
+                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              onClick={() => handleDeleteDessert(dessert.comboDessertId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No desserts found for this combo.</p>
-        )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No desserts found for this combo.</p>
+            )}
+          </div>
+
+          {/* Dishes Table */}
+          <div className='col-md-4'>
+            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+              <h3>Dishes</h3>
+              <button className="btn btn-primary" onClick={handleCreateDish}>
+                Create
+              </button>
+            </div>
+            {relatedDishes.length > 0 ? (
+              <ul className="list-group">
+                {relatedDishes.map((dish, index) => (
+                  <li
+                    key={dish.comboDishId}
+                    className={clsx('list-group-item', styles.listGroupItem, {
+                      [styles.even]: index % 2 === 0,
+                      [styles.odd]: index % 2 !== 0,
+                    })}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={dish.dishImagePath} alt={dish.dishName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
+                      </div>
+                      <div className={styles.detailsInfo}>
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <p><strong>Id:</strong> {dish.dishId}</p>
+                            <p><strong>Name:</strong> {dish.dishName}</p>
+                            <p><strong>Price:</strong> ${dish.dishPrice}</p>
+                          </div>
+                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                            <button
+                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              onClick={() => handleDeleteDish(dish.comboDishId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No dishes found for this combo.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
