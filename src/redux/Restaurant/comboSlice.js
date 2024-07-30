@@ -16,6 +16,18 @@ export const fetchComboData = createAsyncThunk(
     }
 );
 
+export const fetchComboById = createAsyncThunk(
+    "combo/fetchComboById",
+    async (id) => {
+        try {
+            const response = await axios.get(`${apiEndpoint}/${id}`);
+            return response.data.data.$values; // Adjust according to your API response structure
+        } catch (error) {
+            throw new Error('Error fetching combo item:', error.response.data);
+        }
+    }
+);
+
 // Async thunk to create new combo item
 export const createComboItem = createAsyncThunk(
     "combo/createComboItem",
