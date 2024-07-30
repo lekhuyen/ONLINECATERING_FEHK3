@@ -7,29 +7,28 @@ import { fetchAdminComboAppetizerData, deleteAdminComboAppetizer } from '../../r
 import { fetchAdminComboDessertData, deleteAdminComboDessert } from '../../redux/Restaurant/admincombodessertSlice';
 import { fetchAdminComboDishData, deleteAdminComboDish } from '../../redux/Restaurant/admincombodishSlice';
 import styles from './AdminComboDetail.module.scss';
-import clsx from 'clsx';
 import { FaRegTrashAlt } from 'react-icons/fa';
 
 export default function AdminComboDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   // Fetching Combo Data
   const combo = useSelector((state) => state.combo.items.find((item) => item.id === parseInt(id)));
   const comboStatus = useSelector((state) => state.combo.status);
   const comboError = useSelector((state) => state.combo.error);
-  
+
   // Fetching Appetizers Data
   const adminComboAppetizers = useSelector((state) => state.adminComboAppetizer.adminComboAppetizers || []);
   const appStatus = useSelector((state) => state.adminComboAppetizer.status);
   const appError = useSelector((state) => state.adminComboAppetizer.error);
-  
+
   // Fetching Desserts Data
   const adminComboDesserts = useSelector((state) => state.adminComboDessert.adminComboDesserts || []);
   const dessertStatus = useSelector((state) => state.adminComboDessert.status);
   const dessertError = useSelector((state) => state.adminComboDessert.error);
-  
+
   // Fetching Dishes Data
   const adminComboDishes = useSelector((state) => state.adminComboDish.adminComboDishes || []);
   const dishStatus = useSelector((state) => state.adminComboDish.status);
@@ -89,24 +88,24 @@ export default function AdminComboDetail() {
   const relatedDishes = adminComboDishes.filter(dish => dish.comboId === parseInt(id));
 
   return (
-    <div className={clsx('container', styles.container)}>
+    <div className={styles.container}>
       <div>
         {combo ? (
           <div>
-            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4', styles.card)}>
+            <div className={styles.header}>
               <h2>Combo Details</h2>
-              <button className="btn btn-secondary" onClick={handleGoBack}>
+              <button className={styles.goBackButton} onClick={handleGoBack}>
                 <RiArrowGoBackLine /> Back
               </button>
             </div>
-            <div className={clsx('card', styles.card)}>
-              <div className="card-body">
-                <div className="row">
-                  <div className={clsx('col-md-4', styles.detailsContainer)}>
-                    <img src={combo.imagePath} alt={combo.name} className={clsx('img-fluid', 'rounded', styles.imgThumbnail)} />
+            <div className={styles.card}>
+              <div className={styles.cardBody}>
+                <div className={styles.row}>
+                  <div className={styles.detailsContainer}>
+                    <img src={combo.imagePath} alt={combo.name} className={styles.imgThumbnail} />
                   </div>
-                  <div className="col-md-8">
-                    <table className="table table-striped">
+                  <div className={styles.detailsTable}>
+                    <table className={styles.table}>
                       <tbody>
                         <tr>
                           <th>Id</th>
@@ -140,41 +139,38 @@ export default function AdminComboDetail() {
         )}
       </div>
 
-      <div className='container'>
-        <div className='row'>
+      <div className={styles.contentContainer}>
+        <div className={styles.row}>
           {/* Appetizers Table */}
-          <div className='col-md-4'>
-            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
               <h3>Appetizers</h3>
-              <button className="btn btn-primary" onClick={handleCreateAppetizer}>
+              <button className={styles.createButton} onClick={handleCreateAppetizer}>
                 Create
               </button>
             </div>
             {relatedAppetizers.length > 0 ? (
-              <ul className="list-group">
+              <ul className={styles.listGroup}>
                 {relatedAppetizers.map((app, index) => (
                   <li
                     key={app.comboAppetizerId}
-                    className={clsx('list-group-item', styles.listGroupItem, {
-                      [styles.even]: index % 2 === 0,
-                      [styles.odd]: index % 2 !== 0,
-                    })}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
                   >
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsImage}>
-                        <img src={app.appetizerImage} alt={app.appetizerName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
+                        <img src={app.appetizerImage} alt={app.appetizerName} className={styles.imgThumbnail} />
                       </div>
                       <div className={styles.detailsInfo}>
-                        <div className="row">
-                          <div className="col-sm-6">
+                        <div className={styles.row}>
+                          <div className={styles.col}>
                             <p><strong>Id:</strong> {app.appetizerId}</p>
                             <p><strong>Name:</strong> {app.appetizerName}</p>
                             <p><strong>Price:</strong> ${app.appetizerPrice}</p>
                             <p><strong>Quantity:</strong> {app.appetizerQuantity}</p>
                           </div>
-                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                          <div className={styles.deleteButtonContainer}>
                             <button
-                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              className={styles.deleteButton}
                               onClick={() => handleDeleteAppetizer(app.comboAppetizerId)}
                             >
                               <FaRegTrashAlt />
@@ -192,38 +188,35 @@ export default function AdminComboDetail() {
           </div>
 
           {/* Desserts Table */}
-          <div className='col-md-4'>
-            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
               <h3>Desserts</h3>
-              <button className="btn btn-primary" onClick={handleCreateDessert}>
+              <button className={styles.createButton} onClick={handleCreateDessert}>
                 Create
               </button>
             </div>
             {relatedDesserts.length > 0 ? (
-              <ul className="list-group">
+              <ul className={styles.listGroup}>
                 {relatedDesserts.map((dessert, index) => (
                   <li
                     key={dessert.comboDessertId}
-                    className={clsx('list-group-item', styles.listGroupItem, {
-                      [styles.even]: index % 2 === 0,
-                      [styles.odd]: index % 2 !== 0,
-                    })}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
                   >
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsImage}>
-                        <img src={dessert.dessertImage} alt={dessert.dessertName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
+                        <img src={dessert.dessertImage} alt={dessert.dessertName} className={styles.imgThumbnail} />
                       </div>
                       <div className={styles.detailsInfo}>
-                        <div className="row">
-                          <div className="col-sm-6">
+                        <div className={styles.row}>
+                          <div className={styles.col}>
                             <p><strong>Id:</strong> {dessert.dessertId}</p>
                             <p><strong>Name:</strong> {dessert.dessertName}</p>
                             <p><strong>Price:</strong> ${dessert.dessertPrice}</p>
                             <p><strong>Quantity:</strong> {dessert.dessertQuantity}</p>
                           </div>
-                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                          <div className={styles.deleteButtonContainer}>
                             <button
-                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              className={styles.deleteButton}
                               onClick={() => handleDeleteDessert(dessert.comboDessertId)}
                             >
                               <FaRegTrashAlt />
@@ -241,37 +234,35 @@ export default function AdminComboDetail() {
           </div>
 
           {/* Dishes Table */}
-          <div className='col-md-4'>
-            <div className={clsx('d-flex', 'justify-content-between', 'align-items-center', 'mb-4')}>
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
               <h3>Dishes</h3>
-              <button className="btn btn-primary" onClick={handleCreateDish}>
+              <button className={styles.createButton} onClick={handleCreateDish}>
                 Create
               </button>
             </div>
             {relatedDishes.length > 0 ? (
-              <ul className="list-group">
+              <ul className={styles.listGroup}>
                 {relatedDishes.map((dish, index) => (
                   <li
                     key={dish.comboDishId}
-                    className={clsx('list-group-item', styles.listGroupItem, {
-                      [styles.even]: index % 2 === 0,
-                      [styles.odd]: index % 2 !== 0,
-                    })}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
                   >
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsImage}>
-                        <img src={dish.dishImagePath} alt={dish.dishName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
+                        <img src={dish.dishImagePath} alt={dish.dishName} className={styles.imgThumbnail} />
                       </div>
                       <div className={styles.detailsInfo}>
-                        <div className="row">
-                          <div className="col-sm-6">
+                        <div className={styles.row}>
+                          <div className={styles.col}>
                             <p><strong>Id:</strong> {dish.dishId}</p>
                             <p><strong>Name:</strong> {dish.dishName}</p>
                             <p><strong>Price:</strong> ${dish.dishPrice}</p>
+                            <p><strong>Quantity:</strong> {dish.dishQuantity}</p>
                           </div>
-                          <div className="col-sm-6 d-flex align-items-center justify-content-center">
+                          <div className={styles.deleteButtonContainer}>
                             <button
-                              className={clsx("btn btn-danger", styles.deleteButton)}
+                              className={styles.deleteButton}
                               onClick={() => handleDeleteDish(dish.comboDishId)}
                             >
                               <FaRegTrashAlt />

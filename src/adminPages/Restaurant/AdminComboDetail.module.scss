@@ -1,89 +1,178 @@
-    .container {
-        margin: 2rem auto;
+// Container for overall page
+.container {
+    margin: 2rem auto;
+  }
+  
+  // Header section with back button
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .goBackButton {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  // Card styling
+  .card {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    background-color: #fff;
+  }
+  
+  // Card body
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  // Details container
+  .detailsContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .detailsImage {
+    margin-right: 1rem;
+  }
+  
+  .imgThumbnail {
+    width: 100px;
+    height: auto;
+    border-radius: 0.25rem;
+    object-fit: cover;
+  }
+  
+  .detailsTable {
+    flex: 1;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  // Content section with multiple columns
+  .contentContainer {
+    .row {
+      display: flex;
+      flex-wrap: wrap;
     }
-    
-    .card {
-        margin-bottom: 2rem;
-    }
-    
-    .img-fluid {
-        max-width: 100%;
-        height: auto;
-    }
-    
-    .img-thumbnail {
-        width: 100px; // Adjust as needed
-        height: auto;
-    }
-    
+  }
+  
+  .column {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  // Section header
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .createButton {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  // List group styling
+  .listGroup {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .listGroupItem {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    background-color: #f9f9f9;
+    position: relative;
+  }
+  
+  .listGroupItem:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  .listGroupItem img {
+    max-width: 60px;
+    margin-right: 1rem;
+  }
+  
+  // Details info
+  .detailsInfo {
+    flex: 1;
+  }
+  
+  .detailsInfo p {
+    margin: 0.5rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+  }
+  
+  // Delete button styling
+  .deleteButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .deleteButton {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  // Responsive design for smaller screens
+  @media (max-width: 768px) {
     .detailsContainer {
-        display: flex;
-        align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
     }
-    
+  
     .detailsImage {
-        margin-right: 1rem;
+      margin-bottom: 1rem;
     }
-    
-    .detailsInfo {
-        flex: 1;
+  
+    .imgThumbnail {
+      width: 60px;
+      height: 60px;
     }
-    
-    .detailsInfo p {
-        margin: 0.5rem 0;
-    }
-    
+  
     .listGroupItem {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
     }
-    
+  
     .listGroupItem img {
-        max-width: 80px; // Adjust as needed
-        margin-right: 1rem;
+      width: 50px;
+      height: 50px;
     }
-    
-    .even {
-        background-color: #f9f9f9; // Light background for even items
+  
+    .deleteButton {
+      position: static;
+      margin-top: 1rem;
     }
-    
-    .odd {
-        background-color: #fff; // White background for odd items
-    }
-    
-    .btn-primary {
-        margin-left: 1rem;
-    }
-    
-    .btn-danger {
-        margin-left: 1rem;
-    }
-    
-    .detailsInfo {
-        .row {
-        margin-bottom: 1rem;
-        }
-    
-        .col-sm-6 {
-        display: flex;
-        align-items: center;
-        }
-    
-        .col-sm-6:last-child {
-        justify-content: center;
-        }
-    
-        .deleteButton {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        }
-    
-        p {
-        margin: 0.5rem 0;
-        }
-    }
-    
+  }
+  
