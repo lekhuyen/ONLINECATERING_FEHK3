@@ -126,7 +126,7 @@ export default function AdminCombo() {
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
-                                        onClick={() => navigate(`/combo-admin/view-combo-admin/${combo.id}`)}
+                                        onClick={() => navigate(`/combo-admin/${combo.id}`)}
                                     >
                                         <BsInfoCircle />
                                     </button>
