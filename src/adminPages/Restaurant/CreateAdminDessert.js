@@ -55,7 +55,7 @@ export default function CreateAdminDessert() {
             <h2>Create Dessert</h2>
             <div className="mt-3">
                 <button className="btn btn-secondary" onClick={handleGoBack}>
-                    <RiArrowGoBackLine />
+                    <RiArrowGoBackLine /> Go Back
                 </button>
             </div>
             <form onSubmit={handleSubmit}>

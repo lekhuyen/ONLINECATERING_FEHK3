@@ -63,7 +63,7 @@ export default function AdminCombo() {
             <h2>Combo Table</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-9">
+                <div>
                     <label htmlFor="searchTerm" className="form-label">
                         Search Name/Price/Type:
                     </label>
@@ -81,14 +81,14 @@ export default function AdminCombo() {
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="col-sm-3">
+                <div>
                     <button className="btn btn-success mb-3" onClick={() => navigate('/combo-admin/create-combo-admin')}>
                         Add Combo
                     </button>
                 </div>
-            </div>
-
+                
             <div className="container mt-5">
                 <table className="table table-hover">
                     <thead>

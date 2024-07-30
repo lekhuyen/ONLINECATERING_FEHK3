@@ -94,7 +94,7 @@ export default function AdminLobby() {
             <h2>Lobby Table</h2>
 
             <div className="row mb-3">
-                <div className="col-sm-9">
+                <div>
                     <label htmlFor="searchTerm" className="form-label">
                         Search Name/Description/Area:
                     </label>
@@ -112,11 +112,11 @@ export default function AdminLobby() {
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="col-sm-3">
+                <div>
                     <button className="btn btn-success mb-3" onClick={() => navigate('/lobby-admin/create-lobby-admin')}>Add Lobby</button>
                 </div>
-            </div>
 
             <div className="container mt-5">
                 <table className="table table-hover">
