@@ -10,7 +10,7 @@ export const fetchAdminComboDessertData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data.$values || []; // Ensure it is an array
+            return response.data.data.$values; // Ensure it is an array
         } catch (error) {
             throw new Error('Error fetching combo-dessert data:', error.response?.data || error.message);
         }
@@ -32,7 +32,7 @@ export const createAdminComboDessert = createAsyncThunk(
 
 // Async thunk to delete a combo-dessert association
 export const deleteAdminComboDessert = createAsyncThunk(
-    "adminComboDessert/deleteAdminComboDessert",
+    "adminComboDessert/delete",
     async (id, thunkAPI) => {
         try {
             const response = await fetch(`${apiEndpoint}/${id}`, {
@@ -91,7 +91,7 @@ const adminComboDessertSlice = createSlice({
             .addCase(deleteAdminComboDessert.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.adminComboDesserts = state.adminComboDesserts.filter(
-                    (adminComboDessert) => adminComboDessert.id !== action.payload
+                    (dessert) => dessert.comboDessertId !== action.payload
                 );
             })
             .addCase(deleteAdminComboDessert.rejected, (state, action) => {
