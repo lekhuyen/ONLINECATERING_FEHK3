@@ -162,7 +162,7 @@ export default function AdminComboDetail() {
                   >
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsImage}>
-                        <img src={app.ImagePath} alt={app.appetizerName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
+                        <img src={app.appetizerImage} alt={app.appetizerName} className={clsx('img-thumbnail', styles.imgThumbnail)} />
                       </div>
                       <div className={styles.detailsInfo}>
                         <div className="row">
