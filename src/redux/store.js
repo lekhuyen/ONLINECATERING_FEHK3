@@ -26,6 +26,7 @@ import admindessertSlice from './Restaurant/admindessertSlice'
 import adminlobbySlice from './Restaurant/adminlobbySlice'
 import adminlobbyimageSlice from './Restaurant/adminlobbyimageSlice'
 import admincomboappetizerSlice from './Restaurant/admincomboappetizerSlice'
+import admincombodessertSlice from './Restaurant/admincombodessertSlice'
 
 
 const comonConfig = {
@@ -53,6 +54,7 @@ export const store = configureStore({
         adminappetizer : adminappetizersSlice,
         adminComboAppetizer: admincomboappetizerSlice,
         admindessert: admindessertSlice,
+        adminComboDessert: admincombodessertSlice,
         lobby: adminlobbySlice,
         lobbyImages: adminlobbyimageSlice
 
