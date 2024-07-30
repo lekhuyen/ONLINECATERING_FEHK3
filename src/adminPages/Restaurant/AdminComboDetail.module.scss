@@ -1,54 +1,89 @@
-.container {
-    margin: 2rem auto;
-  }
-  
-  .card {
-    margin-bottom: 2rem;
-  }
-  
-  .img-fluid {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .img-thumbnail {
-    width: 100px; // Adjust as needed
-    height: auto;
-  }
-  
-  .detailsContainer {
-    display: flex;
-    align-items: center;
-  }
-  
-  .detailsImage {
-    margin-right: 1rem;
-  }
-  
-  .detailsInfo {
-    flex: 1;
-  }
-  
-  .detailsInfo p {
-    margin: 0.5rem 0;
-  }
-  
-  .listGroupItem {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .listGroupItem img {
-    max-width: 80px; // Adjust as needed
-    margin-right: 1rem;
-  }
-  
-  .even {
-    background-color: #f9f9f9; // Light background for even items
-  }
-  
-  .odd {
-    background-color: #fff; // White background for odd items
-  }
-  
+    .container {
+        margin: 2rem auto;
+    }
+    
+    .card {
+        margin-bottom: 2rem;
+    }
+    
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .img-thumbnail {
+        width: 100px; // Adjust as needed
+        height: auto;
+    }
+    
+    .detailsContainer {
+        display: flex;
+        align-items: center;
+    }
+    
+    .detailsImage {
+        margin-right: 1rem;
+    }
+    
+    .detailsInfo {
+        flex: 1;
+    }
+    
+    .detailsInfo p {
+        margin: 0.5rem 0;
+    }
+    
+    .listGroupItem {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .listGroupItem img {
+        max-width: 80px; // Adjust as needed
+        margin-right: 1rem;
+    }
+    
+    .even {
+        background-color: #f9f9f9; // Light background for even items
+    }
+    
+    .odd {
+        background-color: #fff; // White background for odd items
+    }
+    
+    .btn-primary {
+        margin-left: 1rem;
+    }
+    
+    .btn-danger {
+        margin-left: 1rem;
+    }
+    
+    .detailsInfo {
+        .row {
+        margin-bottom: 1rem;
+        }
+    
+        .col-sm-6 {
+        display: flex;
+        align-items: center;
+        }
+    
+        .col-sm-6:last-child {
+        justify-content: center;
+        }
+    
+        .deleteButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        }
+    
+        p {
+        margin: 0.5rem 0;
+        }
+    }
+    
