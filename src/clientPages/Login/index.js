@@ -3,11 +3,13 @@ import styles from './Login.module.scss'
 import { useCallback, useEffect, useState } from "react";
 import { apiUserLogin, apiUserRegister } from "../../apis/user";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from '../../redux/User/userSlice'
 import { validate } from "../../ultil/helper";
 import EmailInput from "../ForgotPassword/emailInput";
+import { sendMailRegister } from "../../redux/User/userActions";
+import Loading from "../Loading";
 
 const cx = classNames.bind(styles)
 
@@ -17,12 +19,14 @@ const Login = () => {
     const [isForgotPass, setIsForgotPass] = useState(false)
     const navigate = useNavigate()
     const dispath = useDispatch()
+    const { token } = useParams();
+    const { isRegister } = useSelector(state => state.register);
 
     const [payload, setPayload] = useState({
         userEmail: "",
         password: "",
         userName: "",
-        phone: "",
+        phone: ""
     })
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -46,27 +50,33 @@ const Login = () => {
     const handleSubmit = useCallback(async () => {
         const { userName, phone, ...data } = payload
 
+        const loginToken = {
+            userEmail: data.userEmail,
+            password: data.password,
+            loginToken: token
+        }
         const invalids = register ? validate(payload, setInvalidFields) : validate(data, setInvalidFields)
 
         if (invalids === 0) {
             if (register) {
-                const response = await apiUserRegister(payload)
-                if (response.status === 0) {
-                    Swal.fire('Congratulation',
-                        response.message, 'success')
-                        .then(() => {
-                            setRegister(false)
-                            resetPayload()
-                        })
-                } else {
-                    Swal.fire('Oop!',
-                        response.message, 'error')
-                }
+                // const response = await apiUserRegister(payload)
+                // if (response.status === 0) {
+                //     Swal.fire('Congratulation',
+                //         response.message, 'success')
+                //         .then(() => {
+                //             setRegister(false)
+                //             resetPayload()
+                //         })
+                // } else {
+                //     Swal.fire('Oop!',
+                //         response.message, 'error')
+                // }
+                dispath(sendMailRegister(payload));
             }
             else {
-                const rs = await apiUserLogin(data)
+                const rs = await apiUserLogin(token ? loginToken : data)
                 if (rs.status === 0) {
-                    
+
                     localStorage.setItem('userCurrent', JSON.stringify(rs.data))
                     dispath(login({
                         isLoggedIn: true,
@@ -78,6 +88,7 @@ const Login = () => {
                     Swal.fire('Oop!',
                         rs.message, 'error')
                 }
+                // console.log(loginToken);
             }
         }
 
@@ -97,6 +108,10 @@ const Login = () => {
                 <div className={cx("square")} style={{ "--i": 4 }}></div>
                 <div className={cx("container")}>
                     <div className={cx("form")}>
+                        {
+                            isRegister &&
+                            <Loading />
+                        }
                         <h2>{register ? "Register Form" : "Login Form"}</h2>
                         <>
                             <>
@@ -169,7 +184,7 @@ const Login = () => {
                                     ) : null
                                 }
                                 {
-                                    !isForgotPass && 
+                                    !isForgotPass &&
                                     <div className={cx("input-box")}>
                                         <button onClick={handleSubmit}>
                                             {register ? "Register" : "Login"}
