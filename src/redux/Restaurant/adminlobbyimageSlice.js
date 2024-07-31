@@ -11,14 +11,14 @@ export const fetchLobbyImages = createAsyncThunk(
     "lobbyImages/fetchLobbyImages",
     async (lobbyId) => {
         try {
-            const response = await axios.get(`${apiEndpoint}/lobby/${lobbyId}`);
-            // Adjust this line according to your API response structure
-            return response.data.$values; // Assuming your API response is structured like this
+            const response = await axios.get(`${apiEndpoint}/images/${lobbyId}`);
+            return response.data.data.$values; // Extracting image URLs from the response
         } catch (error) {
             throw new Error('Error fetching lobby images:', error.response?.data || error.message);
         }
     }
 );
+
 
 const adminlobbyimageSlice = createSlice({
     name: "lobbyImages",

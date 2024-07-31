@@ -50,6 +50,8 @@ export default function AdminLobby() {
 
     const handleInfoClick = async (lobby) => {
         setSelectedLobby(lobby);
+        console.log("Selected lobby:", lobby); // Add this console.log statement
+    
         try {
             setImagesStatus("loading");
             const action = await dispatch(fetchLobbyImages(lobby.id));
@@ -60,10 +62,11 @@ export default function AdminLobby() {
             setImagesError(error.message);
             console.error("Error fetching images:", error);
         }
-
+    
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.show();
     };
+    
 
     const filteredLobbyData = lobbyData.filter((lobby) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
@@ -207,9 +210,9 @@ export default function AdminLobby() {
                                     {lobbyImages && lobbyImages.length > 0 ? (
                                         <div className="d-flex flex-wrap">
                                             {lobbyImages.map((image, index) => (
-                                                <img
+                                                    <img
                                                     key={index}
-                                                    src={image.imagesUrl}
+                                                    src={image} // Assuming lobbyImages is an array of image URLs
                                                     alt={`Lobby ${selectedLobby.id}`}
                                                     style={{
                                                         width: "20%",
