@@ -10,6 +10,7 @@ export default function EditDish() {
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
+    const [quantity, setQuantity] = useState('');
     const [status, setStatus] = useState(true); // Assuming status is a boolean
     const [formFile, setFormFile] = useState(null); // For handling file upload
     const [imagePath, setImagePath] = useState(''); // Initialize as a string
@@ -29,6 +30,7 @@ export default function EditDish() {
         if (dishItem) {
             setName(dishItem.name || '');
             setPrice(dishItem.price || '');
+            setQuantity(dishItem.quantity || '');
             setStatus(dishItem.status || true);
             setImagePath(dishItem.imagePath || ''); // Set single image path
         }
@@ -52,6 +54,7 @@ export default function EditDish() {
                 id: Number(id),
                 name,
                 price,
+                quantity,
                 status,
                 formFile
             })).unwrap();
@@ -97,6 +100,16 @@ export default function EditDish() {
                         className="form-control"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Quantity</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
                         required
                     />
                 </div>
