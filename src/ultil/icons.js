@@ -48,7 +48,7 @@ import {
 import { CiForkAndKnife } from "react-icons/ci";
 import { BiSolidDrink } from "react-icons/bi";
 import { GiChickenOven } from "react-icons/gi";
-import { FaBowlRice, FaBullhorn, FaTable } from "react-icons/fa6";
+import { FaBowlRice, FaBullhorn, FaTable, FaRegFaceLaughBeam } from "react-icons/fa6";
 
 import { TiImage } from "react-icons/ti";
 import { TbBrandBooking } from "react-icons/tb";
@@ -120,6 +120,7 @@ const icons = {
     FaRegHeart,
     IoCalendarOutline,
     IoIosLogOut,
+    FaRegFaceLaughBeam,
 
 };
 

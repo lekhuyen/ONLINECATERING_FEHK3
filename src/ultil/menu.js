@@ -42,6 +42,11 @@ export const menuItems = [
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
   { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
   {
     icon: <RiCustomerService2Line />,
     title: "Service",
@@ -134,3 +139,27 @@ export const menuUserTab = [
     icon: <IoCalendarOutline />,
   },
 ];
+export const voteOption = [
+    
+  {
+      id: 1,
+      text: 'Terrible'
+  },
+  {
+      id: 2,
+      text: 'Bad'
+  },
+  {
+      id: 3,
+      text: 'Neutral'
+  },
+  {
+      id: 4,
+      text: 'Good'
+  },
+  {
+      id: 5,
+      text: 'Perfect'
+  },
+  
+]
