@@ -75,6 +75,19 @@ export default function CreateAdminCombo() {
                 </div>
 
                 <div className="form-group">
+                    <label htmlFor="price">Price</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        id="price"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        required
+                        step="0.01" // Allows decimal prices
+                    />
+                </div>
+
+                <div className="form-group">
                     <label htmlFor="type">Type</label>
                     <input
                         type="number"

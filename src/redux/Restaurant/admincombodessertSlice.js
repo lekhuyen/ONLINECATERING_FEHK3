@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Define the API endpoint for ComboDessert
-const apiEndpoint = "http://localhost:5265/api/AdminComboDessert";
+const apiEndpoint = "http://localhost:5265/api/DessertCombo";
 
 // Async thunk to fetch combo-dessert associations
 export const fetchAdminComboDessertData = createAsyncThunk(
@@ -10,7 +10,7 @@ export const fetchAdminComboDessertData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data;
+            return response.data.data.$values; // Ensure it is an array
         } catch (error) {
             throw new Error('Error fetching combo-dessert data:', error.response?.data || error.message);
         }
@@ -32,13 +32,23 @@ export const createAdminComboDessert = createAsyncThunk(
 
 // Async thunk to delete a combo-dessert association
 export const deleteAdminComboDessert = createAsyncThunk(
-    "adminComboDessert/deleteAdminComboDessert",
-    async (id) => {
+    "adminComboDessert/delete",
+    async (id, thunkAPI) => {
         try {
-            await axios.delete(`${apiEndpoint}/${id}`);
-            return id; // Return the Id of the deleted association for Redux state update
+            const response = await fetch(`${apiEndpoint}/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete combo-dessert association');
+            }
+
+            return id; // Return the ID of the deleted item
         } catch (error) {
-            throw new Error('Error deleting combo-dessert association:', error.response?.data || error.message);
+            return thunkAPI.rejectWithValue(error.message);
         }
     }
 );
@@ -46,7 +56,7 @@ export const deleteAdminComboDessert = createAsyncThunk(
 const adminComboDessertSlice = createSlice({
     name: "adminComboDessert",
     initialState: {
-        adminComboDesserts: [], 
+        adminComboDesserts: [],
         status: "idle",
         error: null,
     },
@@ -58,7 +68,7 @@ const adminComboDessertSlice = createSlice({
             })
             .addCase(fetchAdminComboDessertData.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.adminComboDesserts = action.payload.data || [];
+                state.adminComboDesserts = action.payload || []; // Ensure it is an array
             })
             .addCase(fetchAdminComboDessertData.rejected, (state, action) => {
                 state.status = "failed";
@@ -69,7 +79,7 @@ const adminComboDessertSlice = createSlice({
             })
             .addCase(createAdminComboDessert.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.adminComboDesserts.push(action.payload.data);
+                state.adminComboDesserts.push(action.payload);
             })
             .addCase(createAdminComboDessert.rejected, (state, action) => {
                 state.status = "failed";
@@ -80,13 +90,13 @@ const adminComboDessertSlice = createSlice({
             })
             .addCase(deleteAdminComboDessert.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.adminComboDesserts = state.adminComboDesserts.filter(adminComboDessert =>
-                    adminComboDessert.id !== action.payload
+                state.adminComboDesserts = state.adminComboDesserts.filter(
+                    (dessert) => dessert.comboDessertId !== action.payload
                 );
             })
             .addCase(deleteAdminComboDessert.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                state.error = action.payload;
             });
     },
 });
