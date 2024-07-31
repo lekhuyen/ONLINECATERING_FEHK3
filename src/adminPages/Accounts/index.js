@@ -117,9 +117,9 @@ const Accounts = () => {
                                 <td>{account.phone}</td>
                                 <td>
                                     {account.status ? (
-                                        <span className="badge bg-success">Active</span>
+                                        <span className="badge bg-success">Banned</span>
                                     ) : (
-                                        <span className="badge bg-danger">Banned</span>
+                                        <span className="badge bg-danger">Active</span>
                                     )}
                                 </td>
                                 <td>
