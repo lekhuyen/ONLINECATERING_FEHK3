@@ -25,6 +25,7 @@ import adminappetizersSlice from './Restaurant/adminappetizersSlice'
 import admindessertSlice from './Restaurant/admindessertSlice'
 import adminlobbySlice from './Restaurant/adminlobbySlice'
 import adminlobbyimageSlice from './Restaurant/adminlobbyimageSlice'
+import userRegisterSlice from './User/userRegisterSlice'
 import admincomboappetizerSlice from './Restaurant/admincomboappetizerSlice'
 import admincombodessertSlice from './Restaurant/admincombodessertSlice'
 import admincombodishSlice from './Restaurant/admincombodishSlice'
@@ -42,6 +43,7 @@ const userConfig  = {
 export const store = configureStore({
     reducer: {
         user: persistReducer(userConfig, userSlice),
+        register: userRegisterSlice,
         about: aboutSlice,
         aboutTypes: aboutTypeSlice,
         news: newsSlice,
