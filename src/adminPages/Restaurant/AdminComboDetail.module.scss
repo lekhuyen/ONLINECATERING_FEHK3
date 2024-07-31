@@ -1,0 +1,178 @@
+// Container for overall page
+.container {
+    margin: 2rem auto;
+  }
+  
+  // Header section with back button
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .goBackButton {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  // Card styling
+  .card {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    background-color: #fff;
+  }
+  
+  // Card body
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  // Details container
+  .detailsContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .detailsImage {
+    margin-right: 1rem;
+  }
+  
+  .imgThumbnail {
+    width: 100px;
+    height: auto;
+    border-radius: 0.25rem;
+    object-fit: cover;
+  }
+  
+  .detailsTable {
+    flex: 1;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  // Content section with multiple columns
+  .contentContainer {
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  
+  .column {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  // Section header
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .createButton {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  // List group styling
+  .listGroup {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .listGroupItem {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    background-color: #f9f9f9;
+    position: relative;
+  }
+  
+  .listGroupItem:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  .listGroupItem img {
+    max-width: 60px;
+    margin-right: 1rem;
+  }
+  
+  // Details info
+  .detailsInfo {
+    flex: 1;
+  }
+  
+  .detailsInfo p {
+    margin: 0.5rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+  }
+  
+  // Delete button styling
+  .deleteButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .deleteButton {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  // Responsive design for smaller screens
+  @media (max-width: 768px) {
+    .detailsContainer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .detailsImage {
+      margin-bottom: 1rem;
+    }
+  
+    .imgThumbnail {
+      width: 60px;
+      height: 60px;
+    }
+  
+    .listGroupItem {
+      flex-direction: column;
+      align-items: flex-start;
+      position: static;
+    }
+  
+    .listGroupItem img {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .deleteButton {
+      position: static;
+      margin-top: 1rem;
+    }
+  }
+  

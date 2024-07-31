@@ -25,6 +25,9 @@ import adminappetizersSlice from './Restaurant/adminappetizersSlice'
 import admindessertSlice from './Restaurant/admindessertSlice'
 import adminlobbySlice from './Restaurant/adminlobbySlice'
 import adminlobbyimageSlice from './Restaurant/adminlobbyimageSlice'
+import admincomboappetizerSlice from './Restaurant/admincomboappetizerSlice'
+import admincombodessertSlice from './Restaurant/admincombodessertSlice'
+import admincombodishSlice from './Restaurant/admincombodishSlice'
 
 
 const comonConfig = {
@@ -48,11 +51,15 @@ export const store = configureStore({
         accounts : accountsSlice,
         service : ServiceSlice,
         dish: dishSlice,
+        adminComboDish: admincombodishSlice,
         customCombo: customComboSlice,
         adminappetizer : adminappetizersSlice,
+        adminComboAppetizer: admincomboappetizerSlice,
         admindessert: admindessertSlice,
+        adminComboDessert: admincombodessertSlice,
         lobby: adminlobbySlice,
         lobbyImages: adminlobbyimageSlice
+
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
