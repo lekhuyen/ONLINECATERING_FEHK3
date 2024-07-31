@@ -49,5 +49,6 @@ export const userSlice = createSlice({
     }
     
 })
+
 export const {login, resetStatusMessage, logout  } = userSlice.actions
 export default userSlice.reducer

@@ -58,6 +58,7 @@ const publicRoutes = [
     {path: "/", component: Home},
     {path: "/about", component: About},
     {path: "/login", component: Login, layout: null},
+    {path: "/login/:token", component: Login, layout: null},
     {path: "/forgot-password", component: EmailInput, layout: null},
     {path: "/contact", component: Contact},
     {path: "/news", component: News},
