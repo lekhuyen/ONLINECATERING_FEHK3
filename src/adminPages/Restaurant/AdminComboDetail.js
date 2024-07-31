@@ -278,6 +278,61 @@ export default function AdminComboDetail() {
               <p>No dishes found for this combo.</p>
             )}
           </div>
+
+          {/* Modal for Create any type  */}
+          {/* <div className="modal fade" id="myModal" role="dialog">
+                <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title float-start">
+                                News 
+                            </h4>
+                            <button
+                                type="button"
+                                className="btn btn-danger float-end"
+                                data-dismiss="modal"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {selectedAboutUs && (
+                                <div>
+                                    <h5>News Content:</h5>
+                                    <p>{selectedAboutUs.content}</p>
+                                    <h5>News Image(s):</h5>
+                                    {selectedAboutUs.imagePaths && selectedAboutUs.imagePaths.length > 0 ? (
+                                        selectedAboutUs.imagePaths.map((imagePath, index) => (
+                                            <img
+                                                key={index}
+                                                src={`http://localhost:5034${imagePath}`}
+                                                alt={`News ${selectedAboutUs.id}`}
+                                                style={{
+                                                    width: "20%",
+                                                    height: "auto",
+                                                    marginBottom: "10px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        ))
+                                    ) : (
+                                        <p>No images available</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                data-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> */}
         </div>
       </div>
     </div>

@@ -113,6 +113,7 @@ export default function AdminDish() {
                             <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Quantity</th>
                             <th>Status</th>
                             <th>Image</th>
                             <th>Actions</th>
@@ -124,6 +125,7 @@ export default function AdminDish() {
                                 <td>{dish.id}</td>
                                 <td>{dish.name}</td>
                                 <td>{dish.price}</td>
+                                <td>{dish.quantity}</td>
                                 <td>{dish.status ? 'Active' : 'Inactive'}</td>
                                 <td>
                                     {dish.imagePath && dish.imagePath.length > 0 && (
