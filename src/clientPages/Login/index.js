@@ -10,6 +10,7 @@ import { validate } from "../../ultil/helper";
 import EmailInput from "../ForgotPassword/emailInput";
 import { sendMailRegister } from "../../redux/User/userActions";
 import Loading from "../Loading";
+import { registerLogin } from "../../redux/User/userRegisterSlice";
 
 const cx = classNames.bind(styles)
 
@@ -20,7 +21,7 @@ const Login = () => {
     const navigate = useNavigate()
     const dispath = useDispatch()
     const { token } = useParams();
-    const { isRegister } = useSelector(state => state.register);
+    const { isRegister, registerStatus, registerMessage } = useSelector(state => state.register);
 
     const [payload, setPayload] = useState({
         userEmail: "",
@@ -59,19 +60,33 @@ const Login = () => {
 
         if (invalids === 0) {
             if (register) {
-                // const response = await apiUserRegister(payload)
-                // if (response.status === 0) {
+                dispath(registerLogin(true))
+                const response = await apiUserRegister(payload)
+                if (response.status === 0) {
+                    dispath(registerLogin(false))
+                    Swal.fire('Congratulation',
+                        response.message, 'success')
+                        .then(() => {
+                            setRegister(false)
+                            resetPayload()
+                        })
+                } else {
+                    dispath(registerLogin(true))
+                    Swal.fire('Oop!',
+                        response.message, 'error')
+                }
+                // dispath(sendMailRegister(payload));
+                // if (registerStatus === 0) {
                 //     Swal.fire('Congratulation',
-                //         response.message, 'success')
+                //         registerMessage, 'success')
                 //         .then(() => {
                 //             setRegister(false)
                 //             resetPayload()
                 //         })
                 // } else {
                 //     Swal.fire('Oop!',
-                //         response.message, 'error')
+                //         registerMessage, 'error')
                 // }
-                dispath(sendMailRegister(payload));
             }
             else {
                 const rs = await apiUserLogin(token ? loginToken : data)
@@ -88,7 +103,6 @@ const Login = () => {
                     Swal.fire('Oop!',
                         rs.message, 'error')
                 }
-                // console.log(loginToken);
             }
         }
 
@@ -196,7 +210,7 @@ const Login = () => {
                                 onClick={() => navigate('/forgot-password')}
                                 className={cx('forget')}
                             >
-                                Foget Password
+                                Forgot Password
                             </p>
                             {
                                 !register && (
