@@ -48,6 +48,7 @@ import AdminCombo from "../adminPages/Restaurant/AdminCombo"
 import CreateAdminCombo from "../adminPages/Restaurant/CreateAdminCombo"
 import EditAdminCombo from "../adminPages/Restaurant/EditAdminCombo"
 import AdminComboDetail from "../adminPages/Restaurant/AdminComboDetail"
+import Comment from "../clientPages/Comment"
 
 
 
@@ -71,6 +72,7 @@ const publicRoutes = [
     {path: "/lobby", component: Lobby},
     {path: "/ordercombo", component: OrderCombo},
     {path: "/checkoutBook", component: CheckoutBook},
+    {path: "/comment/:appetizerId", component: Comment},
 ]
 
 const privateRoutes = [

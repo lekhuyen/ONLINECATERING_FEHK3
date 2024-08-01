@@ -4,12 +4,13 @@ import styles from './Menu.module.scss'
 import { menuDish } from '../../ultil/menu';
 import { useEffect, useState } from 'react';
 import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish } from '../../apis/menu';
+import { useNavigate } from 'react-router-dom';
 
 
 const {
     FaCartPlus,
     RiMoneyDollarCircleLine,
-
+    FaRegFaceLaughBeam
 } = icons
 const MenuDish = () => {
 
@@ -17,7 +18,8 @@ const MenuDish = () => {
     const [mainDessert, setDessert] = useState(null)
     const [mainAppetizer, setAppetizer] = useState(null)
     const [menuChoose, setMenuChoose] = useState(1)
-    
+    const navigate = useNavigate()
+
 
     const [cartAppetizer, setCartAppetizer] = useState(() => {
         const storedCart = localStorage.getItem('appetizer');
@@ -47,18 +49,10 @@ const MenuDish = () => {
             setMainDish(responseDish.data.$values)
         }
     }
-    
+
     useEffect(() => {
         getOneCombo()
     }, [])
-
-
-    // const handleClickBtnShowFormOrder = () => {
-    //     setShowFormOrderStatus(true)
-    // }
-    // const handleClickBtnCloseFormOrder = () => {
-    //     setShowFormOrderStatus(false)
-    // }
 
     const handleOnclickMenu = (index) => {
         setMenuChoose(index)
@@ -106,6 +100,7 @@ const MenuDish = () => {
         localStorage.setItem('appetizer', JSON.stringify(cartAppetizer))
     }, [cartDessert, cartDish, cartAppetizer])
 
+    
 
     return (
         <div className={clsx(styles.menuContainer, "app__bg")}>
@@ -143,8 +138,15 @@ const MenuDish = () => {
                                                 </div>
                                             </div>
                                             <div className={styles.menu_price}>
-                                                <span>{item.appetizerName}</span>
-                                                <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
+                                                <div 
+                                                onClick={() => navigate(`/comment/${item.id}`)}
+                                                style={{paddingLeft:'20px'}}>
+                                                    <FaRegFaceLaughBeam />
+                                                </div>
+                                                <div style={{paddingRight:'20px'}}>
+                                                    <span>{item.appetizerName}</span>
+                                                    <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -219,7 +221,6 @@ const MenuDish = () => {
                     )
                 } */}
             </div>
-
         </div>
     );
 };

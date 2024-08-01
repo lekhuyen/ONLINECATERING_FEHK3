@@ -4,6 +4,10 @@ export const apiGetAllAppetizer = ()  => axios({
     url: `/restaurant-service/appetizer/`,
     method: 'GET',
 })
+export const apiGetAppetizerById = (appetizerId)  => axios({
+    url: `/restaurant-service/appetizer/${appetizerId}`,
+    method: 'GET',
+})
 
 export const apiGetAllDessert = ()  => axios({
     url: `/restaurant-service/dessert`,
