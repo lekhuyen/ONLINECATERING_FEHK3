@@ -1,0 +1,20 @@
+// AdminRestaurant.scss
+
+.admin-restaurant-container {
+    margin-top: 50px;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        th, td {
+            vertical-align: middle;
+        }
+
+        .btn-action {
+            margin-right: 10px;
+        }
+    }
+}

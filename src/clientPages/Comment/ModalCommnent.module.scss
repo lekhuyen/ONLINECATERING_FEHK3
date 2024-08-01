@@ -252,3 +252,34 @@ height: 300px;
     height: 35px;
     border-radius: 50%;
 }
+.comment-input_reply {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    width: 70%;
+    margin-top: 30px;
+    margin-left: 50px;
+    position: relative;
+}
+.comment-input_reply textarea{
+    width: 90%;
+    height: 100%;
+    outline: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 17px;
+    font-family: monospace;
+    background-color: #f0f2f5;
+}
+.comment-reply_cancel {
+    position: absolute;
+    color: #fff;
+    bottom: -22px;
+    right: 0;
+    cursor: pointer;
+}
+.comment-reply_cancel p {
+    margin-bottom: 0;
+}
