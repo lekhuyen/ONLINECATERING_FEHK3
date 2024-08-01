@@ -7,9 +7,9 @@ import icons from "../../ultil/icons";
 import clsx from 'clsx';
 //import Scrollbars from 'react-custom-scrollbars-2';
 import { BsFillSendFill } from 'react-icons/bs';
-import { useParams } from 'react-router-dom';
-import { apiGetAppetizerById } from '../../apis/menu';
-import { apiAddCommentAppetizer, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer } from '../../apis/comment';
+import { Link, useParams } from 'react-router-dom';
+import { apiGetAllAppetizer, apiGetAppetizerById } from '../../apis/menu';
+import { apiAddCommentAppetizer, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer } from '../../apis/comment';
 import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles)
@@ -28,13 +28,29 @@ const Comment = () => {
     const [contentCommentEdit, setContentCommentEdit] = useState('')
     //reply
     const [clickReplyStatus, setClickReplyStatus] = useState({})
+    const [editCommentReplyStatus, seteditCommentReplyStatus] = useState({})
     const [replyContent, setReplyContent] = useState('')
     const [clickOptionCommentReplyStatus, setClickOptionCommentReplyStatus] = useState({})
+    const [contentEditReply, setcontentEditReply] = useState('')
+    const [hoverDotCommentReplyStatus, setHoverDotCommentReplyStatus] = useState({})
 
     const { appetizerId } = useParams()
     const commentRef = useRef(null);
 
+    const [mainAppetizer, setAppetizer] = useState(null)
 
+    const getAllAppetizer = async () => {
+        const responseAppetizer = await apiGetAllAppetizer()
+
+        if (responseAppetizer.status === 0) {
+            setAppetizer(responseAppetizer.data.$values)
+        }
+        
+    }
+    console.log(mainAppetizer);
+    useEffect(() => {
+        getAllAppetizer()
+    }, [])
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -43,7 +59,6 @@ const Comment = () => {
     }, [isLoggedIn])
 
     const getOneAppetizer = async () => {
-
         const res = await apiGetAppetizerById(appetizerId)
         if (res.status === 0) {
             setAppetizerOne(res.data)
@@ -173,7 +188,6 @@ const Comment = () => {
         };
         try {
             const resCommentReplyAppetizer = await apiAddCommentReplyAppetizer(reply)
-            // console.log(resCommentReplyAppetizer);
             if (resCommentReplyAppetizer.status === 0) {
                 const newReply = {
                     id: resCommentReplyAppetizer.data.id,
@@ -185,14 +199,14 @@ const Comment = () => {
                 setAppetizerOne(prev => ({
                     ...prev,
                     comments: {
-                        $values: prev.comments.$values.map(comment =>
+                        $values: prev.comments?.$values?.map(comment =>
                             comment.id === commentId ? {
                                 ...comment,
                                 commentChildren: {
-                                    $values: [newReply, ...comment.commentChildren.$values]
+                                    $values: [newReply, ...comment.commentChildren?.$values || []]
                                 }
                             } : comment
-                        )
+                        ) || []
                     }
                 }))
 
@@ -240,6 +254,57 @@ const Comment = () => {
             }))
         }
     }
+
+    const handleEditCommentReply = (commentIndex, replyIndex) => {
+        const uniqueKey = `${commentIndex}-${replyIndex}`;
+        seteditCommentReplyStatus(prev => ({
+            ...prev,
+            [uniqueKey]: !prev[uniqueKey]
+        }))
+    }
+    const hanldeSubmitCommentEditRepply = async (replyId, commentId,commentIndex, replyIndex) => {
+        const updatedCommentReply = {
+            replyId,
+            content: contentEditReply,
+            userId: userCurrent.id
+        };
+        try {
+            const resEditCommentReply = await apiEditCommentReplyAppetizer(updatedCommentReply)
+            if(resEditCommentReply.status === 0){
+                setAppetizerOne(prev =>({
+                    ...prev,
+                    comments: {
+                        $values: prev.comments.$values.map((comment, cindex)=> cindex === commentIndex ? {
+                            ...comment,
+                            commentChildren: {
+                                $values: comment.commentChildren.$values.map((reply, rIndex) => 
+                                    rIndex === replyIndex ? {...reply, content: contentEditReply} : reply
+                                )
+                            }
+                        }:comment)
+                    }
+                }))
+
+                const uniqueKey = `${commentIndex}-${replyIndex}`;
+            seteditCommentReplyStatus(prev => ({
+                ...prev,
+                [uniqueKey]: false
+            }));
+            setcontentEditReply('');
+            }
+            
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    // 
+    const handleMouseDownReply = (index) => {
+        setHoverDotCommentReplyStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
     return (
         <div className={clsx(styles.container, 'app__bg')}>
             <div className={styles.wapper}>
@@ -280,17 +345,12 @@ const Comment = () => {
             <div className={cx("comment_row")}>
                 <div className={cx("comment_row_left")}>
                     <h3>Menu</h3>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-
-
+                    {
+                        mainAppetizer?.length > 0 && mainAppetizer?.map(item => (
+                            <Link to={`/comment/${item.id}`} className={cx("comment_dish_item")}><p>{item.appetizerName}</p></Link>
+                        ))
+                    }
+                    
                 </div>
                 <div>
                     <div className={cx("comment-container")}>
@@ -396,20 +456,52 @@ const Comment = () => {
 
                                         {
                                             item?.commentChildren?.$values.length > 0 && item?.commentChildren?.$values?.map((c, replyIndex) => (
-                                                <div key={replyIndex} className={cx("comment-reply")}>
+                                                <div 
+                                                onMouseEnter={() => handleMouseDownReply(index)}
+                                                onMouseLeave={() => setHoverDotCommentReplyStatus(false)}
+                                                key={replyIndex} className={cx("comment-reply")}>
                                                     <div className={cx("comment-avatar-user")}>
                                                         <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                                     </div>
-                                                    <div className={cx("comment-content-user")}>
-                                                        <span>{item.user.userName}</span>
-                                                        <p>{c.content}</p>
-                                                    </div>
+                                                    {
+                                                        !editCommentReplyStatus[`${index}-${replyIndex}`] &&
+                                                        <div className={cx("comment-content-user")}>
+                                                            <span>{item.user.userName}</span>
+                                                            <p>{c.content}</p>
+                                                        </div>
+                                                    }
 
-
+                                                    {/* ----------------input edit reply-------------*/}
+                                                    {
+                                                        editCommentReplyStatus[`${index}-${replyIndex}`] &&
+                                                        <div div className={cx("comment-input_edit_reply")}>
+                                                            <textarea
+                                                                value={contentEditReply}
+                                                                onChange={(e) => setcontentEditReply(e.target.value)}
+                                                                placeholder="Reply.." />
+                                                            <div
+                                                                onClick={() => hanldeSubmitCommentEditRepply(c.id, item.id, index, replyIndex)}
+                                                                className={cx("comment-submit_btn")}>
+                                                                <BsFillSendFill />
+                                                            </div>
+                                                            <div className={cx("comment-reply_cancel")}>
+                                                                <p
+                                                                    onClick={() => {
+                                                                        seteditCommentReplyStatus(prev => !prev)
+                                                                        setcontentEditReply('')
+                                                                    }
+                                                                    }
+                                                                >Cancel</p>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                     <div
                                                         onClick={() => handleClickOPtionCommentReply(index, replyIndex)}
                                                         className={cx("comment-dot")}>
-                                                        <BsThreeDots />
+                                                        {
+                                                            hoverDotCommentReplyStatus[index] && 
+                                                            <BsThreeDots />
+                                                        }
                                                         {/* {
                                                     hoverDotCommentStatus[index] &&
                                                 } */}
@@ -420,7 +512,7 @@ const Comment = () => {
                                                                     onClick={() => handleClickDeleteCommentReply(c.id, item.id)}
                                                                 >Delete</p>
                                                                 <p
-                                                                    onClick={() => handleEditComment(replyIndex)}
+                                                                    onClick={() => handleEditCommentReply(index, replyIndex)}
                                                                 >Edit</p>
                                                             </div>
 
