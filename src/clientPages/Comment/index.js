@@ -5,7 +5,7 @@ import { MdOutlineStarPurple500 } from 'react-icons/md';
 import classNames from 'classnames/bind';
 import icons from "../../ultil/icons";
 import clsx from 'clsx';
-import Scrollbars from 'react-custom-scrollbars-2';
+//import Scrollbars from 'react-custom-scrollbars-2';
 import { BsFillSendFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { apiGetAppetizerById } from '../../apis/menu';

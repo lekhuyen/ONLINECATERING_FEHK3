@@ -26,7 +26,7 @@ import {
 
 } from "react-icons/fa";
 
-import { BsCurrencyDollar } from "react-icons/bs";
+import { BsCurrencyDollar, BsInfoCircle } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import { GoFilter } from "react-icons/go";
 import { LuMapPin } from "react-icons/lu";
@@ -35,9 +35,9 @@ import {
   MdOutlineChildCare,
   MdAccessTime,
   MdMonitor,
-  MdOutlinePayment,
-} from "react-icons/md";
+  MdOutlinePayment} from "react-icons/md";
 import { TbMessage2Up } from "react-icons/tb";
+import { FaTrash } from "react-icons/fa";
 
 import {
   RiContactsBook3Line,
@@ -122,6 +122,9 @@ const icons = {
     IoIosLogOut,
     FaRegFaceLaughBeam,
 
+    //lobby
+    FaTrash,
+    BsInfoCircle
 };
 
 export default icons;

@@ -19,6 +19,19 @@ export const fetchLobbyImages = createAsyncThunk(
     }
 );
 
+export const deleteLobbyImage = createAsyncThunk(
+    'lobbyImages/deleteLobbyImage',
+    async (payload, thunkAPI) => {
+        const { lobbyId, imageId } = payload;
+        try {
+            const response = await axios.delete(`/api/lobbies/${lobbyId}/images/${imageId}`);
+            return response.data; // Assuming the API returns a success message or relevant data
+        } catch (error) {
+            throw new Error('Error deleting lobby image:', error.response?.data || error.message);
+        }
+    }
+);
+
 
 const adminlobbyimageSlice = createSlice({
     name: "lobbyImages",
@@ -40,6 +53,17 @@ const adminlobbyimageSlice = createSlice({
             .addCase(fetchLobbyImages.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
+            })
+            .addCase(deleteLobbyImage.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(deleteLobbyImage.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                // Optionally update state based on success response
+            })
+            .addCase(deleteLobbyImage.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || 'Error deleting lobby image';
             });
     },
 });
