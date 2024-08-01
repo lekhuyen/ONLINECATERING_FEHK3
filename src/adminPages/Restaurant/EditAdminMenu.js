@@ -13,6 +13,7 @@ export default function EditAdminMenu() {
     const [ingredient, setIngredient] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
+    const [restaurantId, setRestaurantId] = useState('');
 
     const menuItem = useSelector((state) => state.menu.items.find(item => item.id === Number(id))); // Convert id to number
     const status = useSelector((state) => state.menu.status);
@@ -30,6 +31,7 @@ export default function EditAdminMenu() {
             setIngredient(menuItem.ingredient || '');
             setPrice(menuItem.price.toString() || '');
             setQuantity(menuItem.quantity.toString() || '');
+            setRestaurantId(menuItem.restaurantId.toString() || '');
         }
     }, [menuItem]);
 
@@ -102,6 +104,17 @@ export default function EditAdminMenu() {
                         id="quantity"
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="restaurantId">Restaurant</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        id="restaurantId"
+                        value={restaurantId}
+                        onChange={(e) => setRestaurantId(e.target.value)}
+                        hidden
                     />
                 </div>
                 <button

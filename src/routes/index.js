@@ -50,6 +50,8 @@ import EditAdminCombo from "../adminPages/Restaurant/EditAdminCombo"
 import AdminComboDetail from "../adminPages/Restaurant/AdminComboDetail"
 import AdminMenu from "../adminPages/Restaurant/AdminMenu"
 import Comment from "../clientPages/Comment"
+import CreateAdminMenu from "../adminPages/Restaurant/CreateAdminMenu"
+import EditAdminMenu from "../adminPages/Restaurant/EditAdminLobby"
 
 
 
@@ -111,7 +113,8 @@ const privateRoutes = [
     {path: "/lobby-admin/create-lobby-admin", component: CreateAdminLobby},
     {path: "/lobby-admin/edit-lobby-admin/:id", component: EditAdminLobby},
     {path: "/menu-admin", component: AdminMenu},
-
+    {path: "/menu-admin/create-menu-admin", component: CreateAdminMenu},
+    {path: "/menu-admin/edit-menu-admin/:id", component: EditAdminMenu},
 ]
 
 export {publicRoutes, privateRoutes} 

@@ -12,13 +12,30 @@ export const fetchLobbyImages = createAsyncThunk(
     async (lobbyId) => {
         try {
             const response = await axios.get(`${apiEndpoint}/images/${lobbyId}`);
-            return response.data.data.$values; // Extracting image URLs from the response
+            const images = response.data.data.$values || []; // Ensure $values is defined
+            return images;
         } catch (error) {
             throw new Error('Error fetching lobby images:', error.response?.data || error.message);
         }
     }
 );
 
+export const addLobbyImage = createAsyncThunk(
+    'lobbyImages/addLobbyImage',
+    async ({ lobbyId, formFiles }) => {
+        try {
+            const response = await axios.post(`/lobby/images/${lobbyId}`, formFiles, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const images = response.data.data.$values || []; // Ensure $values is defined
+            return images;
+        } catch (error) {
+            throw new Error('Error adding lobby image:', error.response?.data || error.message);
+        }
+    }
+);
 export const deleteLobbyImage = createAsyncThunk(
     'lobbyImages/deleteLobbyImage',
     async (payload, thunkAPI) => {
@@ -52,6 +69,17 @@ const adminlobbyimageSlice = createSlice({
             })
             .addCase(fetchLobbyImages.rejected, (state, action) => {
                 state.status = "failed";
+                state.error = action.error.message;
+            })
+            .addCase(addLobbyImage.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addLobbyImage.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.images.push(...action.payload); // Assuming action.payload is an array of added images
+            })
+            .addCase(addLobbyImage.rejected, (state, action) => {
+                state.status = 'failed';
                 state.error = action.error.message;
             })
             .addCase(deleteLobbyImage.pending, (state) => {
