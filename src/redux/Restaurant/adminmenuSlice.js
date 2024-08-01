@@ -40,7 +40,7 @@ export const createMenuItem = createAsyncThunk(
 // Async thunk to update menu item
 export const updateMenuItem = createAsyncThunk(
     'menu/updateMenuItem',
-    async ({ id, menuName, ingredient, price, quantity, restaurantId, formFile }) => {
+    async ({ id, menuName, ingredient, price, quantity, restaurantId, menuImage, formFile }) => {
         const formData = new FormData();
         formData.append('menuName', menuName);
         formData.append('ingredient', ingredient);
@@ -49,7 +49,11 @@ export const updateMenuItem = createAsyncThunk(
         formData.append('restaurantId', restaurantId);
         
         if (formFile) {
-            formData.append('formFile', formFile); // Append the file
+            formData.append("formFile", formFile);
+        }
+
+        if (menuImage) {
+            formData.append("MenuImage", JSON.stringify(menuImage));
         }
 
         try {
