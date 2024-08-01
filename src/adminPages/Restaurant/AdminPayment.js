@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-export default function Payment() {
+export default function AdminPayment() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
