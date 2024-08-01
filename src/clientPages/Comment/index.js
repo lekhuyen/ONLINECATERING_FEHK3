@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { voteOption } from '../../ultil/menu';
 import styles from './ModalCommnent.module.scss'
 import { MdOutlineStarPurple500 } from 'react-icons/md';
@@ -9,19 +9,37 @@ import clsx from 'clsx';
 import { BsFillSendFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { apiGetAppetizerById } from '../../apis/menu';
+import { apiAddCommentAppetizer, apiDeleteCommentAppetizer, apiEditCommentAppetizer } from '../../apis/comment';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles)
 const { FaRegStar,
+    BsThreeDots,
 } = icons
 const Comment = () => {
     const [chosenScore, setChosenScore] = useState()
     const [appetizerOne, setAppetizerOne] = useState(null)
+    const [content, setContent] = useState('')
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [userCurrent, setUserCurrent] = useState('')
+    const [clickOptionCommentStatus, setClickOptionCommentStatus] = useState({})
+    const [hoverDotCommentStatus, setHoverDotCommentStatus] = useState({})
+    const [editCommentStatus, seteditCommentStatus] = useState({})
+    const [contentCommentEdit, setContentCommentEdit] = useState('')
     const { appetizerId } = useParams()
+    const commentRef = useRef(null);
 
-    console.log(appetizerOne?.comments?.$values);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user);
+        }
+    }, [isLoggedIn])
+
     const getOneAppetizer = async () => {
+
         const res = await apiGetAppetizerById(appetizerId)
-        console.log(res);
         if (res.status === 0) {
             setAppetizerOne(res.data)
         }
@@ -31,6 +49,108 @@ const Comment = () => {
         getOneAppetizer()
     }, [appetizerId])
 
+    const hanldeSubmitComment = async () => {
+        const comment = {
+            content: content,
+            userId: userCurrent.id,
+            appetizerId
+        }
+        const resAppetizer = await apiAddCommentAppetizer(comment)
+        if (resAppetizer.status === 0) {
+            const newComment = {
+                content: comment.content,
+                user: {
+                    userName: userCurrent.userName
+                }
+            }
+            setAppetizerOne(prev => ({
+                ...prev,
+                comments: {
+                    // $values: [...prev.comments.$values, newComment]
+                    $values: [newComment, ...prev.comments.$values]
+                }
+            }))
+            setContent('')
+            setTimeout(() => {
+                if (commentRef.current) {
+                    commentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+    }
+
+    const handleClickOPtionComment = (index) => {
+        setClickOptionCommentStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
+    const handleMouseDown = (index) => {
+        setHoverDotCommentStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
+    const handleClickDeleteComment = async (commentId) => {
+        const deleteComment = {
+            commentId,
+            userId: userCurrent.id
+        }
+        const resDeleteComment = await apiDeleteCommentAppetizer(deleteComment)
+        if (resDeleteComment.status === 0) {
+            setAppetizerOne(prev => ({
+                ...prev,
+                comments: {
+                    $values: prev.comments.$values.filter(comment => comment.id !== commentId)
+                }
+            }))
+        }
+    }
+
+    const handleEditComment = async (index) => {
+        seteditCommentStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
+    const handleCancleComment = async (index) => {
+        seteditCommentStatus(prev => ({
+            ...prev,
+            [index]: false
+        }))
+        setContentCommentEdit('');
+    }
+    const hanldeSubmitCommentEdit = async (commentId, index) => {
+        
+        const updatedComment = {
+            commentId,
+            comment: contentCommentEdit,
+            userId: userCurrent.id
+        };
+        try {
+            const resEditCommentAppetizer = await apiEditCommentAppetizer(updatedComment)
+            console.log(resEditCommentAppetizer);
+            if(resEditCommentAppetizer.status === 0) {
+                setAppetizerOne(prev => ({
+                    ...prev,
+                    comments: {
+                        $values: prev.comments.$values.map(comment => 
+                            comment.id === commentId ? {...comment, content: contentCommentEdit} : comment
+                        )
+                    }
+                }))
+                seteditCommentStatus(prev => ({
+                    ...prev,
+                    [index]: false
+                }));
+                setContentCommentEdit('');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        
+
+    }
     return (
         <div className={clsx(styles.container, 'app__bg')}>
             <div className={styles.wapper}>
@@ -90,18 +210,69 @@ const Comment = () => {
 
                         <div style={{ marginBottom: "30px" }} className={cx("comment_row_right")}>
                             {
-                                appetizerOne?.comments?.$values?.map(item => (
-                                    <>
-                                        <div className={cx("comment-content")}>
+                                appetizerOne?.comments?.$values?.map((item, index) => (
+                                    <div key={index}>
+                                        <div
+                                            onMouseEnter={() => handleMouseDown(index)}
+                                            onMouseLeave={() => setHoverDotCommentStatus(false)}
+                                            ref={index === 0 ? commentRef : null} className={cx("comment-content")}>
                                             <div className={cx("comment-avatar-user")}>
                                                 <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                             </div>
-                                            <div className={cx("comment-content-user")}>
-                                                <span>{item?.user?.userName}</span>
-                                                <p>{item?.content}</p>
+                                            <div
+
+                                                className={cx("comment-content-user")}>
+                                                {
+                                                    !editCommentStatus[index] &&
+                                                    <>
+                                                        <span>{item?.user?.userName}</span>
+                                                        <p>{item?.content}</p>
+                                                    </>
+                                                }
+                                                {
+                                                    editCommentStatus[index] &&
+                                                    <div className={cx("comment-input_edit")}>
+                                                        <textarea
+                                                            value={contentCommentEdit}
+                                                            onChange={(e) => setContentCommentEdit(e.target.value)}
+                                                            placeholder="Comment.." />
+                                                        <div
+                                                            onClick={() => hanldeSubmitCommentEdit(item.id, index)}
+                                                            className={cx("comment-submit_btn")}>
+                                                            <BsFillSendFill />
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div
+                                                onClick={() => handleClickOPtionComment(index)}
+                                                className={cx("comment-dot")}>
+                                                {
+                                                    hoverDotCommentStatus[index] &&
+                                                    <BsThreeDots />
+                                                }
+                                                {
+                                                    clickOptionCommentStatus[index] &&
+                                                    <div className={cx("comment-option")}>
+                                                        <p
+                                                            onClick={() => handleClickDeleteComment(item.id)}
+                                                        >Delete</p>
+                                                        <p
+                                                            onClick={() => handleEditComment(index)}
+                                                        >Edit</p>
+                                                    </div>
+                                                }
                                             </div>
                                             <div className={cx("reply-comment")}>
-                                                <p>Reply</p>
+                                                {
+                                                    editCommentStatus[index]
+                                                        ?
+                                                        <p
+                                                            onClick={() => handleCancleComment(index)}
+                                                        >Cancel</p>
+                                                        :
+                                                        <p>Reply</p>
+                                                }
                                             </div>
                                         </div>
                                         {
@@ -117,7 +288,7 @@ const Comment = () => {
                                                 </div>
                                             ))
                                         }
-                                    </>
+                                    </div>
                                 ))
                             }
                         </div>
@@ -125,8 +296,13 @@ const Comment = () => {
                         {/* </Scrollbars> */}
                         <div className={cx("comment-content-input")}>
                             <div className={cx("comment-input")}>
-                                <textarea placeholder="Comment.." />
-                                <div className={cx("comment-submit_btn")}>
+                                <textarea
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    placeholder="Comment.." />
+                                <div
+                                    onClick={hanldeSubmitComment}
+                                    className={cx("comment-submit_btn")}>
                                     <BsFillSendFill />
                                 </div>
                             </div>
