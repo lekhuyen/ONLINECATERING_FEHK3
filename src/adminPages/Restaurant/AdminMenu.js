@@ -2,19 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { BsInfoCircle } from 'react-icons/bs';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 
 import { deleteMenuItem, fetchMenuData } from '../../redux/Restaurant/adminmenuSlice';
 import { fetchMenuImages } from '../../redux/Restaurant/adminmenuimageSlice';
 
-const limitContent = (content) => {
-    const words = content.split(' ');
-    if (words.length > 10) {
-        return words.slice(0, 10).join(' ') + '...';
-    }
-    return content;
-};
 
 const AdminTable = () => {
     const dispatch = useDispatch();
@@ -27,10 +19,6 @@ const AdminTable = () => {
     const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState('');
 
-    const [selectedMenu, setSelectedMenu] = useState(null);
-    const [menuImages, setMenuImages] = useState([]);
-    const [imagesStatus, setImagesStatus] = useState('idle');
-    const [imagesError, setImagesError] = useState(null);
 
     useEffect(() => {
         dispatch(fetchMenuData());
@@ -42,25 +30,6 @@ const AdminTable = () => {
 
     const handleEdit = (id) => {
         navigate(`/menu-admin/edit-menu-admin/${id}`);
-    };
-
-    const handleInfoClick = async (menu) => {
-        setSelectedMenu(menu);
-        console.log('Selected menu:', menu);
-
-        try {
-            setImagesStatus('loading');
-            const action = await dispatch(fetchMenuImages(menu.id));
-            setMenuImages(action.payload);
-            setImagesStatus('succeeded');
-        } catch (error) {
-            setImagesStatus('failed');
-            setImagesError(error.message);
-            console.error('Error fetching images:', error);
-        }
-
-        const modal = new window.bootstrap.Modal(document.getElementById('menuModal'));
-        modal.show();
     };
 
     const filteredMenuData = menuData.filter((menu) => {
@@ -79,13 +48,8 @@ const AdminTable = () => {
     const pageNumbers = Math.ceil(filteredMenuData.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    if (status === 'loading') {
-        return <div>Loading...</div>;
-    }
-
-    if (status === 'failed') {
-        return <div>Error: {error}</div>;
-    }
+    if (status === 'loading') return <div>Loading...</div>;
+    if (status === 'failed') return <div>Error: {error}</div>;
 
     return (
         <div className='container'>
@@ -124,9 +88,9 @@ const AdminTable = () => {
                         <tr>
                             <th>Id</th>
                             <th>Menu Name</th>
-                            <th>Description</th>
-                            <th>Category</th>
+                            <th>Ingredient</th>
                             <th>Price</th>
+                            <th>Quantity</th>
                             <th>Image</th>
                             <th>Actions</th>
                         </tr>
@@ -136,9 +100,9 @@ const AdminTable = () => {
                             <tr key={menu.id}>
                                 <td>{menu.id}</td>
                                 <td>{menu.menuName}</td>
-                                <td>{limitContent(menu.description)}</td>
-                                <td>{menu.category}</td>
+                                <td>{menu.ingredient}</td>
                                 <td>{menu.price}</td>
+                                <td>{menu.quantity}</td>
                                 <td>
                                     {menu.menuImages && menu.menuImages.$values.length > 0 && (
                                         <img
@@ -153,9 +117,8 @@ const AdminTable = () => {
                                     )}
                                 </td>
                                 <td>
-                                    <button className='btn btn-outline-primary' onClick={() => handleInfoClick(menu)}>
-                                        <BsInfoCircle />
-                                    </button>
+
+
                                     <button className='btn btn-outline-warning' onClick={() => handleEdit(menu.id)}>
                                         <HiOutlinePencilSquare />
                                     </button>
@@ -169,57 +132,7 @@ const AdminTable = () => {
                 </table>
             </div>
 
-            <div className='modal fade' id='menuModal' tabIndex='-1' role='dialog' aria-labelledby='menuModalLabel' aria-hidden='true'>
-                <div className='modal-dialog modal-lg'>
-                    <div className='modal-content'>
-                        <div className='modal-header'>
-                            <h4 className='modal-title' id='menuModalLabel'>
-                                Menu Details: {selectedMenu ? selectedMenu.menuName : ''}
-                            </h4>
-                            <button type='button' className='btn btn-danger' data-bs-dismiss='modal' aria-label='Close'>
-                                <span aria-hidden='true'>&times;</span>
-                            </button>
-                        </div>
-                        <div className='modal-body'>
-                            {selectedMenu && (
-                                <div>
-                                    <h5>Description:</h5>
-                                    <p>{selectedMenu.description}</p>
-                                    <h5>Images:</h5>
-                                    {imagesStatus === 'loading' && <p>Loading images...</p>}
-                                    {imagesStatus === 'failed' && <p>{imagesError}</p>}
-                                    {menuImages && menuImages.length > 0 ? (
-                                        <div className='d-flex flex-wrap'>
-                                            {menuImages.map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image} // Assuming menuImages is an array of image URLs
-                                                    alt={`Menu ${selectedMenu.id}`}
-                                                    style={{
-                                                        width: '20%',
-                                                        height: 'auto',
-                                                        objectFit: 'cover',
-                                                        marginRight: '10px',
-                                                        marginBottom: '10px',
-                                                    }}
-                                                />
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <p>No images available</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className='modal-footer'>
-                            <button type='button' className='btn btn-danger' data-bs-dismiss='modal'>
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
             <nav>
                 <ul className='pagination'>
