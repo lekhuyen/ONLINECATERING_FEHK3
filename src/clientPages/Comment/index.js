@@ -32,6 +32,7 @@ const Comment = () => {
     const [replyContent, setReplyContent] = useState('')
     const [clickOptionCommentReplyStatus, setClickOptionCommentReplyStatus] = useState({})
     const [contentEditReply, setcontentEditReply] = useState('')
+    const [hoverDotCommentReplyStatus, setHoverDotCommentReplyStatus] = useState({})
 
     const { appetizerId } = useParams()
     const commentRef = useRef(null);
@@ -185,14 +186,14 @@ const Comment = () => {
                 setAppetizerOne(prev => ({
                     ...prev,
                     comments: {
-                        $values: prev.comments.$values.map(comment =>
+                        $values: prev.comments?.$values?.map(comment =>
                             comment.id === commentId ? {
                                 ...comment,
                                 commentChildren: {
-                                    $values: [newReply, ...comment.commentChildren.$values]
+                                    $values: [newReply, ...comment.commentChildren?.$values || []]
                                 }
                             } : comment
-                        )
+                        ) || []
                     }
                 }))
 
@@ -283,6 +284,13 @@ const Comment = () => {
             console.log(error);
         }
 
+    }
+    // 
+    const handleMouseDownReply = (index) => {
+        setHoverDotCommentReplyStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
     }
     return (
         <div className={clsx(styles.container, 'app__bg')}>
@@ -440,7 +448,10 @@ const Comment = () => {
 
                                         {
                                             item?.commentChildren?.$values.length > 0 && item?.commentChildren?.$values?.map((c, replyIndex) => (
-                                                <div key={replyIndex} className={cx("comment-reply")}>
+                                                <div 
+                                                onMouseEnter={() => handleMouseDownReply(index)}
+                                                onMouseLeave={() => setHoverDotCommentReplyStatus(false)}
+                                                key={replyIndex} className={cx("comment-reply")}>
                                                     <div className={cx("comment-avatar-user")}>
                                                         <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                                     </div>
@@ -479,7 +490,10 @@ const Comment = () => {
                                                     <div
                                                         onClick={() => handleClickOPtionCommentReply(index, replyIndex)}
                                                         className={cx("comment-dot")}>
-                                                        <BsThreeDots />
+                                                        {
+                                                            hoverDotCommentReplyStatus[index] && 
+                                                            <BsThreeDots />
+                                                        }
                                                         {/* {
                                                     hoverDotCommentStatus[index] &&
                                                 } */}
