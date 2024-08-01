@@ -15,3 +15,14 @@ export const apiEditCommentAppetizer = (data)  => axios({
     data
 
 })
+
+export const apiAddCommentReplyAppetizer = (data)  => axios({
+    url: '/restaurant-service/commentChild',
+    method: 'POST',
+    data
+})
+
+export const apiDeleteCommentReplyAppetizer = (data)  => axios({
+    url: `/restaurant-service/commentChild/${data.userId}/${data.commentId}`,
+    method: 'Delete',
+})

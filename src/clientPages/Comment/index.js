@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { BsFillSendFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import { apiGetAppetizerById } from '../../apis/menu';
-import { apiAddCommentAppetizer, apiDeleteCommentAppetizer, apiEditCommentAppetizer } from '../../apis/comment';
+import { apiAddCommentAppetizer, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer } from '../../apis/comment';
 import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles)
@@ -26,6 +26,11 @@ const Comment = () => {
     const [hoverDotCommentStatus, setHoverDotCommentStatus] = useState({})
     const [editCommentStatus, seteditCommentStatus] = useState({})
     const [contentCommentEdit, setContentCommentEdit] = useState('')
+    //reply
+    const [clickReplyStatus, setClickReplyStatus] = useState({})
+    const [replyContent, setReplyContent] = useState('')
+    const [clickOptionCommentReplyStatus, setClickOptionCommentReplyStatus] = useState({})
+
     const { appetizerId } = useParams()
     const commentRef = useRef(null);
 
@@ -58,6 +63,7 @@ const Comment = () => {
         const resAppetizer = await apiAddCommentAppetizer(comment)
         if (resAppetizer.status === 0) {
             const newComment = {
+                id: resAppetizer.data.id,
                 content: comment.content,
                 user: {
                     userName: userCurrent.userName
@@ -121,7 +127,7 @@ const Comment = () => {
         setContentCommentEdit('');
     }
     const hanldeSubmitCommentEdit = async (commentId, index) => {
-        
+
         const updatedComment = {
             commentId,
             comment: contentCommentEdit,
@@ -130,12 +136,12 @@ const Comment = () => {
         try {
             const resEditCommentAppetizer = await apiEditCommentAppetizer(updatedComment)
             console.log(resEditCommentAppetizer);
-            if(resEditCommentAppetizer.status === 0) {
+            if (resEditCommentAppetizer.status === 0) {
                 setAppetizerOne(prev => ({
                     ...prev,
                     comments: {
-                        $values: prev.comments.$values.map(comment => 
-                            comment.id === commentId ? {...comment, content: contentCommentEdit} : comment
+                        $values: prev.comments.$values.map(comment =>
+                            comment.id === commentId ? { ...comment, content: contentCommentEdit } : comment
                         )
                     }
                 }))
@@ -148,8 +154,91 @@ const Comment = () => {
         } catch (error) {
             console.log(error);
         }
-        
+    }
 
+
+    //------------------------reply------------------
+    const handleClickReply = (index) => {
+        setClickReplyStatus(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
+
+    const hanldeSubmitCommentRepply = async (commentId, index) => {
+        const reply = {
+            content: replyContent,
+            userId: userCurrent.id,
+            commentId: commentId
+        };
+        try {
+            const resCommentReplyAppetizer = await apiAddCommentReplyAppetizer(reply)
+            // console.log(resCommentReplyAppetizer);
+            if (resCommentReplyAppetizer.status === 0) {
+                const newReply = {
+                    id: resCommentReplyAppetizer.data.id,
+                    content: reply.content,
+                    user: {
+                        userName: userCurrent.userName
+                    }
+                }
+                setAppetizerOne(prev => ({
+                    ...prev,
+                    comments: {
+                        $values: prev.comments.$values.map(comment =>
+                            comment.id === commentId ? {
+                                ...comment,
+                                commentChildren: {
+                                    $values: [newReply, ...comment.commentChildren.$values]
+                                }
+                            } : comment
+                        )
+                    }
+                }))
+
+                setReplyContent('')
+                setClickReplyStatus(prev => ({
+                    ...prev,
+                    [index]: false
+                }));
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const handleClickOPtionCommentReply = (commentIndex, replyIndex) => {
+        const uniqueKey = `${commentIndex}-${replyIndex}`;
+        setClickOptionCommentReplyStatus(prev => ({
+            ...prev,
+            [uniqueKey]: !prev[uniqueKey]
+        }))
+    }
+
+    const handleClickDeleteCommentReply = async (replyId, commentId) => {
+        const deleteComment = {
+            commentId: replyId,
+            userId: userCurrent.id
+        }
+        const resDeleteCommentReply = await apiDeleteCommentReplyAppetizer(deleteComment)
+        if (resDeleteCommentReply.status === 0) {
+            console.log(resDeleteCommentReply);
+            setAppetizerOne(prev => ({
+                ...prev,
+                comments: {
+                    $values: prev.comments.$values.map(comment =>
+                        comment.id === commentId ? {
+                            ...comment,
+                            commentChildren: {
+                                $values: comment.commentChildren.$values.filter(reply => reply.id !== replyId)
+                            }
+                        } : comment
+                    )
+                }
+            }))
+        }
     }
     return (
         <div className={clsx(styles.container, 'app__bg')}>
@@ -271,19 +360,72 @@ const Comment = () => {
                                                             onClick={() => handleCancleComment(index)}
                                                         >Cancel</p>
                                                         :
-                                                        <p>Reply</p>
+                                                        <p
+                                                            onClick={() => handleClickReply(index)}
+                                                        >Reply</p>
                                                 }
                                             </div>
                                         </div>
+                                        {/* input reply */}
                                         {
-                                            item?.commentChildren?.$values.length > 0 && item?.commentChildren?.$values?.map(c => (
-                                                <div className={cx("comment-reply")}>
+                                            clickReplyStatus[index] &&
+                                            <div div className={cx("comment-input_reply")}>
+                                                <textarea
+                                                    value={replyContent}
+                                                    onChange={(e) => setReplyContent(e.target.value)}
+                                                    placeholder="Reply.." />
+                                                <div
+                                                    onClick={() => hanldeSubmitCommentRepply(item.id, index)}
+                                                    className={cx("comment-submit_btn")}>
+                                                    <BsFillSendFill />
+                                                </div>
+                                                <div className={cx("comment-reply_cancel")}>
+                                                    <p
+                                                        onClick={() => {
+                                                            setClickReplyStatus(prev => ({
+                                                                ...prev,
+                                                                [index]: false
+                                                            }))
+                                                            setReplyContent('')
+                                                        }
+                                                        }
+                                                    >Cancel</p>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {
+                                            item?.commentChildren?.$values.length > 0 && item?.commentChildren?.$values?.map((c, replyIndex) => (
+                                                <div key={replyIndex} className={cx("comment-reply")}>
                                                     <div className={cx("comment-avatar-user")}>
                                                         <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                                     </div>
                                                     <div className={cx("comment-content-user")}>
                                                         <span>{item.user.userName}</span>
                                                         <p>{c.content}</p>
+                                                    </div>
+
+
+                                                    <div
+                                                        onClick={() => handleClickOPtionCommentReply(index, replyIndex)}
+                                                        className={cx("comment-dot")}>
+                                                        <BsThreeDots />
+                                                        {/* {
+                                                    hoverDotCommentStatus[index] &&
+                                                } */}
+                                                        {
+                                                            clickOptionCommentReplyStatus[`${index}-${replyIndex}`] &&
+                                                            <div className={cx("comment-option")}>
+                                                                <p
+                                                                    onClick={() => handleClickDeleteCommentReply(c.id, item.id)}
+                                                                >Delete</p>
+                                                                <p
+                                                                    onClick={() => handleEditComment(replyIndex)}
+                                                                >Edit</p>
+                                                            </div>
+
+                                                        }
+
                                                     </div>
                                                 </div>
                                             ))
