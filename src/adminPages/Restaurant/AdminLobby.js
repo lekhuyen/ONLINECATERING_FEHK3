@@ -1,24 +1,15 @@
-// AdminLobby.js
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from 'react-icons/bs';
+
+
+import { fetchLobbyData, deleteLobbyItem } from '../../redux/Restaurant/adminlobbySlice';
+import { deleteLobbyImage, fetchLobbyImages } from '../../redux/Restaurant/adminlobbyimageSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 
-import { deleteLobbyItem, fetchLobbyData } from '../../redux/Restaurant/adminlobbySlice';
-import { fetchLobbyImages } from '../../redux/Restaurant/adminlobbyimageSlice';
-
-const limitContent = (content) => {
-    const words = content.split(' ');
-    if (words.length > 10) {
-        return words.slice(0, 10).join(' ') + '...';
-    }
-    return content;
-};
-
-export default function AdminLobby() {
+const AdminLobby = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -44,14 +35,31 @@ export default function AdminLobby() {
         dispatch(deleteLobbyItem(id));
     };
 
+    const handleDeleteImage = async (lobbyId, imageId) => {
+        try {
+            // Dispatch deleteLobbyImage action to delete the image
+            const response = await dispatch(deleteLobbyImage({ lobbyId, imageId }));
+            // Handle success response (optional)
+            console.log('Image deleted successfully:', response);
+    
+            // After deletion, update lobby images state or fetch updated images
+            if (selectedLobby) {
+                const action = await dispatch(fetchLobbyImages(selectedLobby.id));
+                setLobbyImages(action.payload);
+            }
+        } catch (error) {
+            console.error('Error deleting lobby image:', error);
+            // Handle error state or display error message
+        }
+    };
+
     const handleEdit = (id) => {
         navigate(`/lobby-admin/edit-lobby-admin/${id}`);
     };
 
     const handleInfoClick = async (lobby) => {
         setSelectedLobby(lobby);
-        console.log("Selected lobby:", lobby); // Add this console.log statement
-    
+
         try {
             setImagesStatus("loading");
             const action = await dispatch(fetchLobbyImages(lobby.id));
@@ -62,11 +70,26 @@ export default function AdminLobby() {
             setImagesError(error.message);
             console.error("Error fetching images:", error);
         }
-    
+
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.show();
     };
-    
+
+    const closeModal = () => {
+        const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
+        modal.hide();
+        setSelectedLobby(null);
+        setLobbyImages([]);
+        setImagesStatus("idle");
+        setImagesError(null);
+    };
+
+    const limitContent = (content, maxLength = 100) => {
+        if (content.length <= maxLength) {
+            return content;
+        }
+        return content.substring(0, maxLength) + '...';
+    };
 
     const filteredLobbyData = lobbyData.filter((lobby) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
@@ -117,9 +140,9 @@ export default function AdminLobby() {
                 </div>
             </div>
 
-                <div>
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/lobby-admin/create-lobby-admin')}>Add Lobby</button>
-                </div>
+            <div>
+                <button className="btn btn-success mb-3" onClick={() => navigate('/lobby-admin/create-lobby-admin')}>Add Lobby</button>
+            </div>
 
             <div className="container mt-5">
                 <table className="table table-hover">
@@ -192,12 +215,11 @@ export default function AdminLobby() {
                             </h4>
                             <button
                                 type="button"
-                                className="btn btn-danger"
+                                className="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                                onClick={closeModal}
+                            ></button>
                         </div>
                         <div className="modal-body">
                             {selectedLobby && (
@@ -205,23 +227,32 @@ export default function AdminLobby() {
                                     <h5>Description:</h5>
                                     <p>{selectedLobby.description}</p>
                                     <h5>Images:</h5>
-                                    {imagesStatus === "loading" && <p>Loading images...</p>}
-                                    {imagesStatus === "failed" && <p>{imagesError}</p>}
+                                    {imagesStatus === 'loading' && <p>Loading images...</p>}
+                                    {imagesStatus === 'failed' && <p>{imagesError}</p>}
                                     {lobbyImages && lobbyImages.length > 0 ? (
-                                        <div className="d-flex flex-wrap">
+                                        <div>
                                             {lobbyImages.map((image, index) => (
-                                                    <img
+                                                <div
                                                     key={index}
-                                                    src={image} // Assuming lobbyImages is an array of image URLs
-                                                    alt={`Lobby ${selectedLobby.id}`}
-                                                    style={{
-                                                        width: "20%",
-                                                        height: "auto",
-                                                        objectFit: "cover",
-                                                        marginRight: "10px",
-                                                        marginBottom: "10px"
-                                                    }}
-                                                />
+                                                    className="position-relative"
+                                                    style={{ width: '20%', marginRight: '10px', marginBottom: '10px' }}
+                                                >
+                                                    <img
+                                                        src={image} // Assuming lobbyImages is an array of image URLs
+                                                        alt={`Lobby ${selectedLobby.id}`}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            objectFit: 'cover',
+                                                        }}
+                                                    />
+                                                    <button
+                                                        className="btn btn-outline-danger btn-sm position-absolute top-0 end-0"
+                                                        onClick={() => handleDeleteImage(selectedLobby.id, image.id)}
+                                                    >
+                                                        <FaRegTrashAlt />
+                                                    </button>
+                                                </div>
                                             ))}
                                         </div>
                                     ) : (
@@ -230,7 +261,6 @@ export default function AdminLobby() {
                                 </div>
                             )}
                         </div>
-
                         <div className="modal-footer">
                             <button
                                 type="button"
@@ -263,4 +293,6 @@ export default function AdminLobby() {
             </nav>
         </div>
     );
-}
+};
+
+export default AdminLobby;
