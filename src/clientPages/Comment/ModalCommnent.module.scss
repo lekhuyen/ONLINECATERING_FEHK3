@@ -283,3 +283,25 @@ height: 300px;
 .comment-reply_cancel p {
     margin-bottom: 0;
 }
+
+.comment-input_edit_reply {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    width: 70%;
+    margin-left: 10px;
+    position: relative;
+}
+
+.comment-input_edit_reply textarea{
+    width: 90%;
+    height: 100%;
+    outline: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 17px;
+    font-family: monospace;
+    background-color: #f0f2f5;
+}

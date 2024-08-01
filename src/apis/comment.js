@@ -26,3 +26,8 @@ export const apiDeleteCommentReplyAppetizer = (data)  => axios({
     url: `/restaurant-service/commentChild/${data.userId}/${data.commentId}`,
     method: 'Delete',
 })
+export const apiEditCommentReplyAppetizer = (data)  => axios({
+    url: `/restaurant-service/commentChild/${data.userId}/${data.replyId}`,
+    method: 'PUT',
+    data
+})
