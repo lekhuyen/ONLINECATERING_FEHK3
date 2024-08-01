@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as actions from './userActions'
+import * as actions from './userActions';
 
 export const userSlice = createSlice({
     name: 'user',
@@ -8,7 +8,7 @@ export const userSlice = createSlice({
         userCurrent: null,
         token: null,
 
-        //otp
+        // OTP
         isSendMailLoading: false,
         mailOtp: null,
         status: null,
@@ -16,39 +16,49 @@ export const userSlice = createSlice({
     },
     reducers: {
         login: (state, action) => {
-            state.isLoggedIn = action.payload.isLoggedIn
-            state.userCurrent = action.payload.userCurrent
-            state.token = action.payload.token
+            state.isLoggedIn = action.payload.isLoggedIn;
+            state.userCurrent = action.payload.userCurrent;
+            state.token = action.payload.token;
         },
-        logout: (state, action) => {
-            state.isLoggedIn = false
-            state.userCurrent = null
-            state.token = null
+        logout: (state) => {
+            state.isLoggedIn = false;
+            state.userCurrent = null;
+            state.token = null;
+            localStorage.removeItem('token');
         },
         resetStatusMessage: (state) => {
             state.status = null;
             state.message = "";
         }
     },
-    extraReducers: (builders) => {
-        builders.addCase(actions.sendMailOtp.pending, (state) => {
-            state.isSendMailLoading = true
-        })
-        builders.addCase(actions.sendMailOtp.fulfilled, (state, action) => {
-            state.isSendMailLoading = false
-            state.mailOtp = action.payload.data
-            state.status = action.payload.status
-            state.message = action.payload.message
-        })
-        builders.addCase(actions.sendMailOtp.rejected, (state, action) => {
-            state.isSendMailLoading = true
-            state.mailOtp = null
-            state.status = null
-            state.message = ''
-        })
+    extraReducers: (builder) => {
+        builder
+            .addCase(actions.sendMailOtp.pending, (state) => {
+                state.isSendMailLoading = true;
+            })
+            .addCase(actions.sendMailOtp.fulfilled, (state, action) => {
+                state.isSendMailLoading = false;
+                state.mailOtp = action.payload.data;
+                state.status = action.payload.status;
+                state.message = action.payload.message;
+            })
+            .addCase(actions.sendMailOtp.rejected, (state, action) => {
+                state.isSendMailLoading = false;
+                state.mailOtp = null;
+                state.status = null;
+                state.message = action.payload || 'Failed to send OTP email';
+            })
+            .addCase(actions.sendMailRegister.pending, (state) => {
+                // If needed, handle loading state for registration
+            })
+            .addCase(actions.sendMailRegister.fulfilled, (state, action) => {
+                // Handle success for registration
+            })
+            .addCase(actions.sendMailRegister.rejected, (state, action) => {
+                // Handle error for registration
+            });
     }
-    
-})
+});
 
-export const {login, resetStatusMessage, logout  } = userSlice.actions
-export default userSlice.reducer
+export const { login, resetStatusMessage, logout } = userSlice.actions;
+export default userSlice.reducer;
