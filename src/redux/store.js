@@ -33,7 +33,11 @@ import adminmenuSlice from './Restaurant/adminmenuSlice'
 import adminmenuimageSlice from './Restaurant/adminmenuimageSlice'
 import adminorderSlice from './Restaurant/adminorderSlice'
 import adminrestaurantSlice from './Restaurant/adminrestaurantSlice'
+
+import userForgotPasswordReducer from './User/userForgotPasswordSlice'; 
+
 import adminbookingSlice from './Restaurant/adminbookingSlice'
+
 
 
 const comonConfig = {
@@ -47,6 +51,7 @@ const userConfig  = {
 
 export const store = configureStore({
     reducer: {
+        userForgotPassword: userForgotPasswordReducer,
         user: persistReducer(userConfig, userSlice),
         register: userRegisterSlice,
         about: aboutSlice,
