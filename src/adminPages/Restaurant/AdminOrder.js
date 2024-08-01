@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAdminOrderData } from '../../redux/Restaurant/adminorderSlice';
+import { fetchAdminOrderData, deleteAdminOrder } from '../../redux/Restaurant/adminorderSlice';
+import { FaRegTrashAlt } from 'react-icons/fa';
 
 export default function AdminOrder() {
     const dispatch = useDispatch();
@@ -11,6 +12,12 @@ export default function AdminOrder() {
     useEffect(() => {
         dispatch(fetchAdminOrderData());
     }, [dispatch]);
+
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this order?')) {
+            dispatch(deleteAdminOrder(id));
+        }
+    };
 
     if (adminOrderStatus === 'loading') {
         return <div>Loading...</div>;
@@ -27,8 +34,6 @@ export default function AdminOrder() {
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>User Name</th>
-                        <th>Combo Name</th>
                         <th>Promotion Name</th>
                         <th>Total Price</th>
                         <th>Quantity Table</th>
@@ -36,14 +41,13 @@ export default function AdminOrder() {
                         <th>Organization</th>
                         <th>Deposit</th>
                         <th>Payment</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {adminOrders.map(order => (
                         <tr key={order.id}>
                             <td>{order.id}</td>
-                            <td>{order.user.userName}</td>
-                            <td>{order.customCombo.dishName}</td>
                             <td>{order.promotion ? order.promotion.promotionName : 'N/A'}</td>
                             <td>{order.totalPrice}</td>
                             <td>{order.quantityTable}</td>
@@ -51,6 +55,14 @@ export default function AdminOrder() {
                             <td>{order.organization}</td>
                             <td>{order.deposit}</td>
                             <td>{order.payment ? 'Paid' : 'Pending'}</td>
+                            <td>
+                                <button
+                                    className="btn btn-outline-danger"
+                                    onClick={() => handleDelete(order.id)}
+                                >
+                                    <FaRegTrashAlt />
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
