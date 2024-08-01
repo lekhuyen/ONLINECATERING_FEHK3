@@ -32,6 +32,7 @@ import admincombodishSlice from './Restaurant/admincombodishSlice'
 import adminmenuSlice from './Restaurant/adminmenuSlice'
 import adminmenuimageSlice from './Restaurant/adminmenuimageSlice'
 import adminorderSlice from './Restaurant/adminorderSlice'
+import adminrestaurantSlice from './Restaurant/adminrestaurantSlice'
 
 
 const comonConfig = {
@@ -66,8 +67,8 @@ export const store = configureStore({
         menuImages: adminmenuimageSlice,
         lobby: adminlobbySlice,
         lobbyImages: adminlobbyimageSlice,
-        adminorder: adminorderSlice
-
+        adminorder: adminorderSlice,
+        adminrestaurant: adminrestaurantSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
