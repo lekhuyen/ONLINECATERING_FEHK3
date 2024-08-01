@@ -36,11 +36,16 @@ export const menuItems = [
   { icon: <IoInformationCircleOutline />, title: "About", path: "/aboutus" },
   { icon: <RiContactsBook3Line />, title: "Contact", path: "/contactus" },
   { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
-  { icon: <TiImage />, title: "Lobby", path: "/lobbyadmin" },
+  { icon: <TiImage />, title: "Lobby", path: "/lobby-admin" },
   { icon: <TbBrandBooking />, title: "Order", path: "/bookingadmin" },
-  { icon: <BiDish />, title: "Menu Management", path: "/dish-admin" },
+  { icon: <BiDish />, title: "Menu Management", path: "/menu-admin" },
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
   { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
   {
     icon: <RiCustomerService2Line />,
@@ -134,3 +139,27 @@ export const menuUserTab = [
     icon: <IoCalendarOutline />,
   },
 ];
+export const voteOption = [
+    
+  {
+      id: 1,
+      text: 'Terrible'
+  },
+  {
+      id: 2,
+      text: 'Bad'
+  },
+  {
+      id: 3,
+      text: 'Neutral'
+  },
+  {
+      id: 4,
+      text: 'Good'
+  },
+  {
+      id: 5,
+      text: 'Perfect'
+  },
+  
+]

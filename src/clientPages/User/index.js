@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './User.module.scss'
 import classNames from 'classnames/bind';
 import clsx from 'clsx'
@@ -7,16 +7,31 @@ import ChangePassword from '../ChangePassword';
 import HistoryBooking from '../BookingHistory';
 import { IoIosLogOut } from 'react-icons/io';
 import FavoriteList from '../FavoriteList';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/User/userSlice';
 
 const cx = classNames.bind(styles)
 const User = () => {
     const [statusUserTab, setClickUserTab] = useState(2)
-    // const [selectUserTab, setSelectUserTab] = useState(3)
-
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [userCurrent, setUserCurrent] = useState('')
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (isLoggedIn) {
+            var user = JSON.parse(localStorage.getItem("userCurrent"))
+            setUserCurrent(user);
+        }
+    }, [isLoggedIn])
     const handleClickUserTab = (id) => {
         setClickUserTab(id)
     }
-
+    const handleClickLogout = () => {
+        dispatch(logout())
+        localStorage.removeItem("userCurrent")
+        navigate("/")
+    }
     return (
         <div className={clsx(styles.user_container, "app__bg")}>
             <div className={styles.user_row}>
@@ -28,11 +43,11 @@ const User = () => {
                         <div className={styles.user_name}>
                             <p>
                                 <span className={styles.user_info}>Name: </span>
-                                User name
+                                {userCurrent.userName}
                             </p>
                             <p>
                                 <span className={styles.user_info}>Phone: </span>
-                                +123 123 321
+                                {userCurrent.phone}
                             </p>
                         </div>
                     </div>
@@ -50,7 +65,7 @@ const User = () => {
                     <div
                         className={cx(styles.user_tab)}>
                         <p><IoIosLogOut /></p>
-                        <p>Logout</p>
+                        <p onClick={handleClickLogout}>Logout</p>
                     </div>
                 </div>
                 <div className={styles.user_history_right}>
