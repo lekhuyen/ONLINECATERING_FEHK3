@@ -26,7 +26,7 @@ import {
 
 } from "react-icons/fa";
 
-import { BsCurrencyDollar, BsInfoCircle } from "react-icons/bs";
+import { BsCurrencyDollar, BsInfoCircle,BsThreeDots  } from "react-icons/bs";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import { GoFilter } from "react-icons/go";
 import { LuMapPin } from "react-icons/lu";
@@ -124,7 +124,10 @@ const icons = {
 
     //lobby
     FaTrash,
-    BsInfoCircle
+    BsInfoCircle,
+
+    //comment
+    BsThreeDots 
 };
 
 export default icons;
