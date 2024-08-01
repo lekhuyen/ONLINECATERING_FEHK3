@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from 'react-icons/bs';
 
+import axios from 'axios';
 
 import { fetchLobbyData, deleteLobbyItem } from '../../redux/Restaurant/adminlobbySlice';
-import { deleteLobbyImage, fetchLobbyImages } from '../../redux/Restaurant/adminlobbyimageSlice';
+import { deleteLobbyImage, fetchLobbyImages, addLobbyImage } from '../../redux/Restaurant/adminlobbyimageSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 
 const AdminLobby = () => {
@@ -35,23 +36,6 @@ const AdminLobby = () => {
         dispatch(deleteLobbyItem(id));
     };
 
-    const handleDeleteImage = async (lobbyId, imageId) => {
-        try {
-            // Dispatch deleteLobbyImage action to delete the image
-            const response = await dispatch(deleteLobbyImage({ lobbyId, imageId }));
-            // Handle success response (optional)
-            console.log('Image deleted successfully:', response);
-    
-            // After deletion, update lobby images state or fetch updated images
-            if (selectedLobby) {
-                const action = await dispatch(fetchLobbyImages(selectedLobby.id));
-                setLobbyImages(action.payload);
-            }
-        } catch (error) {
-            console.error('Error deleting lobby image:', error);
-            // Handle error state or display error message
-        }
-    };
 
     const handleEdit = (id) => {
         navigate(`/lobby-admin/edit-lobby-admin/${id}`);
@@ -74,6 +58,35 @@ const AdminLobby = () => {
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.show();
     };
+
+    const handleAddImage = async (event) => {
+        event.preventDefault();
+    
+        const file = event.target.files[0]; // Get the first file from input
+        if (!file) {
+            console.error('No file selected.');
+            return;
+        }
+    
+        if (!selectedLobby) {
+            console.error('No lobby selected.');
+            return;
+        }
+    
+        try {
+            const formData = new FormData();
+            formData.append('formFiles', file); // Append the file directly, not as an array
+    
+            const response = await dispatch(addLobbyImage({ lobbyId: selectedLobby.id, formFiles: formData }));
+            console.log('Image added successfully:', response);
+    
+            const action = await dispatch(fetchLobbyImages(selectedLobby.id));
+            setLobbyImages(action.payload);
+        } catch (error) {
+            console.error('Error adding lobby image:', error);
+        }
+    };
+    
 
     const closeModal = () => {
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
@@ -213,6 +226,7 @@ const AdminLobby = () => {
                             <h4 className="modal-title" id="lobbyModalLabel">
                                 Lobby Details: {selectedLobby ? selectedLobby.lobbyName : ''}
                             </h4>
+
                             <button
                                 type="button"
                                 className="btn-close"
@@ -238,7 +252,7 @@ const AdminLobby = () => {
                                                     style={{ width: '20%', marginRight: '10px', marginBottom: '10px' }}
                                                 >
                                                     <img
-                                                        src={image} // Assuming lobbyImages is an array of image URLs
+                                                        src={image} // Assuming lobbyImages is an array of image objects with 'imagesUrl'
                                                         alt={`Lobby ${selectedLobby.id}`}
                                                         style={{
                                                             width: '100%',
@@ -246,12 +260,7 @@ const AdminLobby = () => {
                                                             objectFit: 'cover',
                                                         }}
                                                     />
-                                                    <button
-                                                        className="btn btn-outline-danger btn-sm position-absolute top-0 end-0"
-                                                        onClick={() => handleDeleteImage(selectedLobby.id, image.id)}
-                                                    >
-                                                        <FaRegTrashAlt />
-                                                    </button>
+
                                                 </div>
                                             ))}
                                         </div>
@@ -262,6 +271,20 @@ const AdminLobby = () => {
                             )}
                         </div>
                         <div className="modal-footer">
+                            <form encType="multipart/form-data" onSubmit={handleAddImage}>
+                                <div className="mb-3">
+                                    <label htmlFor="imageUpload" className="form-label">Upload Image</label>
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        id="imageUpload"
+                                        accept="image/*"
+                                        onChange={(e) => handleAddImage(e)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary">Add Image</button>
+                            </form>
                             <button
                                 type="button"
                                 className="btn btn-danger"

@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenuData, updateMenuItem } from '../../redux/Restaurant/adminmenuSlice'; // Adjust import based on your file structure
+import { fetchMenuData, updateMenuItem } from '../../redux/Restaurant/adminmenuSlice';
 import { FiSend } from 'react-icons/fi';
 
 export default function EditAdminMenu() {
-    const { id } = useParams(); // Get id from URL params
-    const navigate = useNavigate(); // Initialize useNavigate hook
-    const dispatch = useDispatch(); // Initialize useDispatch hook
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [menuName, setMenuName] = useState('');
     const [ingredient, setIngredient] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
+    const [restaurantId, setRestaurantId] = useState('');
+    const [image, setImage] = useState('');
+    const [newImage, setNewImage] = useState(null);
 
-    const menuItem = useSelector((state) => state.menu.items.find(item => item.id === Number(id))); // Convert id to number
+    const menuItem = useSelector((state) => state.menu.items.find(item => item.id === Number(id)));
     const status = useSelector((state) => state.menu.status);
     const error = useSelector((state) => state.menu.error);
 
@@ -30,25 +33,52 @@ export default function EditAdminMenu() {
             setIngredient(menuItem.ingredient || '');
             setPrice(menuItem.price.toString() || '');
             setQuantity(menuItem.quantity.toString() || '');
+            setRestaurantId(menuItem.restaurantId.toString() || '');
+            setImage(menuItem.image || '');
         }
     }, [menuItem]);
 
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setNewImage(file);
+        }
+    };
+
     const handleUpdate = async () => {
         try {
+            const formData = new FormData();
+            formData.append('menuName', menuName);
+            formData.append('ingredient', ingredient);
+            formData.append('price', parseFloat(price));
+            formData.append('quantity', parseInt(quantity, 10));
+            formData.append('restaurantId', restaurantId); // Ensure restaurantId is appended
+    
+            if (newImage) {
+                formData.append('formFile', newImage);
+            }
+    
+            // Assuming menuImage is the current image URL or identifier
+            formData.append('menuImage', menuImage);
+    
             await dispatch(updateMenuItem({
                 id: Number(id),
                 menuName,
                 ingredient,
-                price: parseFloat(price), // Convert price to decimal
-                quantity: parseInt(quantity, 10) // Convert quantity to integer
+                price: parseFloat(price),
+                quantity: parseInt(quantity, 10),
+                restaurantId,
+                menuImage,
+                formFile: newImage
             })).unwrap();
-
+    
             console.log('Menu item updated successfully');
-            navigate('/menu-admin'); // Navigate back to Menu list page after successful update
+            navigate('/menu-admin');
         } catch (error) {
             console.error('Error updating menu item:', error);
         }
     };
+    
 
     if (status === 'loading') {
         return <p>Loading...</p>;
@@ -87,7 +117,7 @@ export default function EditAdminMenu() {
                     <label htmlFor="price">Price</label>
                     <input
                         type="number"
-                        step="0.01" // Allows for decimal values
+                        step="0.01"
                         className="form-control"
                         id="price"
                         value={price}
@@ -102,6 +132,30 @@ export default function EditAdminMenu() {
                         id="quantity"
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="restaurantId">Restaurant</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        id="restaurantId"
+                        value={restaurantId}
+                        onChange={(e) => setRestaurantId(e.target.value)}
+                        hidden
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="image">Current Image</label>
+                    {image && <img src={image} alt="Menu Item" className="img-fluid" />}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="newImage">Upload New Image</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        id="newImage"
+                        onChange={handleImageChange}
                     />
                 </div>
                 <button

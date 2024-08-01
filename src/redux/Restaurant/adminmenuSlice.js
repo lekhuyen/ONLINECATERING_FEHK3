@@ -21,11 +21,11 @@ export const fetchMenuData = createAsyncThunk(
 // Async thunk to create new menu item
 export const createMenuItem = createAsyncThunk(
     "menu/createMenuItem",
-    async (menuItem) => {
+    async (formFile) => {
         try {
-            const response = await axios.post(apiEndpoint, menuItem, {
+            const response = await axios.post(apiEndpoint, formFile, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data' // Important for form-data
                 }
             });
 
@@ -36,25 +36,42 @@ export const createMenuItem = createAsyncThunk(
     }
 );
 
+
 // Async thunk to update menu item
 export const updateMenuItem = createAsyncThunk(
-    "menu/updateMenuItem",
-    async ({ id, itemName, description, price }) => {
+    'menu/updateMenuItem',
+    async ({ id, menuName, ingredient, price, quantity, restaurantId, menuImage, formFile }) => {
+        const formData = new FormData();
+        formData.append('menuName', menuName);
+        formData.append('ingredient', ingredient);
+        formData.append('price', price);
+        formData.append('quantity', quantity);
+        formData.append('restaurantId', restaurantId);
+        
+        if (formFile) {
+            formData.append("formFile", formFile);
+        }
+
+        if (menuImage) {
+            formData.append("MenuImage", JSON.stringify(menuImage));
+        }
+
         try {
-            const response = await axios.put(`${apiEndpoint}/${id}`, {
-                id: Number(id),
-                itemName,
-                description,
-                price: parseFloat(price) // Convert to float
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
+            const response = await axios.put(
+                `${apiEndpoint}/${id}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data' // Important for form-data
+                    }
                 }
-            });
+            );
 
             return response.data.data;
         } catch (error) {
-            throw new Error('Error updating menu item:', error.response?.data || error.message);
+            throw new Error(
+                `Error updating menu item: ${error.response?.data?.message || error.message}`
+            );
         }
     }
 );
