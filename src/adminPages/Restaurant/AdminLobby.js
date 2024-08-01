@@ -61,32 +61,32 @@ const AdminLobby = () => {
 
     const handleAddImage = async (event) => {
         event.preventDefault();
-    
+
         const file = event.target.files[0]; // Get the first file from input
         if (!file) {
             console.error('No file selected.');
             return;
         }
-    
+
         if (!selectedLobby) {
             console.error('No lobby selected.');
             return;
         }
-    
+
         try {
             const formData = new FormData();
             formData.append('formFiles', file); // Append the file directly, not as an array
-    
+
             const response = await dispatch(addLobbyImage({ lobbyId: selectedLobby.id, formFiles: formData }));
             console.log('Image added successfully:', response);
-    
+
             const action = await dispatch(fetchLobbyImages(selectedLobby.id));
             setLobbyImages(action.payload);
         } catch (error) {
             console.error('Error adding lobby image:', error);
         }
     };
-    
+
 
     const closeModal = () => {
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
@@ -271,20 +271,6 @@ const AdminLobby = () => {
                             )}
                         </div>
                         <div className="modal-footer">
-                            <form encType="multipart/form-data" onSubmit={handleAddImage}>
-                                <div className="mb-3">
-                                    <label htmlFor="imageUpload" className="form-label">Upload Image</label>
-                                    <input
-                                        type="file"
-                                        className="form-control"
-                                        id="imageUpload"
-                                        accept="image/*"
-                                        onChange={(e) => handleAddImage(e)}
-                                        required
-                                    />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Add Image</button>
-                            </form>
                             <button
                                 type="button"
                                 className="btn btn-danger"
