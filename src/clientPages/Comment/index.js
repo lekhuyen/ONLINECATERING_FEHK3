@@ -7,8 +7,8 @@ import icons from "../../ultil/icons";
 import clsx from 'clsx';
 //import Scrollbars from 'react-custom-scrollbars-2';
 import { BsFillSendFill } from 'react-icons/bs';
-import { useParams } from 'react-router-dom';
-import { apiGetAppetizerById } from '../../apis/menu';
+import { Link, useParams } from 'react-router-dom';
+import { apiGetAllAppetizer, apiGetAppetizerById } from '../../apis/menu';
 import { apiAddCommentAppetizer, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer } from '../../apis/comment';
 import { useSelector } from 'react-redux';
 
@@ -37,7 +37,20 @@ const Comment = () => {
     const { appetizerId } = useParams()
     const commentRef = useRef(null);
 
+    const [mainAppetizer, setAppetizer] = useState(null)
 
+    const getAllAppetizer = async () => {
+        const responseAppetizer = await apiGetAllAppetizer()
+
+        if (responseAppetizer.status === 0) {
+            setAppetizer(responseAppetizer.data.$values)
+        }
+        
+    }
+    console.log(mainAppetizer);
+    useEffect(() => {
+        getAllAppetizer()
+    }, [])
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -332,17 +345,12 @@ const Comment = () => {
             <div className={cx("comment_row")}>
                 <div className={cx("comment_row_left")}>
                     <h3>Menu</h3>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-                    <div className={cx("comment_dish_item")}><p>Banh kem</p></div>
-
-
+                    {
+                        mainAppetizer?.length > 0 && mainAppetizer?.map(item => (
+                            <Link to={`/comment/${item.id}`} className={cx("comment_dish_item")}><p>{item.appetizerName}</p></Link>
+                        ))
+                    }
+                    
                 </div>
                 <div>
                     <div className={cx("comment-container")}>
