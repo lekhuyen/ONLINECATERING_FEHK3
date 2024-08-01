@@ -29,6 +29,8 @@ import userRegisterSlice from './User/userRegisterSlice'
 import admincomboappetizerSlice from './Restaurant/admincomboappetizerSlice'
 import admincombodessertSlice from './Restaurant/admincombodessertSlice'
 import admincombodishSlice from './Restaurant/admincombodishSlice'
+import adminmenuSlice from './Restaurant/adminmenuSlice'
+import adminmenuimageSlice from './Restaurant/adminmenuimageSlice'
 
 
 const comonConfig = {
@@ -59,6 +61,8 @@ export const store = configureStore({
         adminComboAppetizer: admincomboappetizerSlice,
         admindessert: admindessertSlice,
         adminComboDessert: admincombodessertSlice,
+        menu: adminmenuSlice,
+        menuImages: adminmenuimageSlice,
         lobby: adminlobbySlice,
         lobbyImages: adminlobbyimageSlice
 

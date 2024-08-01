@@ -10,7 +10,8 @@ export const fetchMenuData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data.$values;
+            console.log("Response data:", response.data);
+            return response.data.$values;
         } catch (error) {
             throw new Error('Error fetching menu data:', error.response?.data || error.message);
         }
