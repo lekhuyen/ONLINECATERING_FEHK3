@@ -14,8 +14,8 @@ export default function EditLobby() {
     const [area, setArea] = useState('');
     const [type, setType] = useState('');
     const [price, setPrice] = useState('');
-    const [image, setImage] = useState('');
-    const [newImage, setNewImage] = useState(null);
+    const [currentImages, setCurrentImages] = useState([]); // Array for images
+    const [newImages, setNewImages] = useState([]); // Array for new images
 
     const lobby = useSelector((state) =>
         state.adminLobby.lobbies.find(lobby => lobby.id === Number(id))
@@ -31,52 +31,64 @@ export default function EditLobby() {
 
     useEffect(() => {
         if (lobby) {
-            console.log('Lobby data:', lobby); // Debugging: Check lobby data
             setLobbyName(lobby.lobbyName || '');
             setDescription(lobby.description || '');
             setArea(lobby.area || '');
             setType(lobby.type || '');
             setPrice(lobby.price || '');
-            setImage(lobby.image || ''); // Set current image URL
+            setCurrentImages(lobby.lobbyImages?.$values?.map(img => img.imagesUrl) || []); // Set current images
         }
     }, [lobby]);
 
-    // Fetch lobby details including images if id changes
     useEffect(() => {
         if (id) {
-            dispatch(fetchLobbyById(id)).then((response) => {
-                setImage(response.payload.imageUrl || ''); // Adjust based on your response structure
-            }).catch((error) => {
-                console.error('Error fetching lobby images:', error);
-            });
+            dispatch(fetchLobbyById(id))
+                .unwrap()
+                .then((response) => {
+                    console.log('Lobby response:', response); // Debugging response
+                    if (response.lobbyImages && response.lobbyImages.$values) {
+                        const images = response.lobbyImages.$values.map(img => img.imagesUrl);
+                        setCurrentImages(images || []); // Set current images
+                    } else {
+                        console.error('Lobby images data is missing or malformed:', response);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching lobby images:', error);
+                });
         }
     }, [id, dispatch]);
+    
 
     const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setNewImage(file);
-        }
+        const files = Array.from(event.target.files);
+        setNewImages(files);
     };
 
     const handleUpdate = async () => {
         try {
-            await dispatch(updateLobby({
-                id: Number(id), // Ensure ID is correctly converted to a number
-                lobbyName: lobbyName,
-                description: description,
-                area: area,
-                type: type,
-                price: price,
-                formFile: newImage // Include the new image file if present
-            })).unwrap();
-
-            console.log('Lobby updated successfully');
+            const formData = new FormData();
+            formData.append('id', id); // Ensure ID is included
+            formData.append('lobbyName', lobbyName);
+            formData.append('description', description);
+            formData.append('area', area);
+            formData.append('type', type);
+            formData.append('price', price);
+    
+            newImages.forEach((file) => {
+                formData.append('files', file); // Key must match backend parameter
+            });
+    
+            const response = await dispatch(updateLobby(formData)).unwrap();
+            console.log('Lobby updated successfully:', response);
+    
+            setCurrentImages(response.lobbyImages?.$values?.map(img => img.imagesUrl) || []);
             navigate('/lobby-admin');
         } catch (error) {
             console.error('Error updating lobby:', error);
         }
     };
+    
 
     if (status === 'loading') {
         return <p>Loading...</p>;
@@ -142,37 +154,42 @@ export default function EditLobby() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="currentImage">Current Image</label>
-                    {image ? (
-                        <img
-                            src={image}
-                            alt="Lobby"
-                            style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                            }}
-                        />
-                    ) : (
-                        <p>No image available</p>
-                    )}
+                    <label htmlFor="currentImages">Current Images</label>
+                    <div id="currentImages">
+                        {currentImages.length > 0 ? (
+                            currentImages.map((imgUrl, index) => {
+                                console.log(`Fetching image from: ${imgUrl}`); // Debugging URL
+                                return (
+                                    <img
+                                        key={index}
+                                        src={imgUrl}
+                                        alt={`Lobby ${index}`}
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            objectFit: "cover",
+                                            marginRight: "10px"
+                                        }}
+                                    />
+                                );
+                            })
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="image">Upload New Image</label>
+                    <label htmlFor="formFile">Upload New Images</label>
                     <input
                         type="file"
                         className="form-control"
-                        id="image"
+                        id="formFile"
+                        multiple
                         onChange={handleImageChange}
                     />
                 </div>
-
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleUpdate}
-                >
-                    <FiSend /> Save Changes
+                <button type="button" className="btn btn-primary" onClick={handleUpdate}>
+                    <FiSend /> Update Lobby
                 </button>
             </form>
         </div>
