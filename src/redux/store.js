@@ -24,7 +24,7 @@ import customComboSlice from './Restaurant/customComboSlice'
 import adminappetizersSlice from './Restaurant/adminappetizersSlice'
 import admindessertSlice from './Restaurant/admindessertSlice'
 import adminlobbySlice from './Restaurant/adminlobbySlice'
-import adminlobbyimageSlice from './Restaurant/adminlobbyimageSlice'
+
 import userRegisterSlice from './User/userRegisterSlice'
 import admincomboappetizerSlice from './Restaurant/admincomboappetizerSlice'
 import admincombodessertSlice from './Restaurant/admincombodessertSlice'
@@ -37,6 +37,8 @@ import adminrestaurantSlice from './Restaurant/adminrestaurantSlice'
 import userForgotPasswordReducer from './User/userForgotPasswordSlice'; 
 
 import adminbookingSlice from './Restaurant/adminbookingSlice'
+
+
 
 
 
@@ -71,8 +73,8 @@ export const store = configureStore({
         adminComboDessert: admincombodessertSlice,
         menu: adminmenuSlice,
         menuImages: adminmenuimageSlice,
-        lobby: adminlobbySlice,
-        lobbyImages: adminlobbyimageSlice,
+        adminLobby: adminlobbySlice,
+
         adminorder: adminorderSlice,
         adminrestaurant: adminrestaurantSlice,
         adminbooking: adminbookingSlice

@@ -46,7 +46,7 @@ export const menuItems = [
   {
     icon: <RiCustomerService2Line />,
     title: "Service",
-    path: "/serviceadmin",
+    path: "/service",
   },
   { icon: <PiSignOutLight />, title: "Sign Out", path: "/signout" },
 ];
