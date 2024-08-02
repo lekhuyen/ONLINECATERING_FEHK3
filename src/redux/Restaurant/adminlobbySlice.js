@@ -22,31 +22,19 @@ export const createLobby = createAsyncThunk('adminLobby/createLobby', async (for
     return response.data;
 });
 
-export const updateLobby = createAsyncThunk('adminLobby/updateLobby', async ({ id, lobbyName, description, area, type, price, formFile }) => {
+export const updateLobby = createAsyncThunk('adminLobby/updateLobby', async (formData) => {
     try {
-        const formData = new FormData();
-        formData.append("id", id); // Include ID if backend expects it
-        formData.append("lobbyName", lobbyName);
-        formData.append("description", description);
-        formData.append("area", area);
-        formData.append("type", type);
-        formData.append("price", price);
-
-        if (formFile) {
-            formData.append("formFile", formFile);
-        }
-
-        const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
+        const response = await axios.put(`${apiEndpoint}/${formData.get('id')}`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
-
-        return response.data;
+        return response.data.data;
     } catch (error) {
         throw new Error("Error updating lobby:", error.response.data);
     }
 });
+
 
 
 export const deleteLobby = createAsyncThunk('adminLobby/deleteLobby', async (id) => {
