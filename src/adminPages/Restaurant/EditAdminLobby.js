@@ -1,52 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMenuData, updateMenuItem } from '../../redux/Restaurant/adminmenuSlice'; // Adjust import based on your file structure
 import { FiSend } from 'react-icons/fi';
+import { fetchLobbies, updateLobby, fetchLobbyById } from '../../redux/Restaurant/adminlobbySlice';
 
-export default function EditAdminMenu() {
+export default function EditLobby() {
     const { id } = useParams(); // Get id from URL params
     const navigate = useNavigate(); // Initialize useNavigate hook
     const dispatch = useDispatch(); // Initialize useDispatch hook
 
-    const [menuName, setMenuName] = useState('');
-    const [ingredient, setIngredient] = useState('');
+    const [lobbyName, setLobbyName] = useState('');
+    const [description, setDescription] = useState('');
+    const [area, setArea] = useState('');
+    const [type, setType] = useState('');
     const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState('');
+    const [image, setImage] = useState('');
+    const [newImage, setNewImage] = useState(null);
 
-    const menuItem = useSelector((state) => state.menu.items.find(item => item.id === Number(id))); // Convert id to number
-    const status = useSelector((state) => state.menu.status);
-    const error = useSelector((state) => state.menu.error);
+    const lobby = useSelector((state) =>
+        state.adminLobby.lobbies.find(lobby => lobby.id === Number(id))
+    ); // Convert id to number
+    const status = useSelector((state) => state.adminLobby.status);
+    const error = useSelector((state) => state.adminLobby.error);
 
     useEffect(() => {
         if (status === 'idle') {
-            dispatch(fetchMenuData());
+            dispatch(fetchLobbies());
         }
     }, [status, dispatch]);
 
     useEffect(() => {
-        if (menuItem) {
-            setMenuName(menuItem.menuName || '');
-            setIngredient(menuItem.ingredient || '');
-            setPrice(menuItem.price.toString() || '');
-            setQuantity(menuItem.quantity.toString() || '');
+        if (lobby) {
+            console.log('Lobby data:', lobby); // Debugging: Check lobby data
+            setLobbyName(lobby.lobbyName || '');
+            setDescription(lobby.description || '');
+            setArea(lobby.area || '');
+            setType(lobby.type || '');
+            setPrice(lobby.price || '');
+            setImage(lobby.image || ''); // Set current image URL
         }
-    }, [menuItem]);
+    }, [lobby]);
+
+    // Fetch lobby details including images if id changes
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchLobbyById(id)).then((response) => {
+                setImage(response.payload.imageUrl || ''); // Adjust based on your response structure
+            }).catch((error) => {
+                console.error('Error fetching lobby images:', error);
+            });
+        }
+    }, [id, dispatch]);
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setNewImage(file);
+        }
+    };
 
     const handleUpdate = async () => {
         try {
-            await dispatch(updateMenuItem({
-                id: Number(id),
-                menuName,
-                ingredient,
-                price: parseFloat(price), // Convert price to decimal
-                quantity: parseInt(quantity, 10) // Convert quantity to integer
+            await dispatch(updateLobby({
+                id: Number(id), // Ensure ID is correctly converted to a number
+                lobbyName: lobbyName,
+                description: description,
+                area: area,
+                type: type,
+                price: price,
+                formFile: newImage // Include the new image file if present
             })).unwrap();
 
-            console.log('Menu item updated successfully');
-            navigate('/menu-admin'); // Navigate back to Menu list page after successful update
+            console.log('Lobby updated successfully');
+            navigate('/lobby-admin');
         } catch (error) {
-            console.error('Error updating menu item:', error);
+            console.error('Error updating lobby:', error);
         }
     };
 
@@ -60,34 +88,53 @@ export default function EditAdminMenu() {
 
     return (
         <div className='container'>
-            <h2>Edit Menu Item</h2>
+            <h2>Edit Lobby</h2>
             <form>
                 <div className="form-group">
-                    <label htmlFor="menuName">Menu Name</label>
+                    <label htmlFor="lobbyName">Lobby Name</label>
                     <input
                         type="text"
                         className="form-control"
-                        id="menuName"
-                        value={menuName}
-                        onChange={(e) => setMenuName(e.target.value)}
+                        id="lobbyName"
+                        value={lobbyName}
+                        onChange={(e) => setLobbyName(e.target.value)}
                         required
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="ingredient">Ingredient</label>
+                    <label htmlFor="description">Description</label>
                     <textarea
                         className="form-control"
-                        id="ingredient"
+                        id="description"
                         rows="3"
-                        value={ingredient}
-                        onChange={(e) => setIngredient(e.target.value)}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="area">Area</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="area"
+                        value={area}
+                        onChange={(e) => setArea(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="type">Type</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="type"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
                     />
                 </div>
                 <div className="form-group">
                     <label htmlFor="price">Price</label>
                     <input
                         type="number"
-                        step="0.01" // Allows for decimal values
                         className="form-control"
                         id="price"
                         value={price}
@@ -95,15 +142,31 @@ export default function EditAdminMenu() {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="quantity">Quantity</label>
+                    <label htmlFor="currentImage">Current Image</label>
+                    {image ? (
+                        <img
+                            src={image}
+                            alt="Lobby"
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                                objectFit: "cover",
+                            }}
+                        />
+                    ) : (
+                        <p>No image available</p>
+                    )}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="image">Upload New Image</label>
                     <input
-                        type="number"
+                        type="file"
                         className="form-control"
-                        id="quantity"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
+                        id="image"
+                        onChange={handleImageChange}
                     />
                 </div>
+
                 <button
                     type="button"
                     className="btn btn-primary"
