@@ -24,7 +24,7 @@ export const addLobbyImage = createAsyncThunk(
     'lobbyImages/addLobbyImage',
     async ({ lobbyId, formFiles }) => {
         try {
-            const response = await axios.post(`/lobby/images/${lobbyId}`, formFiles, {
+            const response = await axios.post(`${apiEndpoint}/images/${lobbyId}`, formFiles, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -36,15 +36,15 @@ export const addLobbyImage = createAsyncThunk(
         }
     }
 );
+
 export const deleteLobbyImage = createAsyncThunk(
     'lobbyImages/deleteLobbyImage',
-    async (payload, thunkAPI) => {
-        const { lobbyId, imageId } = payload;
+    async ({ lobbyId, imageId }, thunkAPI) => {
         try {
             const response = await axios.delete(`/api/lobbies/${lobbyId}/images/${imageId}`);
-            return response.data; // Assuming the API returns a success message or relevant data
+            return { lobbyId, imageId }; // Return both lobbyId and imageId for updating state
         } catch (error) {
-            throw new Error('Error deleting lobby image:', error.response?.data || error.message);
+            return thunkAPI.rejectWithValue(error.response?.data || error.message);
         }
     }
 );
@@ -60,39 +60,40 @@ const adminlobbyimageSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchLobbyImages.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(fetchLobbyImages.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.images = action.payload; // Assuming action.payload is an array of images
-            })
-            .addCase(fetchLobbyImages.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
-            })
-            .addCase(addLobbyImage.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(addLobbyImage.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.images.push(...action.payload); // Assuming action.payload is an array of added images
-            })
-            .addCase(addLobbyImage.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
-            .addCase(deleteLobbyImage.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(deleteLobbyImage.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                // Optionally update state based on success response
-            })
-            .addCase(deleteLobbyImage.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || 'Error deleting lobby image';
-            });
+        .addCase(fetchLobbyImages.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(fetchLobbyImages.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.images = action.payload; // Assuming action.payload is an array of images
+        })
+        .addCase(fetchLobbyImages.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+        })
+        .addCase(addLobbyImage.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(addLobbyImage.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.images.push(...action.payload); // Assuming action.payload is an array of added images
+        })
+        .addCase(addLobbyImage.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(deleteLobbyImage.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(deleteLobbyImage.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            // Remove the deleted image from the state
+            state.images = state.images.filter(image => image.id !== action.payload.imageId);
+        })
+        .addCase(deleteLobbyImage.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message || 'Error deleting lobby image';
+        });
     },
 });
 

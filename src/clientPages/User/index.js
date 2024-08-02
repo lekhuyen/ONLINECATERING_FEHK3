@@ -21,7 +21,9 @@ const User = () => {
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
-            setUserCurrent(user);
+            if (user) {
+                setUserCurrent(user);
+            }
         }
     }, [isLoggedIn])
     const handleClickUserTab = (id) => {
@@ -43,11 +45,11 @@ const User = () => {
                         <div className={styles.user_name}>
                             <p>
                                 <span className={styles.user_info}>Name: </span>
-                                {userCurrent.userName}
+                                {userCurrent?.userName}
                             </p>
                             <p>
                                 <span className={styles.user_info}>Phone: </span>
-                                {userCurrent.phone}
+                                {userCurrent?.phone}
                             </p>
                         </div>
                     </div>
@@ -55,7 +57,8 @@ const User = () => {
                         menuUserTab.map((item, index) => (
                             <div
                                 onClick={() => handleClickUserTab(item.id)}
-                                key={index} className={cx(styles.user_tab, statusUserTab === item.id ? "user_tab_hover" : "")}>
+                                key={item.id}
+                                className={cx(styles.user_tab, statusUserTab === item.id ? "user_tab_hover" : "")}>
                                 <p>{item.icon}</p>
                                 <p>{item.title}</p>
                             </div>
@@ -63,9 +66,9 @@ const User = () => {
 
                     }
                     <div
-                        className={cx(styles.user_tab)}>
+                        className={cx(styles.user_tab)} onClick={handleClickLogout}>
                         <p><IoIosLogOut /></p>
-                        <p onClick={handleClickLogout}>Logout</p>
+                        <p>Logout</p>
                     </div>
                 </div>
                 <div className={styles.user_history_right}>

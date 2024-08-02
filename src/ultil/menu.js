@@ -42,11 +42,7 @@ export const menuItems = [
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
   { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+
   {
     icon: <RiCustomerService2Line />,
     title: "Service",

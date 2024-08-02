@@ -121,7 +121,7 @@ const privateRoutes = [
     {path: "/menu-admin/create-menu-admin", component: CreateAdminMenu},
     {path: "/menu-admin/edit-menu-admin/:id", component: EditAdminMenu},
     {path: "/booking-admin", component: AdminBooking},
-    {path: "/payment-admin", component: },
+    // {path: "/payment-admin", component: },
 ]
 
 export {publicRoutes, privateRoutes} 
