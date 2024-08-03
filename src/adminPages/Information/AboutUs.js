@@ -184,18 +184,19 @@ function AboutUs() {
                                 <td>{limitContent(about.content)}</td>
                                 <td>{about.aboutTypeName}</td>
                                 <td>
-                                {about.imagePaths && about.imagePaths.length > 0 && (
-                                        <img
-                                        src={about.imagePaths}
-                                        alt={`about ${about.id}`}
-                                        style={{
-                                            width: "100px",
-                                            height: "50%",
-                                            objectFit: "cover",
-                                        }}
-                                        />
-                                    )}
-                                </td>
+                                        {about.imagePaths && about.imagePaths.length > 0 && (
+                                            <img
+                                                src={about.imagePaths[0]} // Displaying the first image from imagePaths array
+                                                alt={`about ${about.id}`}
+                                                style={{
+                                                    width: "100px",
+                                                    height: "auto",
+                                                    objectFit: "cover",
+                                                    marginBottom: "5px"
+                                                }}
+                                            />
+                                        )}
+                                    </td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
@@ -250,13 +251,13 @@ function AboutUs() {
                                         selectedAboutUs.imagePaths.map((imagePath, index) => (
                                             <img
                                                 key={index}
-                                                src={`http://localhost:5034${imagePath}`}
-                                                alt={`News ${selectedAboutUs.id}`}
+                                                src={imagePath}
+                                                alt={`about ${selectedAboutUs.id}`}
                                                 style={{
-                                                    width: "20%",
+                                                    width: "100px",
                                                     height: "auto",
-                                                    marginBottom: "10px",
                                                     objectFit: "cover",
+                                                    marginBottom: "5px"
                                                 }}
                                             />
                                         ))
