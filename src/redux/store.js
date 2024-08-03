@@ -37,6 +37,7 @@ import adminrestaurantSlice from './Restaurant/adminrestaurantSlice'
 import userForgotPasswordReducer from './User/userForgotPasswordSlice'; 
 
 import adminbookingSlice from './Restaurant/adminbookingSlice'
+import promotionSlice from './Restaurant/promotionSlice'
 
 
 
@@ -74,7 +75,7 @@ export const store = configureStore({
         menu: adminmenuSlice,
         menuImages: adminmenuimageSlice,
         adminLobby: adminlobbySlice,
-
+        promotion: promotionSlice,
         adminorder: adminorderSlice,
         adminrestaurant: adminrestaurantSlice,
         adminbooking: adminbookingSlice

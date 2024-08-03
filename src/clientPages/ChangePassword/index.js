@@ -1,52 +1,76 @@
-// src/clientPages/ChangePassword/index.js
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendForgotPasswordEmail, verifyOtp, updatePassword, resetState } from '../../redux/User/userForgotPasswordSlice'; // Correct path
+import { isChangePasswordLogout, isChangePasswordLogoutOtp, sendForgotPasswordEmail, sendOtpMail, updatePassword } from '../../redux/User/userForgotPasswordSlice';
 import { useNavigate } from 'react-router-dom';
-import styles from './ChangePass.module.scss'; // Import styles
+import styles from './ChangePass.module.scss';
 import Loading from '../Loading';
 import classNames from 'classnames/bind';
-import clsx from 'clsx'
-const cx = classNames.bind(styles)
+import { logout, login } from '../../redux/User/userSlice';
+import axios from 'axios';
+
+const cx = classNames.bind(styles);
 
 const ChangePassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success, otpSent } = useSelector((state) => state.userForgotPassword);
+    const { loading, error, success, otpSent, status, isChangePassword } = useSelector((state) => state.userForgotPassword);
+    const { isLoggedIn } = useSelector((state) => state.user);
 
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
-    const [password, setPassword] = useState('');
-    const { isLoggedIn } = useSelector((state) => state.user);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const handleSubmit = () => {
+        if (otpSent) {
+            if (newPassword !== confirmNewPassword) {
+                // alert("New password and confirm new password must be matched.");
+                return;
+            }
+            if (newPassword === oldPassword) {
+                alert("New password cannot be the same as the old password.");
+                return;
+            }
+            dispatch(updatePassword({ email, password: newPassword, otp }));
+            // dispatch(logout());
+        } else {
+            dispatch(sendForgotPasswordEmail(email));
 
-    const handleSendEmail = () => {
-        dispatch(sendForgotPasswordEmail(email));
-    };
-
-    const handleVerifyOtp = () => {
-        dispatch(verifyOtp({ email, otp }));
-    };
-
-    const handleUpdatePassword = () => {
-        dispatch(updatePassword({ email, password }));
+        }
     };
     useEffect(() => {
-        if (success === "Password has been changed, please login again") {
-            navigate('/login'); // Redirect to login page
+        if (status === 0) {
+            dispatch(sendOtpMail({ isSendOtp: true }))
         }
-    }, [success, navigate]);
+    }, [status])
+    useEffect(() => {
+        if (isChangePassword === 0) {
+            dispatch(logout())
+            dispatch(isChangePasswordLogout())
+            dispatch(isChangePasswordLogoutOtp())
+        }
+    }, [isChangePassword])
     useEffect(() => {
         if (!isLoggedIn) {
-            navigate('/login'); // Redirect to login if user is not logged in
+            dispatch(sendOtpMail({ isSendOtp: false }))
+            navigate('/login'); 
         }
-    }, [isLoggedIn, navigate]);
+    }, [isLoggedIn]);
+
     return (
         <div>
             <h3>Change Password</h3>
-            {otpSent ? (
-                <div className={styles.otpAndPasswordContainer}>
-                    <div className={styles.sectionContainer}>
+            <div className={styles.changePwContainer}>
+                <input
+                    className={styles.inputField}
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={otpSent}
+                />
+                {otpSent && (
+                    <>
                         <input
                             className={styles.inputField}
                             type="text"
@@ -54,33 +78,35 @@ const ChangePassword = () => {
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                         />
-                        <button className={styles.button} onClick={handleVerifyOtp}>Verify OTP</button>
-                    </div>
-                    <div className={styles.sectionContainer}>
+                        <input
+                            className={styles.inputField}
+                            type="password"
+                            placeholder="Old Password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                        />
                         <input
                             className={styles.inputField}
                             type="password"
                             placeholder="New Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
                         />
-                        <button className={styles.button} onClick={handleUpdatePassword}>Update Password</button>
-                    </div>
-                </div>
-            ) : (
-                <div className={cx(styles.changePw_otp)}>
-                    <input className={styles.inputField}
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button className={styles.button} onClick={handleSendEmail}>Send OTP</button>
-                </div>
-            )}
-             {loading && <Loading />} {/* Show Loading component when loading is true */}
-            {error && <p>Error: {error}</p>}
-            {success && <p>Success: {success}</p>}
+                        <input
+                            className={styles.inputField}
+                            type="password"
+                            placeholder="Confirm New Password"
+                            value={confirmNewPassword}
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        />
+                    </>
+                )}
+                <button className={styles.button} onClick={handleSubmit}>
+                    {otpSent ? 'Update Password' : 'Send OTP'}
+                </button>
+            </div>
+            {loading && <Loading />}
+            {status !== 0 || isChangePassword !== 0 ? <p>{error}</p> : ""}
         </div>
     );
 };

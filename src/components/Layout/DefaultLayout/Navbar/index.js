@@ -18,7 +18,7 @@ const Navbar = () => {
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
-            setUserCurrent(user.userName);
+            setUserCurrent(user?.userName);
         }
     }, [isLoggedIn])
     const handleOnclickAccount = () => {
