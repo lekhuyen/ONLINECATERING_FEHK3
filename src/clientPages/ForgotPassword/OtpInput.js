@@ -34,7 +34,7 @@ const OtpInput = () => {
             setIsOtpOk(true)
         }
         else{
-            Swal.fire('Oop!', response.message ? response.message : "Otp is incorrec", 'error');
+            Swal.fire('Oops!', response.message ? response.message : "OTP is incorrect", 'error');
         }
     }
     return (

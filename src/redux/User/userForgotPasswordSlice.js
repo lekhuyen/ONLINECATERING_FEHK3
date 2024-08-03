@@ -8,6 +8,8 @@ const initialState = {
     error: null,
     success: null,
     otpSent: false,
+    status: null,
+    isChangePassword: null
 };
 
 // Define the API endpoint
@@ -26,30 +28,28 @@ export const sendForgotPasswordEmail = createAsyncThunk(
     }
 );
 
-export const verifyOtp = createAsyncThunk(
-    'userForgotPassword/verifyOtp',
-    async ({ email, otp }, { rejectWithValue }) => {
+// export const verifyOtp = createAsyncThunk(
+//     'userForgotPassword/verifyOtp',
+//     async ({ email, otp }, { rejectWithValue }) => {
+//         try {
+//             const response = await axios.post(`${apiEndpoint}/otp`, { UserEmail: email});
+//             return response.data;
+//         } catch (error) {
+//             return rejectWithValue(error.response.data);
+//         }
+//     }
+// );
+
+export const updatePassword = createAsyncThunk(
+    'userForgotPassword/updatePassword',
+    async ({ email, password, otp }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${apiEndpoint}/otp`, { UserEmail: email, Otp: otp });
+            const response = await axios.post(`${apiEndpoint}/update-password-otp`, { UserEmail: email, Password: password, Otp: otp });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
-);
-
-export const updatePassword = createAsyncThunk(
-  'userForgotPassword/updatePassword',
-  async ({ email, password }, { dispatch, rejectWithValue }) => {
-      try {
-          const response = await axios.post(`${apiEndpoint}/update-password`, { UserEmail: email, Password: password });
-          // Dispatch logout action after successful password update
-          dispatch(logout());
-          return response.data;
-      } catch (error) {
-          return rejectWithValue(error.response.data);
-      }
-  }
 );
 
 // Create slice
@@ -63,52 +63,45 @@ const userForgotPasswordSlice = createSlice({
             state.success = null;
             state.otpSent = false;
         },
+        sendOtpMail: (state, action) => {
+            state.otpSent = action.payload.isSendOtp;
+        },
+        isChangePasswordLogout: (state, action) => {
+            state.isChangePassword = null;
+            state.error = null;
+            state.otpSent = false;
+        },
+        isChangePasswordLogoutOtp: (state, action) => {
+            state.status = null;
+        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(sendForgotPasswordEmail.pending, (state) => {
+            .addCase(sendForgotPasswordEmail.pending, (state, action) => {
                 state.loading = true;
-                state.error = null;
-                state.success = null;
             })
             .addCase(sendForgotPasswordEmail.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload.message;
-                state.otpSent = true;
+                state.error = action.payload.message;
+                state.status = action.payload.status;
             })
             .addCase(sendForgotPasswordEmail.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload.message || 'Failed to send email';
             })
-            .addCase(verifyOtp.pending, (state) => {
+
+            .addCase(updatePassword.pending, (state, action) => {
                 state.loading = true;
-                state.error = null;
-                state.success = null;
-            })
-            .addCase(verifyOtp.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = 'OTP verified successfully';
-            })
-            .addCase(verifyOtp.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload.message || 'OTP verification failed';
-            })
-            .addCase(updatePassword.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.success = null;
             })
             .addCase(updatePassword.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload.message;
-                state.otpSent = false; // Reset OTP sent flag on successful password update
+                state.error = action.payload.message;
+                state.isChangePassword = action.payload.status;
             })
             .addCase(updatePassword.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload.message || 'Password update failed';
             });
     },
 });
 
-export const { resetState } = userForgotPasswordSlice.actions;
+export const { resetState, sendOtpMail, isChangePasswordLogout, isChangePasswordLogoutOtp } = userForgotPasswordSlice.actions;
 export default userForgotPasswordSlice.reducer;
