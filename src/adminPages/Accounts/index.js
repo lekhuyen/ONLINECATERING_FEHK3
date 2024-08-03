@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { HiOutlinePencilSquare } from 'react-icons/hi2';
-import { BsInfoCircle } from 'react-icons/bs';
-import { deleteAccount, fetchAccountsData } from '../../redux/Accounts/accountsSlice';
 
+import { fetchAccountsData, editUserStatus } from '../../redux/Accounts/accountsSlice';
 
 const Accounts = () => {
     const dispatch = useDispatch();
@@ -28,19 +25,6 @@ const Accounts = () => {
         setFilteredAccountsData(accountsData);
     }, [accountsData]);
 
-    // const handleDelete = (id) => {
-    //     if (window.confirm("Are you sure you want to delete this account?")) {
-    //         dispatch(deleteAccount(id));
-    //     }
-    // };
-
-    const handleEdit = (id) => {
-
-        navigate(`/admin-accounts/edit-admin-accounts/${id}`);
-    };
-
-
-
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentAccountsData = filteredAccountsData.slice(indexOfFirstItem, indexOfLastItem);
@@ -61,7 +45,20 @@ const Accounts = () => {
             account.phone.toLowerCase().includes(lowerCaseSearchTerm)
         );
         setFilteredAccountsData(filteredData);
-        setCurrentPage(1); // Reset pagination to first page when filtering
+        setCurrentPage(1); 
+    };
+
+    const toggleStatus = (id, currentStatus) => {
+        const newStatus = !currentStatus; // Toggle the current status
+        const action = newStatus ? 'activate' : 'ban';
+
+        if (window.confirm(`Are you sure you want to ${action} this user?`)) {
+            console.log(`Toggling status for user with id ${id} to ${newStatus}`);
+
+            dispatch(editUserStatus({ id, newStatus }))
+                .then(() => console.log(`User status updated successfully for user with id ${id}`))
+                .catch((error) => console.error('Error updating user status:', error));
+        }
     };
 
     if (status === 'loading') {
@@ -105,7 +102,6 @@ const Accounts = () => {
                             <th>UserEmail</th>
                             <th>Phone</th>
                             <th>Status</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,26 +112,12 @@ const Accounts = () => {
                                 <td>{account.userEmail}</td>
                                 <td>{account.phone}</td>
                                 <td>
-                                    {account.status ? (
-                                        <span className="badge bg-success">Banned</span>
-                                    ) : (
-                                        <span className="badge bg-danger">Active</span>
-                                    )}
-                                </td>
-                                <td>
-
                                     <button
-                                        className="btn btn-outline-warning"
-                                        onClick={() => handleEdit(account.id)}
+                                        className={`btn btn-sm ${account.status ? 'btn-success' : 'btn-danger'}`}
+                                        onClick={() => toggleStatus(account.id, account.status)}
                                     >
-                                        <HiOutlinePencilSquare />
+                                        {account.status ? 'Active' : 'Banned'}
                                     </button>
-                                    {/* <button
-                                        className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(account.id)}
-                                    >
-                                        <FaRegTrashAlt />
-                                    </button> */}
                                 </td>
                             </tr>
                         ))}
