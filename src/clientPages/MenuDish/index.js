@@ -100,7 +100,7 @@ const MenuDish = () => {
         localStorage.setItem('appetizer', JSON.stringify(cartAppetizer))
     }, [cartDessert, cartDish, cartAppetizer])
 
-    
+
 
     return (
         <div className={clsx(styles.menuContainer, "app__bg")}>
@@ -138,12 +138,12 @@ const MenuDish = () => {
                                                 </div>
                                             </div>
                                             <div className={styles.menu_price}>
-                                                <div 
-                                                onClick={() => navigate(`/comment/${item.id}`)}
-                                                style={{paddingLeft:'20px'}}>
+                                                <div
+                                                    onClick={() => navigate(`/comment/${item.id}/0`)}
+                                                    style={{ paddingLeft: '20px' }}>
                                                     <FaRegFaceLaughBeam />
                                                 </div>
-                                                <div style={{paddingRight:'20px'}}>
+                                                <div style={{ paddingRight: '20px' }}>
                                                     <span>{item.appetizerName}</span>
                                                     <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
                                                 </div>
@@ -161,16 +161,24 @@ const MenuDish = () => {
                                     mainDish?.length > 0 && mainDish?.map(item => (
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
-                                                <div><img alt="" src={item.imagePath} /></div>
+                                                <div><img alt="" src={item.image} /></div>
                                                 <div
                                                     onClick={() => handleClickCart(item, 'dish')}
                                                     className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
                                                 </div>
                                             </div>
+                                            
                                             <div className={styles.menu_price}>
-                                                <span>{item.name}</span>
-                                                <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
+                                                <div
+                                                    onClick={() => navigate(`/comment/${item.id}/1`)}
+                                                    style={{ paddingLeft: '20px' }}>
+                                                    <FaRegFaceLaughBeam />
+                                                </div>
+                                                <div style={{ paddingRight: '20px' }}>
+                                                    <span>{item.name}</span>
+                                                    <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     ))
@@ -192,9 +200,17 @@ const MenuDish = () => {
                                                     <FaCartPlus />
                                                 </div>
                                             </div>
+                                            
                                             <div className={styles.menu_price}>
+                                                <div
+                                                    onClick={() => navigate(`/comment/${item.id}/2`)}
+                                                    style={{ paddingLeft: '20px' }}>
+                                                    <FaRegFaceLaughBeam />
+                                                </div>
+                                                <div style={{ paddingRight: '20px' }}>
                                                 <span>{item?.dessertName}</span>
-                                                <p><RiMoneyDollarCircleLine color='red' />{item?.price}</p>
+                                                    <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     ))
