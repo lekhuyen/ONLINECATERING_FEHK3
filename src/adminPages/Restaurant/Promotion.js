@@ -24,28 +24,36 @@ export default function Promotion() {
         dispatch(fetchPromotionData());
     }, [dispatch]);
 
+    useEffect(() => {
+        console.log("Promotion Data:", promotionData);
+        console.log("Status:", status);
+    }, [promotionData, status]);
+
     const handleDelete = (id) => {
+        console.log("Deleting promotion with ID:", id);
         dispatch(deletePromotionItem(id));
     };
 
     const handleEdit = (id) => {
+        console.log("Editing promotion with ID:", id);
         navigate(`/promotion/edit-promotion/${id}`);
     };
 
     const handleInfoClick = (promotion) => {
+        console.log("Viewing promotion details:", promotion);
         setSelectedPromotion(promotion);
         // Show modal
         const modal = new window.bootstrap.Modal(document.getElementById('promotionModal'));
         modal.show();
     };
 
-    const filteredPromotionData = promotionData.filter((promotion) => {
+    const filteredPromotionData = promotionData ? promotionData.filter((promotion) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
         return (
             promotion.name.toLowerCase().includes(searchTermLowerCase) ||
             promotion.description.toLowerCase().includes(searchTermLowerCase)
         );
-    });
+    }) : [];
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -115,18 +123,20 @@ export default function Promotion() {
                                 <td>{promotion.quantityTable}</td>
                                 <td>{promotion.price}</td>
                                 <td>
-                                    {promotion.imagePath && (
-                                        <img
-                                            src={promotion.imagePath}
-                                            alt={`Promotion ${promotion.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                objectFit: "cover",
-                                            }}
-                                        />
-                                    )}
-                                </td>
+                                        {promotion.imagePath ? (
+                                            <img
+                                                src={promotion.imagePath}
+                                                alt={`Promotion ${promotion.id}`}
+                                                style={{
+                                                    width: "100px",
+                                                    height: "100px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        ) : (
+                                            <span>No image available</span>
+                                        )}
+                                    </td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
