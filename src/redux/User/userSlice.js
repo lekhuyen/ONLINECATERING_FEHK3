@@ -16,15 +16,17 @@ export const userSlice = createSlice({
     },
     reducers: {
         login: (state, action) => {
-            state.isLoggedIn = action.payload.isLoggedIn;
+            state.isLoggedIn = true;
             state.userCurrent = action.payload.userCurrent;
             state.token = action.payload.token;
+            localStorage.setItem('token', action.payload.token); 
         },
         logout: (state) => {
             state.isLoggedIn = false;
             state.userCurrent = null;
             state.token = null;
             localStorage.removeItem('token');
+            localStorage.removeItem('userCurrent');
         },
         resetStatusMessage: (state) => {
             state.status = null;
