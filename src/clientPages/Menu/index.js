@@ -122,14 +122,14 @@ const Menu = () => {
                                     mainAppetizer?.length > 0 && mainAppetizer?.map(item => (
                                         <div key={item.appetizerId} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
-                                                <div><img alt="" src={item.appetizerImage} /></div>
+                                                <div><img alt="" src={item.image} /></div>
                                                 {/* <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
                                                 </div> */}
                                             </div>
                                             <div className={styles.menu_price}>
-                                                <span>{item.appetizerName}</span>
-                                                <p><RiMoneyDollarCircleLine color='red' />{item.appetizerPrice}</p>
+                                                <span>{item.name}</span>
+                                                <p><RiMoneyDollarCircleLine color='red' />{item.price}</p>
                                             </div>
                                         </div>
                                     ))
@@ -144,7 +144,7 @@ const Menu = () => {
                                     mainDish?.length > 0 && mainDish?.map(item => (
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
-                                                <div><img alt="" src={item.imagePath} /></div>
+                                                <div><img alt="" src={item.image} /></div>
                                                 {/* <div className={clsx(styles.icon_cart, styles.animate_amenu)}>
                                                     <FaCartPlus />
                                                 </div> */}
@@ -166,7 +166,7 @@ const Menu = () => {
                                     mainDessert?.length > 0 && mainDessert?.map(item => (
                                         <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_3)}>
                                             <div className={styles.menu_more}>
-                                                <div><img alt="" src={item?.dessertImage} /></div>
+                                                <div><img alt="" src={item?.image} /></div>
                                                 {/* <div className={styles.icon_cart}>
                                                     <FaCartPlus />
                                                 </div> */}
