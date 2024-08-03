@@ -55,6 +55,8 @@ import EditAdminMenu from "../adminPages/Restaurant/EditAdminLobby"
 import CustomCombo from "../adminPages/Restaurant/CustomCombo"
 import AdminRestaurant from "../adminPages/Restaurant/AdminRestaurant"
 import AdminBooking from "../adminPages/Restaurant/AdminBooking"
+import CreatePromotion from "../adminPages/Restaurant/CreatePromotion"
+import EditPromotion from "../adminPages/Restaurant/EditPromotion"
 
 
 
@@ -99,6 +101,8 @@ const privateRoutes = [
     {path: "/service/create-service", component: CreateService},
     {path: "/service/edit-service/:id", component: EditService},
     {path: "/promotion", component: Promotion},
+    {path: "/promotion/create-promotion", component: CreatePromotion},
+    {path: "/promotion/edit-promotion/:id", component: EditPromotion},
     {path: "/combo-admin", component: AdminCombo},
     {path: "/combo-admin/create-combo-admin", component: CreateAdminCombo},
     {path: "/combo-admin/edit-combo-admin/:id", component: EditAdminCombo},
