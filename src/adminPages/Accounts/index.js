@@ -50,7 +50,7 @@ const Accounts = () => {
 
     const toggleStatus = (id, currentStatus) => {
         const newStatus = !currentStatus; // Toggle the current status
-        const action = newStatus ? 'activate' : 'ban';
+        const action = newStatus ? 'ban' : 'activate';
 
         if (window.confirm(`Are you sure you want to ${action} this user?`)) {
             console.log(`Toggling status for user with id ${id} to ${newStatus}`);
@@ -113,10 +113,10 @@ const Accounts = () => {
                                 <td>{account.phone}</td>
                                 <td>
                                     <button
-                                        className={`btn btn-sm ${account.status ? 'btn-success' : 'btn-danger'}`}
+                                        className={`btn btn-sm ${account.status ? 'btn-danger' : 'btn-success '}`}
                                         onClick={() => toggleStatus(account.id, account.status)}
                                     >
-                                        {account.status ? 'Active' : 'Banned'}
+                                        {account.status ? 'Banned' : 'Active'}
                                     </button>
                                 </td>
                             </tr>

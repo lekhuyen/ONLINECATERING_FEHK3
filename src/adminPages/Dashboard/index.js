@@ -1,46 +1,29 @@
-import classNames from "classnames/bind";
-import styles from './Dashboard.module.scss'
-import icons from "../../ultil/icons";
-import { fetchAccountsData } from "../../redux/Accounts/accountsSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Dashboard.module.scss';
-import icons from '../../ultil/icons';
+
 import { fetchAccountsData } from '../../redux/Accounts/accountsSlice';
 import { fetchAdminOrderData } from '../../redux/Restaurant/adminorderSlice';
+import icons from '../../ultil/icons';
 
-
-const Dashboard = () => {
-    const dispatch = useDispatch();
-    const accounts = useSelector(state => state.accounts.items.slice(-5).reverse()); // Slice and reverse
-    const status = useSelector(state => state.accounts.status);
-    const error = useSelector(state => state.accounts.error);
-    const navigate = useNavigate(); 
-
-    useEffect(() => {
-      dispatch(fetchAccountsData());
-    }, [dispatch]);
-  
 const cx = classNames.bind(styles);
+
 const { FaRegEye, IoChatboxOutline, IoCartOutline, BsCurrencyDollar } = icons;
 
 const Dashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const accounts = useSelector((state) => state.accounts.items.slice(-5).reverse());
     const status = useSelector((state) => state.accounts.status);
     const error = useSelector((state) => state.accounts.error);
-    const orders = useSelector((state) => state.adminorder.adminOrders); // Select orders from the Redux store
+    const orders = useSelector((state) => state.adminorder.adminOrders);
 
     useEffect(() => {
         dispatch(fetchAccountsData());
-        dispatch(fetchAdminOrderData()); // Fetch orders when component mounts
+        dispatch(fetchAdminOrderData());
     }, [dispatch]);
 
     const handleRecentUsersClick = () => {
@@ -48,7 +31,7 @@ const Dashboard = () => {
     };
 
     return (
-        <>
+        <div className={cx('dashboard-container')}>
             <div className={cx('card-box')}>
                 <div className={cx('card')}>
                     <div>
@@ -88,20 +71,19 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Order */}
             <div className={cx('details')}>
                 <div className={cx('recent-order')}>
                     <div className={cx('card-header')}>
-                        <h2>Recent Order</h2>
+                        <h2>Recent Orders</h2>
                         <a className={cx('btn')}>View All</a>
                     </div>
                     <table>
                         <thead>
                             <tr>
-                                <td>Name</td>
-                                <td>Price</td>
-                                <td>Payment</td>
-                                <td>Status</td>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Payment</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,29 +103,12 @@ const Dashboard = () => {
                     </table>
                 </div>
 
-                {/* account */}
-
-                {/* New JSX for recent customers */}
-
-                {/* Recent customers */}
                 <div className={cx('recent-customer')}>
                     <div className={cx('card-header')}>
                         <h2 onClick={handleRecentUsersClick} style={{ cursor: 'pointer' }}>Recent Users</h2>
                     </div>
                     <table>
                         <tbody>
-                        {accounts.map(account => (
-                            <tr key={account.id}>
-                                <td style={{ width: '60px' }}>
-                                    <div className={cx('img')}>
-                                        <img alt="" src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" />
-                                    </div>
-                                </td>
-                                <td>
-                                    <h4>{account.userName}</h4>
-                                </td>
-                            </tr>
-                        ))}
                             {accounts.map((account) => (
                                 <tr key={account.id}>
                                     <td style={{ width: '60px' }}>
@@ -160,7 +125,7 @@ const Dashboard = () => {
                     </table>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
