@@ -1,6 +1,6 @@
 import axios from "../configs/axiosConfig";
 
-export const apiAddCommentAppetizer = (data)  => axios({
+export const apiAddComment = (data)  => axios({
     url: '/restaurant-service/comment',
     method: 'POST',
     data
@@ -30,4 +30,16 @@ export const apiEditCommentReplyAppetizer = (data)  => axios({
     url: `/restaurant-service/commentChild/${data.userId}/${data.replyId}`,
     method: 'PUT',
     data
+})
+
+
+//dish
+export const apiGetDishById = (id)  => axios({
+    url: `/restaurant-service/dish/${id}`,
+    method: 'GET',
+})
+// Dessert
+export const apiGetDessertById = (id)  => axios({
+    url: `/restaurant-service/dessert/${id}`,
+    method: 'GET',
 })

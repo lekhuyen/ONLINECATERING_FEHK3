@@ -56,6 +56,20 @@ export const fetchAccountsData = createAsyncThunk(
     }
     );
 
+    export const editUserStatus = createAsyncThunk(
+        "accounts/editUserStatus",
+        async ({ id, newStatus }) => {
+            try {
+                const response = await axios.put(`${apiEndpoint}/admin-edit/${id}?userId=${id}&newStatus=${newStatus}`);
+                console.log('API Response:', response.data); // Log the response for debugging
+                return response.data; // Assuming response.data contains the updated user object
+            } catch (error) {
+                console.error('Error editing user status:', error);
+                throw new Error('Error editing user status:', error.response.data);
+            }
+        }
+    );
+
     const accountsSlice = createSlice({
     name: 'accounts',
     initialState: {
@@ -114,6 +128,22 @@ export const fetchAccountsData = createAsyncThunk(
             state.items = state.items.filter(account => account.id !== action.payload);
         })
         .addCase(deleteAccount.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+
+        .addCase(editUserStatus.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(editUserStatus.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            const updatedAccount = action.payload;
+            const index = state.items.findIndex(account => account.id === updatedAccount.id);
+            if (index !== -1) {
+                state.items[index].status = updatedAccount.status;
+            }
+        })
+        .addCase(editUserStatus.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         });

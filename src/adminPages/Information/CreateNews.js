@@ -29,8 +29,7 @@ export default function CreateNews() {
         fetchNewsTypes();
     }, []);
 
-    // Handle file input change
-    
+
 
     // Handle form submission
     const handleSubmit = async (e) => {

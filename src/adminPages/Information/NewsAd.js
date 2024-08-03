@@ -123,6 +123,8 @@ function NewsAd() {
         return <div>Error: {error}</div>;
     }
 
+    console.log("selectedNews:", selectedNews); // Log selectedNews object for debugging
+
     return (
         <div className="container">
             <h2>News Data</h2>
@@ -177,22 +179,23 @@ function NewsAd() {
                         <tr key={news.id}>
                             <td>{news.id}</td>
                             <td>{news.title}</td>
-                            <td>{news.content}</td>
+                            <td>{truncateText(news.content)}</td>
                             <td>{news.newsTypeName}</td>
                             <td>
-                                {news.imagePaths && news.imagePaths.length > 0 && (
+                                    {news.imagePaths && news.imagePaths.length > 0 && (
                                         <img
-                                        src={news.imagePaths}
-                                        alt={`News ${news.id}`}
-                                        style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            objectFit: "cover",
-                                        }}
+                                            key={0} // Using a fixed key since there's only one image
+                                            src={news.imagePaths[0]} // Displaying only the first image
+                                            alt={`News ${news.id}`}
+                                            style={{
+                                                width: "100px",
+                                                height: "100px",
+                                                objectFit: "cover",
+                                                marginBottom: "5px"
+                                            }}
                                         />
                                     )}
-                            </td>
-                            
+                                </td>
                             <td>
                                 <button
                                     className="btn btn-outline-primary"
@@ -237,31 +240,31 @@ function NewsAd() {
                             </button>
                         </div>
                         <div className="modal-body">
-                            {selectedNews && (
-                                <div>
-                                    <h5>News Content:</h5>
-                                    <p>{selectedNews.content}</p>
-                                    <h5>News Image(s):</h5>
-                                    {selectedNews.imagePaths && selectedNews.imagePaths.length > 0 ? (
-                                        selectedNews.imagePaths.map((imagePath, index) => (
-                                            <img
-                                                key={index}
-                                                src={`http://localhost:5034${imagePath}`}
-                                                alt={`News ${selectedNews.id}`}
-                                                style={{
-                                                    width: "20%",
-                                                    height: "auto",
-                                                    marginBottom: "10px",
-                                                    objectFit: "cover",
-                                                }}
-                                            />
-                                        ))
-                                    ) : (
-                                        <p>No images available</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
+                                {selectedNews && (
+                                    <div>
+                                        <h5>News Content:</h5>
+                                        <p>{selectedNews.content}</p>
+                                        <h5>News Image(s):</h5>
+                                        {selectedNews.imagePaths && selectedNews.imagePaths.length > 0 ? (
+                                            selectedNews.imagePaths.map((imagePath, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={imagePath}
+                                                        alt={`News ${selectedNews.id}`}
+                                                        style={{
+                                                            width: "100px",
+                                                            height: "100px",
+                                                            objectFit: "cover",
+                                                            marginBottom: "5px"
+                                                        }}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p>No images available</p>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         <div className="modal-footer">
                             <button
                                 type="button"
@@ -403,3 +406,12 @@ function NewsAd() {
 }
 
 export default NewsAd;
+
+function truncateText(text) {
+    const words = text.split(' ');
+    if (words.length > 10) {
+        return words.slice(0, 10).join(' ') + '...';
+    } else {
+        return text;
+    }
+}

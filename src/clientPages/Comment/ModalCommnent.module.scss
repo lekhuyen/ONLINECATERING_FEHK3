@@ -88,6 +88,10 @@ height: 300px;
     text-decoration: none;
     color: white;
 }
+.active {
+    background-color: #ccc;
+    color: white;
+}
 
 .comment_row_right {
     overflow-y: auto;

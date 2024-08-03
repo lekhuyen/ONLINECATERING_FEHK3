@@ -1,11 +1,34 @@
-import classNames from "classnames/bind";
-import styles from './Dashboard.module.scss'
-import icons from "../../ultil/icons";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import styles from './Dashboard.module.scss';
+import icons from '../../ultil/icons';
+import { fetchAccountsData } from '../../redux/Accounts/accountsSlice';
+import { fetchAdminOrderData } from '../../redux/Restaurant/adminorderSlice';
 
-const cx = classNames.bind(styles)
-const { FaRegEye, IoChatboxOutline, IoCartOutline, BsCurrencyDollar } = icons
 
-const DashBoard = () => {
+const cx = classNames.bind(styles);
+const { FaRegEye, IoChatboxOutline, IoCartOutline, BsCurrencyDollar } = icons;
+
+const Dashboard = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+    const accounts = useSelector((state) => state.accounts.items.slice(-5).reverse());
+    const status = useSelector((state) => state.accounts.status);
+    const error = useSelector((state) => state.accounts.error);
+    const orders = useSelector((state) => state.adminorder.adminOrders); // Select orders from the Redux store
+
+    useEffect(() => {
+        dispatch(fetchAccountsData());
+        dispatch(fetchAdminOrderData()); // Fetch orders when component mounts
+    }, [dispatch]);
+
+    const handleRecentUsersClick = () => {
+        navigate('/admin-accounts');
+    };
+
     return (
         <>
             <div className={cx('card-box')}>
@@ -47,6 +70,7 @@ const DashBoard = () => {
                 </div>
             </div>
 
+            {/* Order */}
             <div className={cx('details')}>
                 <div className={cx('recent-order')}>
                     <div className={cx('card-header')}>
@@ -63,94 +87,47 @@ const DashBoard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Start Refrigerator</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td>
-                                    <span className={cx('status', 'delivered')}>Delivered</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Start Refrigerator</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td>
-                                    <span className={cx('status', 'pending')}>Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Start Refrigerator</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td>
-                                    <span className={cx('status', 'return')}>Return</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Start Refrigerator</td>
-                                <td>$1200</td>
-                                <td>Paid</td>
-                                <td>
-                                    <span className={cx('status', 'in-progress')}>In Progress</span>
-                                </td>
-                            </tr>
+                            {orders.map((order) => (
+                                <tr key={order.id}>
+                                    <td>{order.name}</td>
+                                    <td>{order.price}</td>
+                                    <td>{order.payment}</td>
+                                    <td>
+                                        <span className={cx('status', order.status.toLowerCase().replace(' ', '-'))}>
+                                            {order.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
 
-                {/* ------------ */}
-
+                {/* Recent customers */}
                 <div className={cx('recent-customer')}>
                     <div className={cx('card-header')}>
-                        <h2>Recent Customer</h2>
+                        <h2 onClick={handleRecentUsersClick} style={{ cursor: 'pointer' }}>Recent Users</h2>
                     </div>
                     <table>
-                        <tr>
-                            <td style={{width: '60px'}}>
-                                <div className={cx('img')}>
-                                    <img alt="" src="https://i.pinimg.com/564x/6d/99/bf/6d99bfd52d43534ee7fd1490f666a67f.jpg" />
-                                </div>
-                            </td>
-                            <td>
-                                <h4>David</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '60px'}}>
-                                <div className={cx('img')}>
-                                    <img alt="" src="https://i.pinimg.com/564x/6d/99/bf/6d99bfd52d43534ee7fd1490f666a67f.jpg" />
-                                </div>
-                            </td>
-                            <td>
-                                <h4>David</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '60px'}}>
-                                <div className={cx('img')}>
-                                    <img alt="" src="https://i.pinimg.com/564x/6d/99/bf/6d99bfd52d43534ee7fd1490f666a67f.jpg" />
-                                </div>
-                            </td>
-                            <td>
-                                <h4>David</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '60px'}}>
-                                <div className={cx('img')}>
-                                    <img alt="" src="https://i.pinimg.com/564x/6d/99/bf/6d99bfd52d43534ee7fd1490f666a67f.jpg" />
-                                </div>
-                            </td>
-                            <td>
-                                <h4>David</h4>
-                            </td>
-                        </tr>
+                        <tbody>
+                            {accounts.map((account) => (
+                                <tr key={account.id}>
+                                    <td style={{ width: '60px' }}>
+                                        <div className={cx('img')}>
+                                            <img alt="" src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h4>{account.userName}</h4>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </table>
                 </div>
             </div>
         </>
-    )
+    );
 };
 
-export default DashBoard;
+export default Dashboard;
