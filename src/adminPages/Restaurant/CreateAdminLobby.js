@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createLobbyItem } from '../../redux/Restaurant/adminlobbySlice'; // Adjust import based on your file structure
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { RiArrowGoBackLine } from 'react-icons/ri';
+import { createLobby } from '../../redux/Restaurant/adminlobbySlice'; // Import the createLobby action
 
 export default function CreateAdminLobby() {
     const [lobbyName, setLobbyName] = useState('');
@@ -11,30 +11,36 @@ export default function CreateAdminLobby() {
     const [area, setArea] = useState('');
     const [type, setType] = useState('');
     const [price, setPrice] = useState('');
+    const [files, setFiles] = useState([]); // State to hold the selected image file
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
-            // Make sure to pass the data as an object with the expected fields
-            await dispatch(createLobbyItem({
-                lobbyName,
-                description,
-                area,
-                type: parseInt(type, 10), // Convert type to integer
-                price: parseFloat(price)  // Convert price to float
-            })).unwrap();
-
-            // Clear form fields
+            const formData = new FormData();
+            formData.append('lobbyName', lobbyName);
+            formData.append('description', description);
+            formData.append('area', area);
+            formData.append('type', parseInt(type, 10));
+            formData.append('price', parseFloat(price));
+    
+            files.forEach((file, index) => {
+                formData.append('files', file); // Append each file to FormData
+            });
+    
+            await dispatch(createLobby(formData)).unwrap(); // Dispatch createLobby action
+    
+            // Clear form fields and file state
             setLobbyName('');
             setDescription('');
             setArea('');
             setType('');
             setPrice('');
-
+            setFiles([]); // Reset files state
+    
             // Navigate to another page or refresh
             navigate('/lobby-admin');
         } catch (error) {
@@ -43,17 +49,23 @@ export default function CreateAdminLobby() {
         }
     };
 
+    const handleFileChange = (e) => {
+        const filesArray = Array.from(e.target.files);
+        setFiles(filesArray);
+    };
+    
+
     const handleGoBack = () => {
-        navigate('/lobby-admin'); // Navigate back to dessert list page
+        navigate('/lobby-admin'); // Navigate back to lobby list page
     };
 
     return (
         <div className="container">
             <h2>Create Lobby</h2>
 
-                <button className="btn btn-secondary" onClick={handleGoBack}>
-                    <RiArrowGoBackLine /> Go Back
-                </button>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -112,6 +124,18 @@ export default function CreateAdminLobby() {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="image">Images</label>
+                    <input
+                        type="file"
+                        className="form-control-file"
+                        id="image"
+                        onChange={handleFileChange}
+                        accept="image/*" // Accept only image files
+                        multiple // Allow multiple files
                     />
                 </div>
 

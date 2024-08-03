@@ -3,121 +3,76 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from 'react-icons/bs';
-
-import axios from 'axios';
-
-import { fetchLobbyData, deleteLobbyItem } from '../../redux/Restaurant/adminlobbySlice';
-import { deleteLobbyImage, fetchLobbyImages, addLobbyImage } from '../../redux/Restaurant/adminlobbyimageSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
+import { fetchLobbies, deleteLobby } from '../../redux/Restaurant/adminlobbySlice';
 
 const AdminLobby = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const lobbyState = useSelector((state) => state.lobby || {});
-    const lobbyData = lobbyState.items || [];
-    const status = lobbyState.status;
-    const error = lobbyState.error;
+    const lobbies = useSelector((state) => state.adminLobby?.lobbies || []);
+    const status = useSelector((state) => state.adminLobby?.status || 'idle');
+    const error = useSelector((state) => state.adminLobby?.error || null);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState("");
-
     const [selectedLobby, setSelectedLobby] = useState(null);
-    const [lobbyImages, setLobbyImages] = useState([]);
-    const [imagesStatus, setImagesStatus] = useState("idle");
-    const [imagesError, setImagesError] = useState(null);
 
     useEffect(() => {
-        dispatch(fetchLobbyData());
+        dispatch(fetchLobbies());
+        
     }, [dispatch]);
 
-    const handleDelete = (id) => {
-        dispatch(deleteLobbyItem(id));
+    const handleDelete = async (id) => {
+        try {
+            await dispatch(deleteLobby(id)).unwrap();
+        } catch (error) {
+            console.error("Error deleting lobby:", error);
+        }
     };
-
 
     const handleEdit = (id) => {
         navigate(`/lobby-admin/edit-lobby-admin/${id}`);
     };
 
-    const handleInfoClick = async (lobby) => {
+    const handleInfoClick = (lobby) => {
+        console.log(`Viewing info for lobby:`, lobby);
         setSelectedLobby(lobby);
-
-        try {
-            setImagesStatus("loading");
-            const action = await dispatch(fetchLobbyImages(lobby.id));
-            setLobbyImages(action.payload);
-            setImagesStatus("succeeded");
-        } catch (error) {
-            setImagesStatus("failed");
-            setImagesError(error.message);
-            console.error("Error fetching images:", error);
-        }
-
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.show();
     };
-
-    const handleAddImage = async (event) => {
-        event.preventDefault();
-
-        const file = event.target.files[0]; // Get the first file from input
-        if (!file) {
-            console.error('No file selected.');
-            return;
-        }
-
-        if (!selectedLobby) {
-            console.error('No lobby selected.');
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append('formFiles', file); // Append the file directly, not as an array
-
-            const response = await dispatch(addLobbyImage({ lobbyId: selectedLobby.id, formFiles: formData }));
-            console.log('Image added successfully:', response);
-
-            const action = await dispatch(fetchLobbyImages(selectedLobby.id));
-            setLobbyImages(action.payload);
-        } catch (error) {
-            console.error('Error adding lobby image:', error);
-        }
-    };
-
 
     const closeModal = () => {
         const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
         modal.hide();
         setSelectedLobby(null);
-        setLobbyImages([]);
-        setImagesStatus("idle");
-        setImagesError(null);
     };
 
     const limitContent = (content, maxLength = 100) => {
-        if (content.length <= maxLength) {
-            return content;
-        }
-        return content.substring(0, maxLength) + '...';
+        return content.length <= maxLength ? content : content.substring(0, maxLength) + '...';
     };
 
-    const filteredLobbyData = lobbyData.filter((lobby) => {
+    const filteredLobbies = Array.isArray(lobbies) ? lobbies.filter((lobby) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
+        
+        // Ensure properties are strings and not undefined
+        const lobbyName = lobby.lobbyName?.toLowerCase() || '';
+        const description = lobby.description?.toLowerCase() || '';
+        const area = lobby.area?.toLowerCase() || '';
+    
         return (
-            lobby.lobbyName.toLowerCase().includes(searchTermLowerCase) ||
-            lobby.description.toLowerCase().includes(searchTermLowerCase) ||
-            lobby.area.toLowerCase().includes(searchTermLowerCase)
+            lobbyName.includes(searchTermLowerCase) ||
+            description.includes(searchTermLowerCase) ||
+            area.includes(searchTermLowerCase)
         );
-    });
+    }) : [];
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentLobbyData = filteredLobbyData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentLobbies = filteredLobbies.slice(indexOfFirstItem, indexOfLastItem);
 
-    const pageNumbers = Math.ceil(filteredLobbyData.length / itemsPerPage);
+    const pageNumbers = Math.ceil(filteredLobbies.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     if (status === 'loading') {
@@ -172,49 +127,60 @@ const AdminLobby = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentLobbyData.map((lobby) => (
-                            <tr key={lobby.id}>
-                                <td>{lobby.id}</td>
-                                <td>{lobby.lobbyName}</td>
-                                <td>{limitContent(lobby.description)}</td>
-                                <td>{lobby.area}</td>
-                                <td>{lobby.type}</td>
-                                <td>{lobby.price}</td>
-                                <td>
-                                    {lobby.lobbyImages && lobby.lobbyImages.$values.length > 0 && (
-                                        <img
-                                            src={lobby.lobbyImages.$values[0].imagesUrl}
-                                            alt={`Lobby ${lobby.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                objectFit: "cover",
-                                            }}
-                                        />
-                                    )}
-                                </td>
-                                <td>
-                                    <button
-                                        className="btn btn-outline-primary"
-                                        onClick={() => handleInfoClick(lobby)}
-                                    >
-                                        <BsInfoCircle />
-                                    </button>
-                                    <button
-                                        className="btn btn-outline-warning"
-                                        onClick={() => handleEdit(lobby.id)}
-                                    >
-                                        <HiOutlinePencilSquare />
-                                    </button>
-                                    <button
-                                        className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(lobby.id)}
-                                    >
-                                        <FaRegTrashAlt />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                    {currentLobbies.map((lobby) => {
+                                console.log('Rendering lobby:', lobby); // Log information for each lobby
+
+                                // Accessing images array inside `$values` if available
+                                const images = (lobby.lobbyImages && lobby.lobbyImages.$values) || [];
+
+                                return (
+                                    <tr key={lobby.id}>
+                                        <td>{lobby.id}</td>
+                                        <td>{lobby.lobbyName || 'N/A'}</td>
+                                        <td>{limitContent(lobby.description || '')}</td>
+                                        <td>{lobby.area || 'N/A'}</td>
+                                        <td>{lobby.type || 'N/A'}</td>
+                                        <td>{lobby.price || 'N/A'}</td>
+                                        <td>
+    {lobby.lobbyImages && lobby.lobbyImages.$values && lobby.lobbyImages.$values.length > 0 ? (
+        <img
+            src={lobby.lobbyImages.$values[0]?.imagesUrl || ''}
+            alt={`Lobby ${lobby.id}`}
+            style={{
+                width: "100px",
+                height: "100px",
+                objectFit: "cover",
+            }}
+        />
+    ) : (
+        <p>No image available</p>
+    )}
+</td>
+
+
+                                        <td>
+                                            <button
+                                                className="btn btn-outline-primary"
+                                                onClick={() => handleInfoClick(lobby)}
+                                            >
+                                                <BsInfoCircle />
+                                            </button>
+                                            <button
+                                                className="btn btn-outline-warning"
+                                                onClick={() => handleEdit(lobby.id)}
+                                            >
+                                                <HiOutlinePencilSquare />
+                                            </button>
+                                            <button
+                                                className="btn btn-outline-danger"
+                                                onClick={() => handleDelete(lobby.id)}
+                                            >
+                                                <FaRegTrashAlt />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>
@@ -226,48 +192,52 @@ const AdminLobby = () => {
                             <h4 className="modal-title" id="lobbyModalLabel">
                                 Lobby Details: {selectedLobby ? selectedLobby.lobbyName : ''}
                             </h4>
-
                             <button
                                 type="button"
                                 className="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
-                                onClick={closeModal}
+                                onClick={() => {
+                                    console.log('Modal close button clicked');
+                                    closeModal();
+                                }}
                             ></button>
                         </div>
                         <div className="modal-body">
-                            {selectedLobby && (
+                            {selectedLobby ? (
                                 <div>
                                     <h5>Description:</h5>
                                     <p>{selectedLobby.description}</p>
                                     <h5>Images:</h5>
-                                    {imagesStatus === 'loading' && <p>Loading images...</p>}
-                                    {imagesStatus === 'failed' && <p>{imagesError}</p>}
-                                    {lobbyImages && lobbyImages.length > 0 ? (
+                                    {selectedLobby.lobbyImages && selectedLobby.lobbyImages.$values && selectedLobby.lobbyImages.$values.length > 0 ? (
                                         <div>
-                                            {lobbyImages.map((image, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="position-relative"
-                                                    style={{ width: '20%', marginRight: '10px', marginBottom: '10px' }}
-                                                >
-                                                    <img
-                                                        src={image} // Assuming lobbyImages is an array of image objects with 'imagesUrl'
-                                                        alt={`Lobby ${selectedLobby.id}`}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: 'auto',
-                                                            objectFit: 'cover',
-                                                        }}
-                                                    />
-
-                                                </div>
-                                            ))}
+                                            {selectedLobby.lobbyImages.$values.map((image, index) => {
+                                                console.log(`Rendering image ${index}:`, image.imagesUrl);
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className="position-relative"
+                                                        style={{ width: '20%', marginRight: '10px', marginBottom: '10px' }}
+                                                    >
+                                                        <img
+                                                            src={image.imagesUrl}
+                                                            alt={`Lobby ${selectedLobby.id}`}
+                                                            style={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                                objectFit: 'cover',
+                                                            }}
+                                                        />
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     ) : (
                                         <p>No images available</p>
                                     )}
                                 </div>
+                            ) : (
+                                <p>No lobby data available</p>
                             )}
                         </div>
                         <div className="modal-footer">
@@ -275,6 +245,7 @@ const AdminLobby = () => {
                                 type="button"
                                 className="btn btn-danger"
                                 data-bs-dismiss="modal"
+                                onClick={() => console.log('Modal close button clicked from footer')}
                             >
                                 Close
                             </button>
@@ -282,6 +253,8 @@ const AdminLobby = () => {
                     </div>
                 </div>
             </div>
+
+
 
             <nav>
                 <ul className="pagination">
