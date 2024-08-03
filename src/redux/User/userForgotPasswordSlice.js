@@ -39,17 +39,17 @@ export const verifyOtp = createAsyncThunk(
 );
 
 export const updatePassword = createAsyncThunk(
-  'userForgotPassword/updatePassword',
-  async ({ email, password }, { dispatch, rejectWithValue }) => {
-      try {
-          const response = await axios.post(`${apiEndpoint}/update-password`, { UserEmail: email, Password: password });
-          // Dispatch logout action after successful password update
-          dispatch(logout());
-          return response.data;
-      } catch (error) {
-          return rejectWithValue(error.response.data);
-      }
-  }
+    'userForgotPassword/updatePassword',
+    async ({ email, password }, { dispatch, rejectWithValue }) => {
+        try {
+            const response = await axios.post(`${apiEndpoint}/update-password`, { UserEmail: email, Password: password });
+            // Dispatch logout action after successful password update
+            dispatch(logout());
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
 );
 
 // Create slice

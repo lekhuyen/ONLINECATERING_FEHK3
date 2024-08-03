@@ -1,3 +1,6 @@
+import { FaRegStarHalfStroke } from "react-icons/fa6"
+import { MdOutlineStarPurple500, MdStarOutline } from "react-icons/md"
+
 export const validate = (payload, setInvalidFields) => {
     let invalid = 0
 
@@ -32,4 +35,28 @@ export const validate = (payload, setInvalidFields) => {
     }
 
     return invalid
+}
+
+export const renderStarFromNumber = (number, size) => {
+    if (!Number(number) && number !== 0) return;
+    
+    const stars = [];
+    const fullStars = Math.floor(number);
+    const hasHalfStar = number % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+        stars.push(<MdOutlineStarPurple500 key={`full-${i}`} color="orange" size={size || 30} />);
+    }
+    
+    if (hasHalfStar) {
+        stars.push(<FaRegStarHalfStroke key="half" color="orange" size={size || 30} />);
+    }
+
+    const emptyStars = 5 - stars.length;
+
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push(<MdStarOutline key={`empty-${i}`} color="orange" size={size || 30} />);
+    }
+    
+    return stars;
 }

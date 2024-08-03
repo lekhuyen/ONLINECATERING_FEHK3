@@ -1,16 +1,17 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { voteOption } from '../../ultil/menu';
 import styles from './ModalCommnent.module.scss'
-import { MdOutlineStarPurple500 } from 'react-icons/md';
+import { MdOutlineStarPurple500, MdStarOutline } from 'react-icons/md';
 import classNames from 'classnames/bind';
 import icons from "../../ultil/icons";
 import clsx from 'clsx';
 //import Scrollbars from 'react-custom-scrollbars-2';
 import { BsFillSendFill } from 'react-icons/bs';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish, apiGetAppetizerById } from '../../apis/menu';
-import { apiAddComment, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer, apiGetDessertById, apiGetDishById } from '../../apis/comment';
+import { apiAddComment, apiAddCommentReplyAppetizer, apiAddRatingAppetizer, apiAddRatingDessert, apiAddRatingDish, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer, apiGetDessertById, apiGetDishById } from '../../apis/comment';
 import { useSelector } from 'react-redux';
+import { renderStarFromNumber } from '../../ultil/helper';
 
 const cx = classNames.bind(styles)
 const { FaRegStar,
@@ -34,9 +35,9 @@ const Comment = () => {
     const [contentEditReply, setcontentEditReply] = useState('')
     const [hoverDotCommentReplyStatus, setHoverDotCommentReplyStatus] = useState({})
 
-    const [clickAppetizerStatus, setClickAppetizerStatus] = useState(null)
-    const [clickDishStatus, setClickDishStatus] = useState(null)
-    const [clickDessertStatus, setClickDessertStatus] = useState(null)
+    // const [clickAppetizerStatus, setClickAppetizerStatus] = useState(null)
+    // const [clickDishStatus, setClickDishStatus] = useState(null)
+    // const [clickDessertStatus, setClickDessertStatus] = useState(null)
 
 
     const navigate = useNavigate()
@@ -81,12 +82,14 @@ const Comment = () => {
 
         } else if (+dishId === 2) {
             const resDessert = await apiGetDessertById(appetizerId)
+            
+            
             setAppetizerOne(resDessert.data)
         }
         else {
             const res = await apiGetAppetizerById(appetizerId)
             if (res.status === 0) {
-
+                console.log(res.data.ratings.$values);
                 setAppetizerOne(res.data)
             }
         }
@@ -96,7 +99,7 @@ const Comment = () => {
 
     useEffect(() => {
         getOneAppetizer()
-    }, [appetizerId,dishId])
+    }, [appetizerId,dishId, chosenScore])
 
     const hanldeSubmitComment = async () => {
         const comment = {
@@ -336,6 +339,36 @@ const Comment = () => {
             [index]: !prev[index]
         }))
     }
+
+    //rating
+    const addRating = async () => {
+        const rating = {
+            userId: userCurrent.id,
+            dishId: +dishId === 1 ? appetizerId : null,
+            dessertId: +dishId === 2 ? appetizerId : null,
+            appetizerId: +dishId === 0 ? appetizerId : null,
+            point: chosenScore
+        }
+        let resRatingAppetizer;
+        if(+dishId === 0) {
+            resRatingAppetizer = await apiAddRatingAppetizer(rating)
+        }else if (+dishId === 1) {
+            resRatingAppetizer = await apiAddRatingDish(rating);
+        } else if (+dishId === 2) {
+            resRatingAppetizer = await apiAddRatingDessert(rating);
+        }
+
+        if(resRatingAppetizer.status === 0) {
+            console.log(resRatingAppetizer);
+            
+        }
+    }
+    useEffect(()=> {
+        if (chosenScore != null) {
+            addRating();
+        }
+    }, [chosenScore])
+    
     return (
         <div className={clsx(styles.container, 'app__bg')}>
             <div className={styles.wapper}>
@@ -346,14 +379,21 @@ const Comment = () => {
                     <h3>{appetizerOne?.name}</h3>
                     <div className={cx("vote")}>
                         <div>
-                            <span><FaRegStar /></span>
-                            <span><FaRegStar /></span>
-                            <span><FaRegStar /></span>
-                            <span><FaRegStar /></span>
-                            <span><FaRegStar /></span>
+                        {
+                            renderStarFromNumber(appetizerOne?.totalRating)?.map((item, index) => (
+                                <span key={index}>{item}</span>
+                            ))
+                        }
+                        {
+                            appetizerOne?.totalRating === null &&
+                            Array.from({length: 5}).map((_, index) => (
+                                <span><MdStarOutline color="orange" size='30'/></span>
+                            ))
+                        }
+                        
                         </div>
                         <div>
-                            <p>100+</p>
+                        {appetizerOne?.countRatings !== null ? <p>{appetizerOne?.countRatings} reviews</p> : ''}
                         </div>
                     </div>
                     <div className={cx("border-bottom")}></div>
@@ -363,8 +403,13 @@ const Comment = () => {
                                 key={el.id}
                                 onClick={() => setChosenScore(el.id)}
                                 className={cx('rating_star')}>
+                                
                                 {
-                                    (Number(chosenScore) && chosenScore >= el.id) ? <MdOutlineStarPurple500 size='20' color='orange' /> : <MdOutlineStarPurple500 size='20' color='gray' />
+                                    (Number(chosenScore) && chosenScore >= el.id) 
+                                    ? 
+                                    <MdOutlineStarPurple500 size='20' color='orange' /> 
+                                    : 
+                                    <MdOutlineStarPurple500 size='20' color='gray' />
                                 }
                                 <span>{el.text}</span>
                             </div>

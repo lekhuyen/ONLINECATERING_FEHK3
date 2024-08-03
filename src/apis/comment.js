@@ -43,3 +43,20 @@ export const apiGetDessertById = (id)  => axios({
     url: `/restaurant-service/dessert/${id}`,
     method: 'GET',
 })
+
+//rating
+export const apiAddRatingAppetizer = (data)  => axios({
+    url: '/restaurant-service/rating/rating-appetizer',
+    method: 'POST',
+    data
+})
+export const apiAddRatingDish = (data)  => axios({
+    url: '/restaurant-service/rating/rating-dish',
+    method: 'POST',
+    data
+})
+export const apiAddRatingDessert = (data)  => axios({
+    url: '/restaurant-service/rating/rating-dessert',
+    method: 'POST',
+    data
+})
