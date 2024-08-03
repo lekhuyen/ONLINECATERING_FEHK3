@@ -79,6 +79,7 @@ const publicRoutes = [
     {path: "/ordercombo", component: OrderCombo},
     {path: "/checkoutBook", component: CheckoutBook},
     {path: "/comment/:appetizerId", component: Comment},
+    {path: "/comment/:appetizerId/:dishId", component: Comment},
 ]
 
 const privateRoutes = [

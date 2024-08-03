@@ -7,9 +7,9 @@ import icons from "../../ultil/icons";
 import clsx from 'clsx';
 //import Scrollbars from 'react-custom-scrollbars-2';
 import { BsFillSendFill } from 'react-icons/bs';
-import { Link, useParams } from 'react-router-dom';
-import { apiGetAllAppetizer, apiGetAppetizerById } from '../../apis/menu';
-import { apiAddCommentAppetizer, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer } from '../../apis/comment';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish, apiGetAppetizerById } from '../../apis/menu';
+import { apiAddComment, apiAddCommentReplyAppetizer, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer, apiGetDessertById, apiGetDishById } from '../../apis/comment';
 import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles)
@@ -34,20 +34,36 @@ const Comment = () => {
     const [contentEditReply, setcontentEditReply] = useState('')
     const [hoverDotCommentReplyStatus, setHoverDotCommentReplyStatus] = useState({})
 
-    const { appetizerId } = useParams()
+    const [clickAppetizerStatus, setClickAppetizerStatus] = useState(null)
+    const [clickDishStatus, setClickDishStatus] = useState(null)
+    const [clickDessertStatus, setClickDessertStatus] = useState(null)
+
+
+    const navigate = useNavigate()
+    const { appetizerId, dishId } = useParams()
+
     const commentRef = useRef(null);
 
     const [mainAppetizer, setAppetizer] = useState(null)
+    const [mainDish, setDish] = useState(null)
+    const [mainDessert, setDessert] = useState(null)
 
     const getAllAppetizer = async () => {
         const responseAppetizer = await apiGetAllAppetizer()
+        const responseDessert = await apiGetAllDessert()
+        const responseDish = await apiGetAllDish()
 
+        if (responseDish.status === 0) {
+            setDish(responseDish.data.$values)
+        }
+        if (responseDessert.status === 0) {
+            setDessert(responseDessert.data.$values)
+        }
         if (responseAppetizer.status === 0) {
             setAppetizer(responseAppetizer.data.$values)
         }
-        
+
     }
-    console.log(mainAppetizer);
     useEffect(() => {
         getAllAppetizer()
     }, [])
@@ -59,23 +75,38 @@ const Comment = () => {
     }, [isLoggedIn])
 
     const getOneAppetizer = async () => {
-        const res = await apiGetAppetizerById(appetizerId)
-        if (res.status === 0) {
-            setAppetizerOne(res.data)
+        if (+dishId === 1) {
+            const resDish = await apiGetDishById(appetizerId)
+            setAppetizerOne(resDish.data)
+
+        } else if (+dishId === 2) {
+            const resDessert = await apiGetDessertById(appetizerId)
+            setAppetizerOne(resDessert.data)
         }
+        else {
+            const res = await apiGetAppetizerById(appetizerId)
+            if (res.status === 0) {
+
+                setAppetizerOne(res.data)
+            }
+        }
+
     }
+
 
     useEffect(() => {
         getOneAppetizer()
-    }, [appetizerId])
+    }, [appetizerId,dishId])
 
     const hanldeSubmitComment = async () => {
         const comment = {
             content: content,
             userId: userCurrent.id,
-            appetizerId
+            dishId: +dishId === 1 ? appetizerId : null,
+            dessertId: +dishId === 2 ? appetizerId : null,
+            appetizerId: +dishId === 0 ? appetizerId : null,
         }
-        const resAppetizer = await apiAddCommentAppetizer(comment)
+        const resAppetizer = await apiAddComment(comment)
         if (resAppetizer.status === 0) {
             const newComment = {
                 id: resAppetizer.data.id,
@@ -88,7 +119,7 @@ const Comment = () => {
                 ...prev,
                 comments: {
                     // $values: [...prev.comments.$values, newComment]
-                    $values: [newComment, ...prev.comments.$values]
+                    $values: [newComment, ...prev.comments?.$values]
                 }
             }))
             setContent('')
@@ -262,7 +293,7 @@ const Comment = () => {
             [uniqueKey]: !prev[uniqueKey]
         }))
     }
-    const hanldeSubmitCommentEditRepply = async (replyId, commentId,commentIndex, replyIndex) => {
+    const hanldeSubmitCommentEditRepply = async (replyId, commentId, commentIndex, replyIndex) => {
         const updatedCommentReply = {
             replyId,
             content: contentEditReply,
@@ -270,29 +301,29 @@ const Comment = () => {
         };
         try {
             const resEditCommentReply = await apiEditCommentReplyAppetizer(updatedCommentReply)
-            if(resEditCommentReply.status === 0){
-                setAppetizerOne(prev =>({
+            if (resEditCommentReply.status === 0) {
+                setAppetizerOne(prev => ({
                     ...prev,
                     comments: {
-                        $values: prev.comments.$values.map((comment, cindex)=> cindex === commentIndex ? {
+                        $values: prev.comments.$values.map((comment, cindex) => cindex === commentIndex ? {
                             ...comment,
                             commentChildren: {
-                                $values: comment.commentChildren.$values.map((reply, rIndex) => 
-                                    rIndex === replyIndex ? {...reply, content: contentEditReply} : reply
+                                $values: comment.commentChildren.$values.map((reply, rIndex) =>
+                                    rIndex === replyIndex ? { ...reply, content: contentEditReply } : reply
                                 )
                             }
-                        }:comment)
+                        } : comment)
                     }
                 }))
 
                 const uniqueKey = `${commentIndex}-${replyIndex}`;
-            seteditCommentReplyStatus(prev => ({
-                ...prev,
-                [uniqueKey]: false
-            }));
-            setcontentEditReply('');
+                seteditCommentReplyStatus(prev => ({
+                    ...prev,
+                    [uniqueKey]: false
+                }));
+                setcontentEditReply('');
             }
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -309,10 +340,10 @@ const Comment = () => {
         <div className={clsx(styles.container, 'app__bg')}>
             <div className={styles.wapper}>
                 <div className={styles.image_dish}>
-                    <img alt="" src={appetizerOne?.appetizerImage} />
+                    <img alt="" src={appetizerOne?.image} />
                 </div>
                 <div>
-                    <h3>{appetizerOne?.appetizerName}</h3>
+                    <h3>{appetizerOne?.name}</h3>
                     <div className={cx("vote")}>
                         <div>
                             <span><FaRegStar /></span>
@@ -344,13 +375,47 @@ const Comment = () => {
             </div>
             <div className={cx("comment_row")}>
                 <div className={cx("comment_row_left")}>
-                    <h3>Menu</h3>
+                    <h3>Appetizer</h3>
                     {
-                        mainAppetizer?.length > 0 && mainAppetizer?.map(item => (
-                            <Link to={`/comment/${item.id}`} className={cx("comment_dish_item")}><p>{item.appetizerName}</p></Link>
+                        mainAppetizer?.length > 0 && mainAppetizer?.map((item, index) => (
+                            <div
+                                onClick={() => {
+                                    // setClickAppetizerStatus(index)
+                                    // setClickDishStatus(null)
+                                    navigate(`/comment/${item.id}/0`)
+                                }}
+                                key={item.id} className={cx("comment_dish_item")}>
+                                {/* , +clickAppetizerStatus === index ? 'active' : '' */}
+                                <p
+                                >
+                                    {item.appetizerName}
+                                </p>
+                            </div>
                         ))
                     }
-                    
+                    <h3>Dish</h3>
+                    {
+                        mainDish?.length > 0 && mainDish?.map((item, index) => (
+                            <div
+                                onClick={() => {
+                                    // setClickAppetizerStatus(null)
+                                    // setClickDishStatus(index)
+                                    navigate(`/comment/${item.id}/1`)
+                                }}
+                                // , +clickDishStatus === index ? 'active' : ''
+                                key={item.id} className={cx("comment_dish_item")}><p>{item.name}</p></div>
+                                
+                        ))
+                    }
+                    <h3>Dessert</h3>
+                    {
+                        mainDessert?.length > 0 && mainDessert?.map(item => (
+                            <div
+                                onClick={() => navigate(`/comment/${item.id}/2`)}
+                                key={item.id} className={cx("comment_dish_item")}><p>{item.dessertName}</p></div>
+                        ))
+                    }
+
                 </div>
                 <div>
                     <div className={cx("comment-container")}>
@@ -456,10 +521,10 @@ const Comment = () => {
 
                                         {
                                             item?.commentChildren?.$values.length > 0 && item?.commentChildren?.$values?.map((c, replyIndex) => (
-                                                <div 
-                                                onMouseEnter={() => handleMouseDownReply(index)}
-                                                onMouseLeave={() => setHoverDotCommentReplyStatus(false)}
-                                                key={replyIndex} className={cx("comment-reply")}>
+                                                <div
+                                                    onMouseEnter={() => handleMouseDownReply(index)}
+                                                    onMouseLeave={() => setHoverDotCommentReplyStatus(false)}
+                                                    key={replyIndex} className={cx("comment-reply")}>
                                                     <div className={cx("comment-avatar-user")}>
                                                         <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                                     </div>
@@ -499,7 +564,7 @@ const Comment = () => {
                                                         onClick={() => handleClickOPtionCommentReply(index, replyIndex)}
                                                         className={cx("comment-dot")}>
                                                         {
-                                                            hoverDotCommentReplyStatus[index] && 
+                                                            hoverDotCommentReplyStatus[index] &&
                                                             <BsThreeDots />
                                                         }
                                                         {/* {
