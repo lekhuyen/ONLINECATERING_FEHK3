@@ -134,11 +134,11 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                         {
                             table &&
                             <div className={cx("older")}>
-                                <p><IoTabletLandscapeOutline /><span>Table:</span></p>
+                                <p><IoTabletLandscapeOutline /><span>Combo:</span></p>
                                 <select
                                     onChange={handleChangeTable}
                                     className={cx(!showFormOrderStatus ? "bg" : "")}>
-                                    <option value="--Choose Table--">--Choose Table--</option>
+                                    <option value="--Choose Table--">--Choose Combo--</option>
                                     {
                                         combos?.length > 0 && combos?.map(item => (
                                             <option key={item.id} value={item.id}>{item?.name}-${item?.price}</option>

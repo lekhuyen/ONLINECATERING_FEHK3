@@ -44,7 +44,7 @@ const EmailInput = () => {
             if (status === 1) {
                 dispath(resetStatusMessage())
                 setIsOtp(false);
-                Swal.fire('Oop!', message ? message : "Email is incorrec", 'error');
+                Swal.fire('Oops!', message ? message : "Email is incorrect", 'error');
                 setPayload({ userEmail: "" });
             } else {
                 setIsOtp(true);
