@@ -1,18 +1,24 @@
 .order_container {
     margin-top: 76px;
     position: relative;
+    font-family: cursive;
 }
 .order_header_title {
     display: flex;
     justify-content: center;
     padding-top: 20px;
-    color: #fff;
+    color: #f7d794;
 }
 //order
 .order_row {
     width: 60%;
     margin: auto;
     padding: 50px 0;
+    h1{
+        color: #f7d794;
+        font-size: 20px;
+        font-style: italic;
+    }
 }
 .item-restaurant {
     padding: 10px 20px 0;
@@ -48,11 +54,10 @@
     font-size: 20px;
     font-weight: 600;
     // font-family: monospace;
-    font-family: cursive;
 }
 .item-restaurant-name p {
     // font-family: 'Courier New', Courier, monospace;
-    font-family: cursive;
+    // font-family: cursive;
 }
 .item-restaurant-more {
     display: flex;
@@ -140,16 +145,16 @@
 .form-book-container {
     margin: auto;
     position: absolute;
-
-    width: 50%;
+    width: 70%;
+    height: 100%;
     top: 50%;
     transform: translateY(-50%);
     left: 0;
     right: 0;
-    color:#60a3bc;
+    color:#f8a5c2;
     border-radius: 5px;
     background: rgb(255,255,255,0.1);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(15px);
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-right: 1px solid rgba(255, 255, 255, 0.2);

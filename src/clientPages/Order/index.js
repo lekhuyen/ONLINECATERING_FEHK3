@@ -272,7 +272,7 @@ console.log(order);
                             <div className={cx("item-restaurant-info")}>
                                 <div className={cx("item-restaurant-1")}>
                                     <div className={cx("item-restaurant-img")}>
-                                        <img alt="" src={dish.item.imagePath} />
+                                        <img alt="" src={dish.item.image} />
                                     </div>
                                     <div className={cx("item-restaurant-name")}>
                                         <span>{dish.item.name}</span>
