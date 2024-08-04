@@ -19,7 +19,7 @@ export const toggleCommentStatus = createAsyncThunk(
     "admincomment/toggleCommentStatus",
     async ({ id, status }) => {
         try {
-            const response = await axios.put(`${apiEndpoint}/toggleStatus/${id}`, { status });
+            const response = await axios.put(`${apiEndpoint}/${id}`, { id, status });
             return response.data.data; // Adjust according to your API response structure
         } catch (error) {
             throw new Error('Error toggling comment status:', error.response?.data || error.message);
@@ -49,38 +49,42 @@ const admincommentSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchCommentData.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(fetchCommentData.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.items = action.payload || [];
-            })
-            .addCase(fetchCommentData.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
-            })
-            .addCase(toggleCommentStatus.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.items = state.items.map(item =>
-                    item.id === action.payload.id ? { ...item, status: action.payload.status } : item
-                );
-            })
-            .addCase(toggleCommentStatus.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
-            })
-            .addCase(deleteAdminComment.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(deleteAdminComment.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.items = state.items.filter(item => item.id !== action.payload);
-            })
-            .addCase(deleteAdminComment.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
-            });
+        .addCase(fetchCommentData.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(fetchCommentData.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.items = action.payload || [];
+        })
+        .addCase(fetchCommentData.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+        })
+        .addCase(toggleCommentStatus.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(toggleCommentStatus.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            // Update the specific comment item's status
+            state.items = state.items.map(item =>
+                item.id === action.payload.id ? { ...item, status: action.payload.status } : item
+            );
+        })
+        .addCase(toggleCommentStatus.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+        })
+        .addCase(deleteAdminComment.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(deleteAdminComment.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.items = state.items.filter(item => item.id !== action.payload);
+        })
+        .addCase(deleteAdminComment.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+        });
     },
 });
 

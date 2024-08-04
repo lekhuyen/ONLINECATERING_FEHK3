@@ -39,6 +39,7 @@ import userForgotPasswordReducer from './User/userForgotPasswordSlice';
 import adminbookingSlice from './Restaurant/adminbookingSlice'
 import promotionSlice from './Restaurant/promotionSlice'
 import admincommentSlice from './Restaurant/admincommentSlice'
+import adminuserSlice from './Restaurant/adminuserSlice'
 
 
 
@@ -81,6 +82,7 @@ export const store = configureStore({
         adminrestaurant: adminrestaurantSlice,
         adminbooking: adminbookingSlice,
         admincomment: admincommentSlice,
+        adminuser: adminuserSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
