@@ -71,7 +71,7 @@ export default function EditAboutUs() {
     };
 
     const handleImageChange = (e) => {
-        setImageFiles(e.target.files); // Store the selected image files
+        setImageFiles(Array.from(e.target.files)); // Store the selected image files
     };
 
     if (status === 'loading' || aboutTypeStatus === 'loading') {
@@ -81,8 +81,6 @@ export default function EditAboutUs() {
     if (status === 'failed') {
         return <p>Error: {error}</p>;
     }
-
-    console.log('AboutTypes:', aboutTypes); // Log the aboutTypes to verify structure
 
     return (
         <div className='container'>
@@ -127,22 +125,28 @@ export default function EditAboutUs() {
 
                 <div className="form-group">
                     <label>Current Images</label>
-                    {imagePaths.length > 0 ? (
-                        <div className="d-flex flex-wrap">
-                            {imagePaths.map((imagePath, index) => (
-                                <div key={index} className="mb-2 mr-2">
-                                    <img
-                                        src={`http://localhost:5034${imagePath}`}
-                                        alt={`Image ${index}`}
-                                        style={{ width: "100px", height: "100px" }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>No images available</p>
-                    )}
+                    <div className="d-flex flex-wrap">
+                        {imagePaths.length > 0 ? (
+                            imagePaths.map((imagePath, index) => (
+                                <img
+                                    key={index}
+                                    src={imagePath}
+                                    alt={`about ${id}`}
+                                    style={{
+                                        width: "100px",
+                                        height: "auto",
+                                        objectFit: "cover",
+                                        marginBottom: "5px",
+                                        marginRight: "5px"
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
                 </div>
+
                 <div className="form-group">
                     <label>Upload New Images</label>
                     <input

@@ -17,14 +17,13 @@ const Chef = () => (
                 <div className="app__chef-content_quote">
                     <img src={images.quote} alt="quote_image" />
                     <p className="p__opensans">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit auctor sit .
+                        Cooking is love made visible
                     </p>
                 </div>
                 <p className="p__opensans">
                     {" "}
-                    auctor sit iaculis in arcu. Vulputate nulla lobortis mauris eget sit.
-                    Nulla scelerisque scelerisque congue ac consequat, aliquam molestie
-                    lectus eu. Congue iaculis integer curabitur semper sit nunc.{" "}
+                    Behind every dish lies a story of passion and creativity, where flavors blend harmoniously to evoke memories and stir emotions, 
+                    making every meal a journey worth savoring.{" "}
                 </p>
             </div>
 

@@ -7,46 +7,47 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchAboutData } from '../../redux/Information/aboutSlice';
 import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
 
-const AboutSection = ({ aboutData, aboutTypeName }) => {
-    return (
-        <div className={styles.aboutSection}>
-            {aboutData.map((about, index) => {
-                if (about.aboutTypeName === aboutTypeName) {
-                    const isEven = index % 2 === 0;
-                    // Render only the first image from the imagePaths array
-                    const imagePath = about.imagePaths && about.imagePaths.length > 0 ? about.imagePaths[0] : null;
-                    
-                    return (
-                        <div className={clsx(styles.aboutCard, isEven ? styles.even : styles.odd)} key={about.id}>
-                            <div className={clsx(styles.imageContainer, isEven ? styles.left : styles.right)}>
-                                {imagePath && (
-                                    <img
-                                        src={imagePath}
-                                        alt={`about ${about.id}`}
-                                        className={styles.aboutImage}
-                                    />
-                                )}
-                            </div>
-                            <div className={clsx(styles.textContainer, isEven ? styles.right : styles.left)}>
-                                <h1 className={styles.aboutTitle}>{about.title}</h1>
-                                <p className={styles.aboutText}>{about.content}</p>
-                            </div>
-                        </div>
-                    );
-                }
-                return null;
-            })}
-        </div>
-    );
-};
-
-AboutSection.propTypes = {
-    sectionTitle: PropTypes.string.isRequired,
-    aboutData: PropTypes.array.isRequired,
-    aboutTypeName: PropTypes.string.isRequired,
-};
-
 const About = () => {
+    // Define AboutSection as a nested component
+    const AboutSection = ({ aboutData, aboutTypeName }) => {
+        return (
+            <div className={styles.aboutSection}>
+                {aboutData.map((about, index) => {
+                    if (about.aboutTypeName === aboutTypeName) {
+                        const isEven = index % 2 === 0;
+                        const imagePath = about.imagePaths && about.imagePaths.length > 0 ? about.imagePaths[0] : null;
+
+                        return (
+                            <div className={clsx(styles.aboutCard, isEven ? styles.even : styles.odd)} key={about.id}>
+                                <div className={clsx(styles.imageContainer, isEven ? styles.left : styles.right)}>
+                                    {imagePath && (
+                                        <img
+                                            src={imagePath}
+                                            alt={`about ${about.id}`}
+                                            className={styles.aboutImage}
+                                        />
+                                    )}
+                                </div>
+                                <div className={clsx(styles.textContainer, isEven ? styles.right : styles.left)}>
+                                    <h1 className={styles.aboutTitle}>{about.title}</h1>
+                                    <p className={styles.aboutText}>{about.content}</p>
+                                </div>
+                            </div>
+                        );
+                    }
+                    return null;
+                })}
+            </div>
+        );
+    };
+
+    AboutSection.propTypes = {
+        sectionTitle: PropTypes.string.isRequired,
+        aboutData: PropTypes.array.isRequired,
+        aboutTypeName: PropTypes.string.isRequired,
+    };
+
+    // Redux setup within About component
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -67,6 +68,7 @@ const About = () => {
         return <div>Error: {error}</div>;
     }
 
+    // Render the About component
     return (
         <div className={clsx(styles.aboutUsContainer, "app__bg")}>
             <div className={styles.aboutUsHeaderTitle}><h1>Welcome to OnlineCatering.in</h1></div>
