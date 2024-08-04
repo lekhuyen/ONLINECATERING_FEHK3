@@ -9,7 +9,7 @@ export const validate = (payload, setInvalidFields) => {
     for(let arr of formatPayload) {
         if(arr[1].trim() === '') {
             invalid++
-            setInvalidFields(prev => [...prev, {name: arr[0], mes: 'Require this field'}])
+            setInvalidFields(prev => [...prev, {name: arr[0], mes: 'This field is required'}])
         }
     }   
 
@@ -18,14 +18,14 @@ export const validate = (payload, setInvalidFields) => {
             case 'userEmail':
                 const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                 if(!arr[1].match(regex)) {
-                    setInvalidFields(prev => [...prev, {name: arr[0], mes: 'Email invalid'}])
+                    setInvalidFields(prev => [...prev, {name: arr[0], mes: 'Invalid email'}])
                 }
                 break;
                 
             case 'password':
                 if(arr[1].length < 6) {
                     invalid++
-                    setInvalidFields(prev => [...prev, {name: arr[0], mes: 'Password minium 6 characters'}])
+                    setInvalidFields(prev => [...prev, {name: arr[0], mes: 'Password must be at least 6 characters'}])
                 }
                 break;
                 
