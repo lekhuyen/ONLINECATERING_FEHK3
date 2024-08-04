@@ -1,4 +1,3 @@
-// EditNews Component
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,7 +35,7 @@ export default function EditNews() {
             setTitle(newsItem.title || '');
             setContent(newsItem.content || '');
             setImagePaths(newsItem.imagePaths || []);
-            const selectedType = newsTypes.find(type => type.aboutTypeName === newsItem.aboutTypeName);
+            const selectedType = newsTypes.find(type => type.newsTypeName === newsItem.newsTypeName);
             setNewsTypeId(selectedType ? selectedType.id : '');
         }
     }, [newsItem, newsTypes]);
@@ -72,7 +71,7 @@ export default function EditNews() {
     };
 
     const handleImageChange = (e) => {
-        setImageFiles(e.target.files);
+        setImageFiles(Array.from(e.target.files));
     };
 
     if (status === 'loading' || newsTypeStatus === 'loading') {
@@ -125,23 +124,26 @@ export default function EditNews() {
                 </div>
 
                 <div className="form-group">
-                    <label>Current Images</label>
-                    {imagePaths.length > 0 ? (
-                        <div className="d-flex flex-wrap">
-                            {imagePaths.map((imagePath, index) => (
-                                <div key={index} className="mb-2 mr-2">
-                                    <img
-                                        src={`http://localhost:5034${imagePath}`}
-                                        alt={`Image ${index}`}
-                                        style={{ width: "100px", height: "100px" }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>No images available</p>
-                    )}
-                </div>
+                        <label>Current Images</label>
+                        {imagePaths && imagePaths.length > 0 ? (
+                            imagePaths.map((imagePath, index) => (
+                                <img
+                                    key={index}
+                                    src={imagePath}
+                                    alt={`News ${id}`}
+                                    style={{
+                                        width: "100px",
+                                        height: "100px",
+                                        objectFit: "cover",
+                                        marginBottom: "5px"
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
+
                 <div className="form-group">
                     <label>Upload New Images</label>
                     <input
