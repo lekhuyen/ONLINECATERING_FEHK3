@@ -59,14 +59,14 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
-        if(setLobbyId) setLobbyId(selectedId)
+        if (setLobbyId) setLobbyId(selectedId)
     }
 
     const handleChangeTable = (e) => {
         const selectedId = e.target.value;
         if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
-        if(setComboid) setComboid(selectedId)
-        
+        if (setComboid) setComboid(selectedId)
+
     }
     const getOneCombo = async () => {
         if (selectTable == null) {
@@ -112,11 +112,11 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
         getAllCombo()
     }, [])
 
-    
-    const handleClickCreateOrder = async() => {
-            // const response = await apiCreateOrder(order)
-            // console.log(response);
-            console.log(order);
+
+    const handleClickCreateOrder = async () => {
+        // const response = await apiCreateOrder(order)
+        // console.log(response);
+        console.log(order);
     }
 
     return (
@@ -151,14 +151,17 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                             <p><FaTable /><span>Quantity:</span></p>
                             <select
                                 onChange={handleSelectTable}
-                                className={cx(!showFormOrderStatus ? "bg" : "")}>
+                                className={cx(!showFormOrderStatus ? "bg" : "")}
+                                defaultValue={50}
+                            >
                                 {
-                                    Array.from({ length: 20 }, (_, i) => (
-                                        <option key={i} value={i + 1}>{i + 1}</option>
+                                    Array.from({ length: 50 }, (_, i) => (
+                                        <option key={i + 50} value={i + 50}>{i + 50}</option>
                                     ))
                                 }
                             </select>
                         </div>
+
                         <div className={cx("older")}>
                             <p><IoTabletLandscapeOutline /><span>Lobby:</span></p>
                             <select
@@ -179,13 +182,13 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                             <div>
                                 <p><MdAccessTime /><span>Booking Date:</span></p>
                             </div>
-                            <input 
-                            onChange={handleChangeDate} type="date" className={cx(!showFormOrderStatus ? "bg" : "")} />
+                            <input
+                                onChange={handleChangeDate} type="date" className={cx(!showFormOrderStatus ? "bg" : "")} />
                         </div>
                         <div className={cx("time")}>
                             <p><MdAccessTime /><span>Booking Time:</span></p>
-                            <input 
-                            onChange={handleChangeTime} type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
+                            <input
+                                onChange={handleChangeTime} type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
                         </div>
                     </div>
                     <div className={cx("total_price")}>
