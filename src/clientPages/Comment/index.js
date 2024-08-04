@@ -39,6 +39,9 @@ const Comment = () => {
     // const [clickDishStatus, setClickDishStatus] = useState(null)
     // const [clickDessertStatus, setClickDessertStatus] = useState(null)
 
+    //rating
+    const [userRating, setUserRating] = useState('')
+
 
     const navigate = useNavigate()
     const { appetizerId, dishId } = useParams()
@@ -78,18 +81,33 @@ const Comment = () => {
     const getOneAppetizer = async () => {
         if (+dishId === 1) {
             const resDish = await apiGetDishById(appetizerId)
+            const pointRating = resDish?.data?.ratings?.$values
+
+            var ratingUserPointDish = pointRating.find(rating => rating.userId === userCurrent.id)?.point
+
+            setUserRating(ratingUserPointDish)
             setAppetizerOne(resDish.data)
 
         } else if (+dishId === 2) {
             const resDessert = await apiGetDessertById(appetizerId)
-            
-            
+            const pointRating = resDessert?.data?.ratings?.$values
+
+                var ratingUserPointDessert = pointRating.find(rating => rating.userId === userCurrent.id)?.point
+
+            setUserRating(ratingUserPointDessert)
+
             setAppetizerOne(resDessert.data)
         }
         else {
             const res = await apiGetAppetizerById(appetizerId)
             if (res.status === 0) {
-                console.log(res.data.ratings.$values);
+                const pointRating = res.data.ratings.$values
+
+                var ratingUserPoint = pointRating.find(rating => rating.userId === userCurrent.id)?.point
+                // console.log(pointRating);
+                // console.log(ratingUserPoint);
+
+                setUserRating(ratingUserPoint)
                 setAppetizerOne(res.data)
             }
         }
@@ -99,7 +117,7 @@ const Comment = () => {
 
     useEffect(() => {
         getOneAppetizer()
-    }, [appetizerId,dishId, chosenScore])
+    }, [appetizerId, dishId, chosenScore, userCurrent])
 
     const hanldeSubmitComment = async () => {
         const comment = {
@@ -341,7 +359,16 @@ const Comment = () => {
     }
 
     //rating
+    const handleRatingClick = async (score) => {
+        setChosenScore(+score);
+        setUserRating(+score);
+        // await addRating(+score);
+
+    };
+
     const addRating = async () => {
+        // console.log(score);
+
         const rating = {
             userId: userCurrent.id,
             dishId: +dishId === 1 ? appetizerId : null,
@@ -350,25 +377,27 @@ const Comment = () => {
             point: chosenScore
         }
         let resRatingAppetizer;
-        if(+dishId === 0) {
+        if (+dishId === 0) {
             resRatingAppetizer = await apiAddRatingAppetizer(rating)
-        }else if (+dishId === 1) {
+        } else if (+dishId === 1) {
             resRatingAppetizer = await apiAddRatingDish(rating);
         } else if (+dishId === 2) {
             resRatingAppetizer = await apiAddRatingDessert(rating);
         }
 
-        if(resRatingAppetizer.status === 0) {
-            console.log(resRatingAppetizer);
-            
+        if (resRatingAppetizer.status === 0) {
+            // console.log(resRatingAppetizer);
+            getOneAppetizer()
+            setUserRating(resRatingAppetizer?.data?.point);
+
         }
     }
-    useEffect(()=> {
+    useEffect(() => {
         if (chosenScore != null) {
             addRating();
         }
     }, [chosenScore])
-    
+
     return (
         <div className={clsx(styles.container, 'app__bg')}>
             <div className={styles.wapper}>
@@ -379,21 +408,21 @@ const Comment = () => {
                     <h3>{appetizerOne?.name}</h3>
                     <div className={cx("vote")}>
                         <div>
-                        {
-                            renderStarFromNumber(appetizerOne?.totalRating)?.map((item, index) => (
-                                <span key={index}>{item}</span>
-                            ))
-                        }
-                        {
-                            appetizerOne?.totalRating === null &&
-                            Array.from({length: 5}).map((_, index) => (
-                                <span><MdStarOutline color="orange" size='30'/></span>
-                            ))
-                        }
-                        
+                            {
+                                renderStarFromNumber(appetizerOne?.totalRating)?.map((item, index) => (
+                                    <span key={index}>{item}</span>
+                                ))
+                            }
+                            {
+                                appetizerOne?.totalRating === null &&
+                                Array.from({ length: 5 }).map((_, index) => (
+                                    <span><MdStarOutline color="orange" size='30' /></span>
+                                ))
+                            }
+
                         </div>
                         <div>
-                        {appetizerOne?.countRatings !== null ? <p>{appetizerOne?.countRatings} reviews</p> : ''}
+                            {appetizerOne?.countRatings !== null ? <p>{appetizerOne?.countRatings} reviews</p> : ''}
                         </div>
                     </div>
                     <div className={cx("border-bottom")}></div>
@@ -401,15 +430,18 @@ const Comment = () => {
                         {voteOption.map(el => (
                             <div
                                 key={el.id}
-                                onClick={() => setChosenScore(el.id)}
+                                // onClick={() => setChosenScore(el.id)}
+                                onClick={() => handleRatingClick(el.id)}
                                 className={cx('rating_star')}>
-                                
+
+                                {/* (Number(chosenScore) && chosenScore >= el.id)  */}
                                 {
-                                    (Number(chosenScore) && chosenScore >= el.id) 
-                                    ? 
-                                    <MdOutlineStarPurple500 size='20' color='orange' /> 
-                                    : 
-                                    <MdOutlineStarPurple500 size='20' color='gray' />
+                                    userRating && el.id <= userRating
+                                        ?
+
+                                        <MdOutlineStarPurple500 size='20' color='orange' />
+                                        :
+                                        <MdOutlineStarPurple500 size='20' color='gray' />
                                 }
                                 <span>{el.text}</span>
                             </div>
@@ -449,7 +481,7 @@ const Comment = () => {
                                 }}
                                 // , +clickDishStatus === index ? 'active' : ''
                                 key={item.id} className={cx("comment_dish_item")}><p>{item.name}</p></div>
-                                
+
                         ))
                     }
                     <h3>Dessert</h3>
