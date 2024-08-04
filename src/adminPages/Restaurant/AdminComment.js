@@ -5,9 +5,20 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 
 import {
     deleteAdminComment,
-    fetchCommentData
+    fetchCommentData,
+    toggleCommentStatus
 } from '../../redux/Restaurant/admincommentSlice';
-import { HiOutlinePencilSquare } from 'react-icons/hi2';
+
+import {
+    fetchDishData
+} from '../../redux/Restaurant/dishSlice';
+
+import {
+    fetchAppetizerData
+} from '../../redux/Restaurant/adminappetizersSlice';
+import { fetchDessertData } from '../../redux/Restaurant/admindessertSlice';
+
+
 
 export default function AdminComment() {
     const dispatch = useDispatch();
@@ -15,21 +26,46 @@ export default function AdminComment() {
     const commentData = useSelector((state) => state.admincomment?.items || []);
     const status = useSelector((state) => state.admincomment?.status || 'idle');
     const error = useSelector((state) => state.admincomment?.error || null);
+    const dishData = useSelector((state) => state.dish?.items || []);
+    const appetizerData = useSelector((state) => state.adminappetizer?.items || []);
+    const dessertData = useSelector((state) => state.admindessert?.items || []); // Retrieve dessert data from Redux store
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
     useEffect(() => {
         dispatch(fetchCommentData());
+        dispatch(fetchDishData());
+        dispatch(fetchAppetizerData());
+        dispatch(fetchDessertData()); // Fetch dessert data when the component mounts
     }, [dispatch]);
 
     const handleDelete = (id) => {
         dispatch(deleteAdminComment(id));
     };
 
-    const handleEdit = (id) => {
-        // Implement edit functionality if needed
+    const handleToggleStatus = (id, currentStatus) => {
+        const newStatus = !currentStatus; // Toggle the current status
+        dispatch(toggleCommentStatus({ id, status: newStatus }));
     };
+
+    // Create a dictionary of dessert names mapped by their IDs
+    const dessertNameById = dessertData.reduce((acc, dessert) => {
+        acc[dessert.id] = dessert.dessertName; // Adjust according to your dessert item structure
+        return acc;
+    }, {});
+
+    // Create a dictionary of appetizer names mapped by their IDs (similar to how appetizer names are handled)
+    const appetizerNameById = appetizerData.reduce((acc, appetizer) => {
+        acc[appetizer.id] = appetizer.appetizerName;
+        return acc;
+    }, {});
+
+    // Create a dictionary of dish names mapped by their IDs (similar to how dish names are handled)
+    const dishNameById = dishData.reduce((acc, dish) => {
+        acc[dish.id] = dish.name;
+        return acc;
+    }, {});
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -61,6 +97,7 @@ export default function AdminComment() {
                             <th>Appetizer</th>
                             <th>Dessert</th>
                             <th>Content</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -68,24 +105,29 @@ export default function AdminComment() {
                         {currentCommentData.map((comment) => (
                             <tr key={comment.id}>
                                 <td>{comment.id}</td>
-                                <td>{comment.user?.username}</td> {/* Display username */}
+                                <td>{comment.user?.username}</td>
                                 <td>{comment.restaurantId}</td>
-                                <td>{comment.dishId}</td>
-                                <td>{comment.appetizerId}</td>
-                                <td>{comment.dessertId}</td>
+                                <td>{dishNameById[comment.dishId]}</td>
+                                <td>{appetizerNameById[comment.appetizerId]}</td>
+                                <td>{dessertNameById[comment.dessertId]}</td> {/* Display dessert name using dessertNameById */}
                                 <td>{comment.content}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-outline-warning"
-                                        onClick={() => handleEdit(comment.id)}
-                                    >
-                                        <HiOutlinePencilSquare />
-                                    </button>
+                                    <span className={`badge ${comment.status ? 'bg-danger' : 'bg-success'}`}>
+                                        {comment.status ? 'Blocked' : 'Appear'}
+                                    </span> 
+                                </td>
+                                <td>
                                     <button
                                         className="btn btn-outline-danger"
                                         onClick={() => handleDelete(comment.id)}
                                     >
                                         <FaRegTrashAlt />
+                                    </button>
+                                    <button
+                                        className="btn btn-outline-primary"
+                                        onClick={() => handleToggleStatus(comment.id, comment.status)}
+                                    >
+                                        {comment.status ? 'Unblock' : 'Block'}
                                     </button>
                                 </td>
                             </tr>
