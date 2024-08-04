@@ -9,7 +9,7 @@ export const fetchPromotionData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data;
+            return response.data.data.$values;
         } catch (error) {
             throw new Error('Error fetching promotion data:', error.response.data);
         }
@@ -27,19 +27,18 @@ export const createPromotionItem = createAsyncThunk(
             formData.append('status', newPromotion.status);
             formData.append('quantityTable', newPromotion.quantityTable);
             formData.append('price', newPromotion.price);
+
             if (newPromotion.imageFile) {
-                formData.append('imageFile', newPromotion.imageFile);
+                formData.append('formFile', newPromotion.imageFile);
             }
 
             const response = await axios.post(apiEndpoint, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            return response.data;
+            return response.data.data;
         } catch (error) {
-            throw new Error('Error creating promotion:', error.response.data);
+            throw new Error('Error creating promotion:', error.response?.data || error.message);
         }
     }
 );
@@ -47,31 +46,35 @@ export const createPromotionItem = createAsyncThunk(
 // Async thunk to update promotion
 export const updatePromotionItem = createAsyncThunk(
     "promotion/updatePromotionItem",
-    async (updatedPromotion) => {
+    async ({ id, name, description, status, quantityTable, price, imagePath, formFile }) => {
         try {
             const formData = new FormData();
-            formData.append("id", updatedPromotion.id);
-            formData.append("name", updatedPromotion.name);
-            formData.append("description", updatedPromotion.description);
-            formData.append("status", updatedPromotion.status);
-            formData.append("quantityTable", updatedPromotion.quantityTable);
-            formData.append("price", updatedPromotion.price);
-            if (updatedPromotion.imageFile) {
-                formData.append('imageFile', updatedPromotion.imageFile);
+            formData.append("id", id);
+            formData.append("name", name);
+            formData.append("description", description);
+            formData.append("status", status);
+            formData.append("quantityTable", quantityTable);
+            formData.append("price", price);
+
+            if (formFile) {
+                formData.append("formFile", formFile);
             }
 
-            const response = await axios.put(`${apiEndpoint}/${updatedPromotion.id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+            if (imagePath) {
+                formData.append("imagePath", JSON.stringify(imagePath));
+            }
+
+            const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
             });
 
-            return response.data;
+            return response.data.data;
         } catch (error) {
-            throw new Error("Error updating promotion:", error.response.data);
+            throw new Error("Error updating promotion:", error.response?.data || error.message);
         }
     }
 );
+
 
 // Async thunk to delete promotion
 export const deletePromotionItem = createAsyncThunk(
@@ -79,9 +82,9 @@ export const deletePromotionItem = createAsyncThunk(
     async (id) => {
         try {
             await axios.delete(`${apiEndpoint}/${id}`);
-            return id; // Return the deleted promotion ID for Redux state update
+            return id;
         } catch (error) {
-            throw new Error('Error deleting promotion:', error.response.data);
+            throw new Error('Error deleting promotion:', error.response?.data || error.message);
         }
     }
 );
@@ -97,14 +100,14 @@ const promotionSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchPromotionData.pending, (state) => {
-                state.status = "loading";
+                state.status = 'loading';
             })
             .addCase(fetchPromotionData.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.promotions = action.payload.data || [];
+                state.status = 'succeeded';
+                state.items = action.payload || []; // Ensure correct mapping of data
             })
             .addCase(fetchPromotionData.rejected, (state, action) => {
-                state.status = "failed";
+                state.status = 'failed';
                 state.error = action.error.message;
             })
             .addCase(createPromotionItem.pending, (state) => {
@@ -112,7 +115,7 @@ const promotionSlice = createSlice({
             })
             .addCase(createPromotionItem.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.promotions.push(action.payload.data);
+                state.promotions.push(action.payload); // Assuming payload contains new promotion data
             })
             .addCase(createPromotionItem.rejected, (state, action) => {
                 state.status = "failed";
