@@ -57,6 +57,7 @@ import AdminRestaurant from "../adminPages/Restaurant/AdminRestaurant"
 import AdminBooking from "../adminPages/Restaurant/AdminBooking"
 import CreatePromotion from "../adminPages/Restaurant/CreatePromotion"
 import EditPromotion from "../adminPages/Restaurant/EditPromotion"
+import AdminComment from "../adminPages/Restaurant/AdminComment"
 
 
 
@@ -126,6 +127,7 @@ const privateRoutes = [
     {path: "/menu-admin/create-menu-admin", component: CreateAdminMenu},
     {path: "/menu-admin/edit-menu-admin/:id", component: EditAdminMenu},
     {path: "/booking-admin", component: AdminBooking},
+    {path: "/comment-admin", component: AdminComment},
     // {path: "/payment-admin", component: },
 ]
 
