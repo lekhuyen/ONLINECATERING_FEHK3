@@ -15,27 +15,14 @@ export const fetchCommentData = createAsyncThunk(
     }
 );
 
-export const createAdminComment = createAsyncThunk(
-    "admincomment/createComment",
-    async (newComment) => {
+export const toggleCommentStatus = createAsyncThunk(
+    "admincomment/toggleCommentStatus",
+    async ({ id, status }) => {
         try {
-            const response = await axios.post(apiEndpoint, newComment);
+            const response = await axios.put(`${apiEndpoint}/toggleStatus/${id}`, { status });
             return response.data.data; // Adjust according to your API response structure
         } catch (error) {
-            throw new Error('Error creating comment:', error.response?.data || error.message);
-        }
-    }
-);
-
-export const updateAdminComment = createAsyncThunk(
-    "admincomment/updateComment",
-    async (updatedComment) => {
-        try {
-            const { id, ...rest } = updatedComment;
-            const response = await axios.put(`${apiEndpoint}/${id}`, rest);
-            return response.data.data; // Adjust according to your API response structure
-        } catch (error) {
-            throw new Error('Error updating comment:', error.response?.data || error.message);
+            throw new Error('Error toggling comment status:', error.response?.data || error.message);
         }
     }
 );
@@ -73,27 +60,13 @@ const admincommentSlice = createSlice({
                 state.status = "failed";
                 state.error = action.error.message;
             })
-            .addCase(createAdminComment.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(createAdminComment.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.items.push(action.payload);
-            })
-            .addCase(createAdminComment.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
-            })
-            .addCase(updateAdminComment.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(updateAdminComment.fulfilled, (state, action) => {
+            .addCase(toggleCommentStatus.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.items = state.items.map(item =>
-                    item.id === action.payload.id ? action.payload : item
+                    item.id === action.payload.id ? { ...item, status: action.payload.status } : item
                 );
             })
-            .addCase(updateAdminComment.rejected, (state, action) => {
+            .addCase(toggleCommentStatus.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
             })
