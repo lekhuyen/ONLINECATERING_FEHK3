@@ -8,7 +8,7 @@ export const fetchCommentData = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data; // Adjust according to your API response structure
+            return response.data.$values; // Adjust to match your API response structure
         } catch (error) {
             throw new Error('Error fetching comment data:', error.response?.data || error.message);
         }
