@@ -1,10 +1,7 @@
-// AdminComment.js
-
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
-
 
 import {
     deleteAdminComment,
@@ -71,7 +68,7 @@ export default function AdminComment() {
                         {currentCommentData.map((comment) => (
                             <tr key={comment.id}>
                                 <td>{comment.id}</td>
-                                <td>{comment.user.username}</td> {/* Assuming user has username */}
+                                <td>{comment.user?.username}</td> {/* Display username */}
                                 <td>{comment.restaurantId}</td>
                                 <td>{comment.dishId}</td>
                                 <td>{comment.appetizerId}</td>
