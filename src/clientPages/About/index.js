@@ -13,17 +13,19 @@ const AboutSection = ({ aboutData, aboutTypeName }) => {
             {aboutData.map((about, index) => {
                 if (about.aboutTypeName === aboutTypeName) {
                     const isEven = index % 2 === 0;
+                    // Render only the first image from the imagePaths array
+                    const imagePath = about.imagePaths && about.imagePaths.length > 0 ? about.imagePaths[0] : null;
+                    
                     return (
                         <div className={clsx(styles.aboutCard, isEven ? styles.even : styles.odd)} key={about.id}>
                             <div className={clsx(styles.imageContainer, isEven ? styles.left : styles.right)}>
-                                {about.imagePaths && about.imagePaths.slice(0, 3).map((imagePath, imgIndex) => (
+                                {imagePath && (
                                     <img
                                         src={imagePath}
                                         alt={`about ${about.id}`}
-                                        key={imgIndex}
                                         className={styles.aboutImage}
                                     />
-                                ))}
+                                )}
                             </div>
                             <div className={clsx(styles.textContainer, isEven ? styles.right : styles.left)}>
                                 <h1 className={styles.aboutTitle}>{about.title}</h1>
