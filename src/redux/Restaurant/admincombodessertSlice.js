@@ -20,7 +20,7 @@ export const fetchAdminComboDessertData = createAsyncThunk(
 // Async thunk to create a new combo-dessert association
 export const createAdminComboDessert = createAsyncThunk(
     "adminComboDessert/createAdminComboDessert",
-    async ({ comboId, dessertId }) => {
+    async ({ comboId, dessertId }, thunkAPI)  => {
         try {
             const response = await axios.post(apiEndpoint, { comboId, dessertId });
             return response.data;

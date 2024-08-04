@@ -1,0 +1,66 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  
+  .modal-header {
+    padding: 1rem;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+  }
+  
+  .modal-header button {
+    background-color: #e74c3c;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+  
+  .appetizer-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .appetizer-table th, .appetizer-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  .appetizer-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .appetizer-table button {
+    background-color: #3498db;
+    border: none;
+    color: #fff;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+  
