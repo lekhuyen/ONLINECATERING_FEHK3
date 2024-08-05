@@ -58,6 +58,7 @@ import AdminBooking from "../adminPages/Restaurant/AdminBooking"
 import CreatePromotion from "../adminPages/Restaurant/CreatePromotion"
 import EditPromotion from "../adminPages/Restaurant/EditPromotion"
 import AdminComment from "../adminPages/Restaurant/AdminComment"
+import PaymentSuccess from "../clientPages/PaymentSuccess"
 
 
 
@@ -66,6 +67,7 @@ import AdminComment from "../adminPages/Restaurant/AdminComment"
 
 const publicRoutes = [
     {path: "/", component: Home},
+    // {path: "/:success", component: Home},
     {path: "/about", component: About},
     {path: "/login", component: Login, layout: null},
     {path: "/login/:token", component: Login, layout: null},
@@ -80,9 +82,11 @@ const publicRoutes = [
     {path: "/user", component: User},
     {path: "/lobby", component: Lobby},
     {path: "/ordercombo", component: OrderCombo},
+    {path: "/ordercombo/:success", component: OrderCombo},
     {path: "/checkoutBook", component: CheckoutBook},
     {path: "/comment/:appetizerId", component: Comment},
     {path: "/comment/:appetizerId/:dishId", component: Comment},
+    {path: "/payment-success", component: PaymentSuccess, layout: null},
 ]
 
 const privateRoutes = [

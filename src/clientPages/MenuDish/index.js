@@ -128,7 +128,7 @@ const MenuDish = () => {
                             <>
                                 {
                                     mainAppetizer?.length > 0 && mainAppetizer?.map(item => (
-                                        <div key={item.appetizerId} className={clsx(styles.menu_item, styles.choose_menu_4)}>
+                                        <div key={item.id} className={clsx(styles.menu_item, styles.choose_menu_4)}>
                                             <div className={styles.menu_more}>
                                                 <div><img alt="" src={item.appetizerImage} /></div>
                                                 <div

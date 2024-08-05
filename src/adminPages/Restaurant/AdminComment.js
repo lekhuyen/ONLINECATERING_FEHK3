@@ -130,7 +130,7 @@ export default function AdminComment() {
 
     return (
         <div className="container mt-5">
-            <h2>Admin Comments</h2>
+            <h2>Comment Management</h2>
 
             <div className="container mt-5">
                 <table className="table table-hover">

@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { createDishItem } from '../../redux/Restaurant/dishSlice';
 
-
-export default function CreateAdminCombo() {
+export default function CreateDish() {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [formFile, setFormFile] = useState(null); // State to hold the image file
-    const [type, setType] = useState(''); // State to hold the combo type
+    const [type, setType] = useState(''); // State to hold the type
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,15 +16,20 @@ export default function CreateAdminCombo() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Dispatch the action to create a new combo
-        dispatch(createDishItem({
-            name,
-            price: parseFloat(price),
-            status: false, // Always false by default
-            type: parseInt(type), // Parse the type to integer
-            imageFile: formFile
-        })).unwrap() // unwrap to handle the promise
-        .then(() => {
+        // Check if name, price, and formFile are provided
+        if (!name || !price || !formFile) {
+            alert('Please provide all required fields.');
+            return;
+        }
+
+        try {
+            await dispatch(createDishItem({
+                name,
+                price: parseFloat(price),
+                status: false, // Always false by default
+                formFile
+            })).unwrap();
+
             // Clear form fields
             setName('');
             setPrice('');
@@ -33,11 +37,10 @@ export default function CreateAdminCombo() {
             setFormFile(null);
  
             navigate('/dish-admin'); 
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Error creating dish:', error);
             // Handle error state or display error message to the user
-        });
+        }
     };
 
     // Function to handle file input change
@@ -47,7 +50,7 @@ export default function CreateAdminCombo() {
 
     return (
         <div className="container">
-            <h2>Create Admin Combo</h2>
+            <h2>Create Dish</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Name</label>
@@ -77,18 +80,14 @@ export default function CreateAdminCombo() {
                 <div className="form-group">
                     <label htmlFor="type">Type</label>
                     <input
-                        type="number"
+                        type="text"
                         className="form-control"
                         id="type"
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                         required
-
                     />
                 </div>
-
-                {/* Hidden Status Field */}
-                <input type="hidden" value={false} />
 
                 <div className="form-group">
                     <label htmlFor="formFile">Image</label>
@@ -97,10 +96,11 @@ export default function CreateAdminCombo() {
                         className="form-control"
                         id="formFile"
                         onChange={handleFileChange}
+                        required
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary"><FiSend /> Create Combo</button>
+                <button type="submit" className="btn btn-primary"><FiSend /> Create Dish</button>
             </form>
         </div>
     );

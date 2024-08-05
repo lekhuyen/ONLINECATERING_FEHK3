@@ -59,6 +59,8 @@ import { TfiLayersAlt } from "react-icons/tfi";
 
 import { GiCupcake } from "react-icons/gi";
 
+import { LiaCommentDotsSolid } from "react-icons/lia";
+
 const icons = {
 
     PiUsers,
@@ -93,6 +95,7 @@ const icons = {
     FaMinusCircle,
     FaBullhorn,
 
+    LiaCommentDotsSolid,
 
     //aboutus
     IoInformationCircleOutline,
@@ -116,7 +119,8 @@ const icons = {
     FaTable,
     IoTabletLandscapeOutline,
     GiCupcake,
-
+    LiaCommentDotsSolid,
+    
     //user
     PiLockKey,
     FaRegHeart,
