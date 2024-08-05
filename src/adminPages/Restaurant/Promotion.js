@@ -72,7 +72,7 @@ export default function Promotion() {
 
     return (
         <div className='container'>
-            <h2>Promotion Table</h2>
+            <h2>Promotion Management</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">
@@ -93,10 +93,10 @@ export default function Promotion() {
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="col-sm-3">
+            <div className="">
                     <button className="btn btn-success mb-3" onClick={() => navigate('/promotion/create-promotion')}>Add Promotion</button>
-                </div>
             </div>
 
             <div className="container mt-5">
