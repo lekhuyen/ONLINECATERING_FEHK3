@@ -63,7 +63,6 @@ const Menu = () => {
         const responsePromotion = await apiGetPromotionByComboId(comboid)
         const responseComboOne = await apiGetComboById(comboid)
 
-        console.log(responseAppetizer);
         if (responseComboOne.status === 0) {
             setComboPrice(responseComboOne.data.price)
         }
