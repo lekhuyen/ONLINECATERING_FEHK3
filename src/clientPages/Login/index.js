@@ -10,7 +10,7 @@ import { validate } from "../../ultil/helper";
 import EmailInput from "../ForgotPassword/emailInput";
 import { sendMailRegister } from "../../redux/User/userActions";
 import Loading from "../Loading";
-import { registerLogin } from "../../redux/User/userRegisterSlice";
+import { isRegisterStatus, registerLogin } from "../../redux/User/userRegisterSlice";
 
 const cx = classNames.bind(styles)
 
@@ -72,21 +72,11 @@ const Login = () => {
                         })
                 } else {
                     dispath(registerLogin(true))
+                    dispath(isRegisterStatus())
                     Swal.fire('Oop!',
                         response.message, 'error')
                 }
-                // dispath(sendMailRegister(payload));
-                // if (registerStatus === 0) {
-                //     Swal.fire('Congratulation',
-                //         registerMessage, 'success')
-                //         .then(() => {
-                //             setRegister(false)
-                //             resetPayload()
-                //         })
-                // } else {
-                //     Swal.fire('Oop!',
-                //         registerMessage, 'error')
-                // }
+                
             }
             else {
                 const rs = await apiUserLogin(token ? loginToken : data)

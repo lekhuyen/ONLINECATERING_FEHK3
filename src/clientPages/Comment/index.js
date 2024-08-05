@@ -12,9 +12,10 @@ import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish, apiGetAppetizerByI
 import { apiAddComment, apiAddCommentReplyAppetizer, apiAddRatingAppetizer, apiAddRatingDessert, apiAddRatingDish, apiDeleteCommentAppetizer, apiDeleteCommentReplyAppetizer, apiEditCommentAppetizer, apiEditCommentReplyAppetizer, apiGetDessertById, apiGetDishById } from '../../apis/comment';
 import { useSelector } from 'react-redux';
 import { renderStarFromNumber } from '../../ultil/helper';
+import Swal from 'sweetalert2';
 
 const cx = classNames.bind(styles)
-const { FaRegStar,
+const {
     BsThreeDots,
 } = icons
 const Comment = () => {
@@ -51,6 +52,7 @@ const Comment = () => {
     const [mainAppetizer, setAppetizer] = useState(null)
     const [mainDish, setDish] = useState(null)
     const [mainDessert, setDessert] = useState(null)
+    const [userCurrentId, setUserCurrentIdId] = useState('')
 
     const getAllAppetizer = async () => {
         const responseAppetizer = await apiGetAllAppetizer()
@@ -83,7 +85,7 @@ const Comment = () => {
             const resDish = await apiGetDishById(appetizerId)
             const pointRating = resDish?.data?.ratings?.$values
 
-            var ratingUserPointDish = pointRating.find(rating => rating.userId === userCurrent.id)?.point
+            var ratingUserPointDish = pointRating.find(rating => rating.userId === userCurrent?.id)?.point
 
             setUserRating(ratingUserPointDish)
             setAppetizerOne(resDish.data)
@@ -92,7 +94,7 @@ const Comment = () => {
             const resDessert = await apiGetDessertById(appetizerId)
             const pointRating = resDessert?.data?.ratings?.$values
 
-                var ratingUserPointDessert = pointRating.find(rating => rating.userId === userCurrent.id)?.point
+            var ratingUserPointDessert = pointRating.find(rating => rating.userId === userCurrent.id)?.point
 
             setUserRating(ratingUserPointDessert)
 
@@ -127,29 +129,50 @@ const Comment = () => {
             dessertId: +dishId === 2 ? appetizerId : null,
             appetizerId: +dishId === 0 ? appetizerId : null,
         }
-        const resAppetizer = await apiAddComment(comment)
-        if (resAppetizer.status === 0) {
-            const newComment = {
-                id: resAppetizer.data.id,
-                content: comment.content,
-                user: {
-                    userName: userCurrent.userName
+
+        if (isLoggedIn) {
+            const resAppetizer = await apiAddComment(comment)
+
+            if (resAppetizer.status === 0) {
+                setUserCurrentIdId(resAppetizer?.data?.userId)
+                const newComment = {
+                    id: resAppetizer.data.id,
+                    content: comment.content,
+                    user: {
+                        userName: userCurrent.userName
+                    }
                 }
+
+                setAppetizerOne(prev => ({
+                    ...prev,
+                    comments: {
+                        // $values: [...prev.comments.$values, newComment]
+                        $values: [newComment, ...prev.comments?.$values]
+                    }
+                }))
+                setContent('')
+                setTimeout(() => {
+                    if (commentRef.current) {
+                        commentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             }
-            setAppetizerOne(prev => ({
-                ...prev,
-                comments: {
-                    // $values: [...prev.comments.$values, newComment]
-                    $values: [newComment, ...prev.comments?.$values]
+        } else {
+            Swal.fire({
+                title: "You are not logged in",
+                text: "Please Login to comment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login')
                 }
-            }))
-            setContent('')
-            setTimeout(() => {
-                if (commentRef.current) {
-                    commentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 100);
+            });
         }
+
     }
 
     const handleClickOPtionComment = (index) => {
@@ -239,35 +262,52 @@ const Comment = () => {
             commentId: commentId
         };
         try {
-            const resCommentReplyAppetizer = await apiAddCommentReplyAppetizer(reply)
-            if (resCommentReplyAppetizer.status === 0) {
-                const newReply = {
-                    id: resCommentReplyAppetizer.data.id,
-                    content: reply.content,
-                    user: {
-                        userName: userCurrent.userName
+            if (isLoggedIn) {
+                const resCommentReplyAppetizer = await apiAddCommentReplyAppetizer(reply)
+                if (resCommentReplyAppetizer.status === 0) {
+                    const newReply = {
+                        id: resCommentReplyAppetizer.data.id,
+                        content: reply.content,
+                        user: {
+                            userName: userCurrent.userName
+                        }
                     }
-                }
-                setAppetizerOne(prev => ({
-                    ...prev,
-                    comments: {
-                        $values: prev.comments?.$values?.map(comment =>
-                            comment.id === commentId ? {
-                                ...comment,
-                                commentChildren: {
-                                    $values: [newReply, ...comment.commentChildren?.$values || []]
-                                }
-                            } : comment
-                        ) || []
-                    }
-                }))
+                    setAppetizerOne(prev => ({
+                        ...prev,
+                        comments: {
+                            $values: prev.comments?.$values?.map(comment =>
+                                comment.id === commentId ? {
+                                    ...comment,
+                                    commentChildren: {
+                                        $values: [newReply, ...comment.commentChildren?.$values || []]
+                                    }
+                                } : comment
+                            ) || []
+                        }
+                    }))
 
-                setReplyContent('')
-                setClickReplyStatus(prev => ({
-                    ...prev,
-                    [index]: false
-                }));
+                    setReplyContent('')
+                    setClickReplyStatus(prev => ({
+                        ...prev,
+                        [index]: false
+                    }));
+                }
+            } else {
+                Swal.fire({
+                    title: "You are not logged in",
+                    text: "Please Login to comment!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Login"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/login')
+                    }
+                });
             }
+
 
         } catch (error) {
             console.log(error);
@@ -368,29 +408,45 @@ const Comment = () => {
 
     const addRating = async () => {
         // console.log(score);
+        if (isLoggedIn) {
+            const rating = {
+                userId: userCurrent.id,
+                dishId: +dishId === 1 ? appetizerId : null,
+                dessertId: +dishId === 2 ? appetizerId : null,
+                appetizerId: +dishId === 0 ? appetizerId : null,
+                point: chosenScore
+            }
+            let resRatingAppetizer;
+            if (+dishId === 0) {
+                resRatingAppetizer = await apiAddRatingAppetizer(rating)
+            } else if (+dishId === 1) {
+                resRatingAppetizer = await apiAddRatingDish(rating);
+            } else if (+dishId === 2) {
+                resRatingAppetizer = await apiAddRatingDessert(rating);
+            }
 
-        const rating = {
-            userId: userCurrent.id,
-            dishId: +dishId === 1 ? appetizerId : null,
-            dessertId: +dishId === 2 ? appetizerId : null,
-            appetizerId: +dishId === 0 ? appetizerId : null,
-            point: chosenScore
-        }
-        let resRatingAppetizer;
-        if (+dishId === 0) {
-            resRatingAppetizer = await apiAddRatingAppetizer(rating)
-        } else if (+dishId === 1) {
-            resRatingAppetizer = await apiAddRatingDish(rating);
-        } else if (+dishId === 2) {
-            resRatingAppetizer = await apiAddRatingDessert(rating);
+            if (resRatingAppetizer.status === 0) {
+                // console.log(resRatingAppetizer);
+                getOneAppetizer()
+                setUserRating(resRatingAppetizer?.data?.point);
+
+            }
+        } else {
+            Swal.fire({
+                title: "You are not logged in",
+                text: "Please Login to comment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login')
+                }
+            });
         }
 
-        if (resRatingAppetizer.status === 0) {
-            // console.log(resRatingAppetizer);
-            getOneAppetizer()
-            setUserRating(resRatingAppetizer?.data?.point);
-
-        }
     }
     useEffect(() => {
         if (chosenScore != null) {
@@ -498,6 +554,7 @@ const Comment = () => {
                     <div className={cx("comment-container")}>
                         <div className={cx("comment-header")}><h2>Comments</h2></div>
                         {/* <Scrollbars style={{ width: 500, height: 300 }}> */}
+                        {/* +item.user?.id === +userCurrent?.id || userCurrentId === +item.user?.id ? */}
 
                         <div style={{ marginBottom: "30px" }} className={cx("comment_row_right")}>
                             {
@@ -511,7 +568,6 @@ const Comment = () => {
                                                 <img alt="" src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" />
                                             </div>
                                             <div
-
                                                 className={cx("comment-content-user")}>
                                                 {
                                                     !editCommentStatus[index] &&
@@ -535,6 +591,7 @@ const Comment = () => {
                                                     </div>
                                                 }
                                             </div>
+
                                             <div
                                                 onClick={() => handleClickOPtionComment(index)}
                                                 className={cx("comment-dot")}>
@@ -544,10 +601,13 @@ const Comment = () => {
                                                 }
                                                 {
                                                     clickOptionCommentStatus[index] &&
+                                                    (+item.user?.id === +userCurrent?.id || item.user.id === userCurrentId) &&
                                                     <div className={cx("comment-option")}>
                                                         <p
                                                             onClick={() => handleClickDeleteComment(item.id)}
-                                                        >Delete</p>
+                                                        >
+                                                            Delete
+                                                        </p>
                                                         <p
                                                             onClick={() => handleEditComment(index)}
                                                         >Edit</p>
