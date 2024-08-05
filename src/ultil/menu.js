@@ -37,11 +37,17 @@ export const menuItems = [
   { icon: <RiContactsBook3Line />, title: "Contact", path: "/contactus" },
   { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
   { icon: <TiImage />, title: "Lobby", path: "/lobby-admin" },
-  { icon: <TbBrandBooking />, title: "Order", path: "/bookingadmin" },
+  { icon: <TbBrandBooking />, title: "Order", path: "/booking-admin" },
   { icon: <BiDish />, title: "Menu Management", path: "/menu-admin" },
   { icon: <MdOutlinePayment />, title: "Payment", path: "/paymentadmin" },
   { icon: <IoMdGift />, title: "Promotion", path: "/promotion" },
   { icon: <TfiLayersAlt />, title: "Combo", path: "/combo-admin" },
+  { icon: <TfiLayersAlt />, title: "Order", path: "/order-admin" },
+  { icon: <TfiLayersAlt />, title: "Dish", path: "/dish-admin" },
+  { icon: <TfiLayersAlt />, title: "Dessert", path: "/dessert-admin" },
+  { icon: <TfiLayersAlt />, title: "Comment", path: "/comment-admin" },
+  { icon: <TfiLayersAlt />, title: "Service", path: "/service" },
+  { icon: <TfiLayersAlt />, title: "Promotion", path: "/promotion" },
 
   {
     icon: <RiCustomerService2Line />,
