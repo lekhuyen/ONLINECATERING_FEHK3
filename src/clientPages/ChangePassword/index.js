@@ -28,7 +28,7 @@ const ChangePassword = () => {
                 return;
             }
             if (newPassword === oldPassword) {
-                alert("New password cannot be the same as the old password.");
+                // alert("New password cannot be the same as the old password.");
                 return;
             }
             dispatch(updatePassword({ email, password: newPassword, otp }));

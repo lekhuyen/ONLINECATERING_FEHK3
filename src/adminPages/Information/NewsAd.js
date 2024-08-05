@@ -12,21 +12,21 @@ function NewsAd() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Selecting state from Redux store
     const newsData = useSelector((state) => state.news.items);
     const newsTypeData = useSelector((state) => state.newsTypes.items);
     const status = useSelector((state) => state.news.status);
     const error = useSelector((state) => state.news.error);
 
-    // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const contactsPerPage = 3;
 
-    // State for search and date filters
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedNews, setSelectedNews] = useState(null);
     const [addNewsTypeName, setAddNewsTypeName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [showTypeModal, setShowTypeModal] = useState(false);
 
     useEffect(() => {
         dispatch(fetchNewsData());
@@ -52,37 +52,34 @@ function NewsAd() {
       try {
           await dispatch(createNewsType({ newsTypeName: addNewsTypeName }));
           setAddNewsTypeName("");
+          setShowTypeModal(false);
       } catch (error) {
           console.error('Error adding news type:', error);
       } finally {
           setIsSubmitting(false);
       }
-  };
+    };
 
-  const handleEditType = async (id, newName) => {
-    const updatedType = { id, newsTypeName: newName };
-    try {
-        const response = await fetch(`http://localhost:5034/api/News/newtypes/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedType),
-        });
-        if (response.ok) {
-            // Assuming the response returns updated data, you may dispatch an action
-            // to update your Redux store if needed.
-            dispatch(editNewsType(updatedType)); // Assuming you have an action like this in your redux
-            // Or you can re-fetch the types after successful update
-            dispatch(fetchNewsTypes());
-        } else {
-            console.error('Failed to edit News Type:', response.statusText);
+    const handleEditType = async (id, newName) => {
+        const updatedType = { id, newsTypeName: newName };
+        try {
+            const response = await fetch(`http://localhost:5034/api/News/newtypes/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedType),
+            });
+            if (response.ok) {
+                dispatch(editNewsType(updatedType));
+                dispatch(fetchNewsTypes());
+            } else {
+                console.error('Failed to edit News Type:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error editing News Type:', error);
         }
-      } catch (error) {
-          console.error('Error editing News Type:', error);
-      }
-  };
-
+    };
 
     const handleDeleteType = async (id) => {
         try {
@@ -96,7 +93,6 @@ function NewsAd() {
         setSearchTerm(e.target.value);
     };
 
-    // Pagination logic and filtered newsData
     const indexOfLastContact = currentPage * contactsPerPage;
     const indexOfFirstContact = indexOfLastContact - contactsPerPage;
 
@@ -114,7 +110,6 @@ function NewsAd() {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    // Handling initial loading state and fetch error state
     if (status === "loading") {
         return <div>Loading...</div>;
     }
@@ -122,8 +117,6 @@ function NewsAd() {
     if (status === "failed") {
         return <div>Error: {error}</div>;
     }
-
-    console.log("selectedNews:", selectedNews); // Log selectedNews object for debugging
 
     return (
         <div className="container">
@@ -148,8 +141,7 @@ function NewsAd() {
                     <button
                         type="button"
                         className="btn btn-info btn-lg"
-                        data-bs-toggle="modal"
-                        data-bs-target="#TypeModal"
+                        onClick={() => setShowTypeModal(true)}
                     >
                         Create News Type
                     </button>
@@ -182,26 +174,26 @@ function NewsAd() {
                             <td>{truncateText(news.content)}</td>
                             <td>{news.newsTypeName}</td>
                             <td>
-                                    {news.imagePaths && news.imagePaths.length > 0 && (
-                                        <img
-                                            key={0} // Using a fixed key since there's only one image
-                                            src={news.imagePaths[0]} // Displaying only the first image
-                                            alt={`News ${news.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "100px",
-                                                objectFit: "cover",
-                                                marginBottom: "5px"
-                                            }}
-                                        />
-                                    )}
-                                </td>
+                                {news.imagePaths && news.imagePaths.length > 0 && (
+                                    <img
+                                        src={news.imagePaths[0]}
+                                        alt={`News ${news.id}`}
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            objectFit: "cover",
+                                            marginBottom: "5px"
+                                        }}
+                                    />
+                                )}
+                            </td>
                             <td>
                                 <button
                                     className="btn btn-outline-primary"
-                                    onClick={() => setSelectedNews(news)}
-                                    data-toggle="modal"
-                                    data-target="#myModal"
+                                    onClick={() => {
+                                        setSelectedNews(news);
+                                        setShowDetailModal(true);
+                                    }}
                                 >
                                     <BsInfoCircle />
                                 </button>
@@ -224,22 +216,23 @@ function NewsAd() {
             </table>
 
             {/* Modal for News Details */}
-            <div className="modal fade" id="myModal" role="dialog">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title float-start">
-                                News Title: {selectedNews && selectedNews.title}
-                            </h4>
-                            <button
-                                type="button"
-                                className="btn btn-danger float-end"
-                                data-dismiss="modal"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
+            {showDetailModal && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title float-start">
+                                    News Title: {selectedNews && selectedNews.title}
+                                </h4>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger float-end"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
                                 {selectedNews && (
                                     <div>
                                         <h5>News Content:</h5>
@@ -250,13 +243,13 @@ function NewsAd() {
                                                 <img
                                                     key={index}
                                                     src={imagePath}
-                                                        alt={`News ${selectedNews.id}`}
-                                                        style={{
-                                                            width: "100px",
-                                                            height: "100px",
-                                                            objectFit: "cover",
-                                                            marginBottom: "5px"
-                                                        }}
+                                                    alt={`News ${selectedNews.id}`}
+                                                    style={{
+                                                        width: "100px",
+                                                        height: "100px",
+                                                        objectFit: "cover",
+                                                        marginBottom: "5px"
+                                                    }}
                                                 />
                                             ))
                                         ) : (
@@ -265,32 +258,31 @@ function NewsAd() {
                                     </div>
                                 )}
                             </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-dismiss="modal"
-                            >
-                                Close
-                            </button>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Modal for Create News Type */}
-            <div className="container">
-                
-
-                <div className="modal fade" id="TypeModal" role="dialog">
-                    <div className="modal-dialog modal-lg">
+            {showTypeModal && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h4 className="modal-title">Type of News</h4>
                                 <button
                                     type="button"
                                     className="btn-close"
-                                    data-bs-dismiss="modal"
+                                    onClick={() => setShowTypeModal(false)}
                                     aria-label="Close"
                                 ></button>
                             </div>
@@ -309,20 +301,18 @@ function NewsAd() {
                                                 <td>
                                                     <button
                                                         className="btn btn-outline-warning"
-                                                        onClick={() =>
-                                                            handleEditType(
-                                                                type.id,
-                                                                prompt("Enter new name")
-                                                            )
-                                                        }
+                                                        onClick={() => {
+                                                            const newName = prompt("Enter new name", type.newsTypeName);
+                                                            if (newName) {
+                                                                handleEditType(type.id, newName);
+                                                            }
+                                                        }}
                                                     >
                                                         <HiOutlinePencilSquare />
                                                     </button>
                                                     <button
                                                         className="btn btn-outline-danger"
-                                                        onClick={() =>
-                                                            handleDeleteType(type.id)
-                                                        }
+                                                        onClick={() => handleDeleteType(type.id)}
                                                     >
                                                         <FaRegTrashAlt />
                                                     </button>
@@ -349,14 +339,14 @@ function NewsAd() {
                                     onClick={handleAddNewsType}
                                     disabled={isSubmitting}
                                 >
-                                    Add Type
+                                    {isSubmitting ? 'Adding...' : 'Add Type'}
                                 </button>
                             </div>
                             <div className="modal-footer">
                                 <button
                                     type="button"
                                     className="btn btn-secondary"
-                                    data-bs-dismiss="modal"
+                                    onClick={() => setShowTypeModal(false)}
                                 >
                                     Close
                                 </button>
@@ -364,7 +354,7 @@ function NewsAd() {
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Pagination */}
             <nav>
@@ -388,9 +378,7 @@ function NewsAd() {
                         </li>
                     ))}
                     <li
-                        className={`page-item ${
-                            currentPage === pageNumbers ? "disabled" : ""
-                        }`}
+                        className={`page-item ${currentPage === pageNumbers ? "disabled" : ""}`}
                     >
                         <button
                             className="page-link"

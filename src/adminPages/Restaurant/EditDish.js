@@ -32,7 +32,7 @@ export default function EditDish() {
             setPrice(dishItem.price || '');
             setQuantity(dishItem.quantity || '');
             setStatus(dishItem.status || true);
-            setImagePath(dishItem.imagePath || ''); // Set single image path
+            setImagePath(dishItem.image || ''); // Set image path from dishItem
         }
     }, [dishItem]);
 
@@ -64,8 +64,7 @@ export default function EditDish() {
         } catch (error) {
             console.error('Error updating dish item:', error);
         }
-
-};
+    };
 
     const handleImageChange = (e) => {
         setFormFile(e.target.files[0]); // Store the selected file for upload
