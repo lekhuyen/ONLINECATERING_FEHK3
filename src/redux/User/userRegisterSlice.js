@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as actions from './userActions'
-import { act } from "react";
 
 export const userRegisterSlice = createSlice({
   name: 'user',
@@ -12,8 +11,10 @@ export const userRegisterSlice = createSlice({
   reducers: {
     registerLogin: (state, action) => {
       state.isRegister = action.payload
-      console.log(action)
-  }
+    },
+    isRegisterStatus: (state) =>{
+      state.isRegister = false
+    }
   },
   extraReducers: (builders) => {
     builders.addCase(actions.sendMailRegister.pending, (state) => {
@@ -21,7 +22,7 @@ export const userRegisterSlice = createSlice({
     })
     builders.addCase(actions.sendMailRegister.fulfilled, (state, action) => {
       state.isRegister = false
-      state.registerStatus  = action.payload.status
+      state.registerStatus = action.payload.status
       state.registerMessage = action.payload.message
     })
     builders.addCase(actions.sendMailRegister.rejected, (state, action) => {
@@ -33,6 +34,6 @@ export const userRegisterSlice = createSlice({
 
 })
 
-export const { registerLogin  } = userRegisterSlice.actions
+export const { registerLogin, isRegisterStatus } = userRegisterSlice.actions
 
 export default userRegisterSlice.reducer
