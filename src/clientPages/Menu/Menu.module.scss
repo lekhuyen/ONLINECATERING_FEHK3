@@ -1,5 +1,5 @@
 .menuContainer {
-    margin-top: 76px;    
+    margin-top: 50px;
     font-family: cursive;
 }
 .menu_category {
@@ -87,7 +87,7 @@
     justify-content: center;
     gap: 25px;
     margin-top: 50px;
-    padding-bottom: 100px;
+    padding-bottom: 500px;
 }
 .menu_item {
     background-color: #f5efdb;
@@ -223,16 +223,16 @@
 .form-book-container {
     margin: auto;
     position: absolute;
-
-    width: 50%;
-    top: 50%;
+    width: 70%;
+    height: 80%;
+    top: 45%;
     transform: translateY(-50%);
     left: 0;
     right: 0;
-    color:#60a3bc;
+    color:#f8a5c2;
     border-radius: 5px;
     background: rgb(255,255,255,0.1);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(55px);
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-right: 1px solid rgba(255, 255, 255, 0.2);
