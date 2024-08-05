@@ -7,7 +7,7 @@ import SubHeading from "../../components/Layout/DefaultLayout/SubHeading/Index";
 const Chef = () => (
     <div className="app__bg app__wrapper section__padding">
         <div className="app__wrapper_img app__wrapper_img-reverse">
-            <img src={images.chef} alt="chef_image" />
+            <img src={images.cheff} alt="chef_image" />
         </div>
         <div className="app__wrapper_info">
             <SubHeading title="Chef's word" />
@@ -27,11 +27,11 @@ const Chef = () => (
                 </p>
             </div>
 
-            <div className="app__chef-sign">
+            {/* <div className="app__chef-sign">
                 <p>Kevin Luo</p>
                 <p className="p__opensans">Chef & Founder</p>
                 <img src={images.sign} alt="sign_image" />
-            </div>
+            </div> */}
         </div>
     </div>
 );

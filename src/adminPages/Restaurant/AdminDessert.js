@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { deleteAdminDessertItem, fetchDessertData } from '../../redux/Restaurant/admindessertSlice';
@@ -30,10 +28,10 @@ export default function AdminDessert() {
         navigate(`/dessert-admin/edit-dessert-admin/${id}`);
     };
 
-
     const filterBySearchTerm = (dessert) => {
+        if (!dessert) return false; // Check if dessert is null or undefined
         const searchTermLowerCase = searchTerm.toLowerCase();
-        const priceMatches = dessert.price.toString().includes(searchTermLowerCase);
+        const priceMatches = dessert.price?.toString().includes(searchTermLowerCase);
         const nameMatches = dessert.dessertName?.toLowerCase().includes(searchTermLowerCase);
 
         return nameMatches || priceMatches;
@@ -81,11 +79,11 @@ export default function AdminDessert() {
                 </div>
             </div>
 
-                <div >
-                    <button className="btn btn-success mb-3" onClick={() => navigate('/dessert-admin/create-dessert-admin')}>
-                        Add Dessert
-                    </button>
-                </div>
+            <div>
+                <button className="btn btn-success mb-3" onClick={() => navigate('/dessert-admin/create-dessert-admin')}>
+                    Add Dessert
+                </button>
+            </div>
 
             <div className="container mt-5">
                 <table className="table table-hover">
@@ -103,9 +101,9 @@ export default function AdminDessert() {
                         <tr key={dessert.id}>
                             <td>{dessert.id}</td>
                             <td>{dessert.dessertName}</td>
-                            <td>{dessert.price}</td> {/* Ensure dessert.price is defined */}
+                            <td>{dessert.price || 'N/A'}</td> {/* Display 'N/A' if price is undefined */}
                             <td>
-                                {dessert.dessertImage && (
+                                {dessert.dessertImage ? (
                                     <img
                                         src={dessert.dessertImage}
                                         alt={`Dessert ${dessert.id}`}
@@ -115,6 +113,8 @@ export default function AdminDessert() {
                                             objectFit: "cover",
                                         }}
                                     />
+                                ) : (
+                                    'No Image'
                                 )}
                             </td>
                             <td>

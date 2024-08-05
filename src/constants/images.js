@@ -24,10 +24,12 @@ import oclogo from '../assets/oclogo.png';
 import SurfnTurf from '../assets/SurfnTurf.jpg';
 import dumaloo from '../assets/dumaloo.jpg';
 import applewalnut from '../assets/applewalnut.jpg';
+import cheff from '../assets/cheff.jpg';
 
 export default {
   bg,
-  chef,
+  // chef,
+  cheff,
   G,
   gallery01,
   gallery02,

@@ -52,7 +52,11 @@ export default function AdminComboDetail() {
   // Debugging Logs
   useEffect(() => {
     console.log('Admin Combo Appetizers:', adminComboAppetizers);
+    
   }, [adminComboAppetizers]);
+  useEffect(() => {
+    console.log('Admin Combo Dishes:', adminComboDishes);
+  }, [adminComboDishes]);
 
   useEffect(() => {
     const someId = 1; // Use the correct logic to get this ID
@@ -280,7 +284,7 @@ export default function AdminComboDetail() {
                   >
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsImage}>
-                        <img src={dish.dishImage} alt={dish.dishName} className={styles.imgThumbnail} />
+                        <img src={dish.dishImagePath} alt={dish.dishName} className={styles.imgThumbnail} />
                       </div>
                       <div className={styles.detailsInfo}>
                         <div className={styles.row}>
