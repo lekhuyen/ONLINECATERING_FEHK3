@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Dashboard.module.scss';
 
-import { fetchAccountsData } from '../../redux/Accounts/accountsSlice';
 import { fetchAdminOrderData } from '../../redux/Restaurant/adminorderSlice';
+import { fetchUserData } from '../../redux/Restaurant/adminuserSlice';
 import icons from '../../ultil/icons';
 
 const cx = classNames.bind(styles);
@@ -16,19 +16,31 @@ const Dashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const accounts = useSelector((state) => state.accounts.items.slice(-5).reverse());
-    const status = useSelector((state) => state.accounts.status);
-    const error = useSelector((state) => state.accounts.error);
+    // Fetch orders and users from Redux state
     const orders = useSelector((state) => state.adminorder.adminOrders);
+    const accounts = useSelector((state) => state.adminuser.users);
+    const ordersStatus = useSelector((state) => state.adminorder.status);
+    const usersStatus = useSelector((state) => state.adminuser.status);
+    const ordersError = useSelector((state) => state.adminorder.error);
+    const usersError = useSelector((state) => state.adminuser.error);
 
     useEffect(() => {
-        dispatch(fetchAccountsData());
         dispatch(fetchAdminOrderData());
+        dispatch(fetchUserData());
     }, [dispatch]);
+
+    // Create a map of user IDs to user names
+    const userMap = accounts.reduce((map, user) => {
+        map[user.id] = user.userName;
+        return map;
+    }, {});
 
     const handleRecentUsersClick = () => {
         navigate('/admin-accounts');
     };
+
+    // Limit the number of users displayed to 5
+    const displayedUsers = accounts.slice(0, 5);
 
     return (
         <div className={cx('dashboard-container')}>
@@ -77,26 +89,24 @@ const Dashboard = () => {
                         <h2>Recent Orders</h2>
                         <a className={cx('btn')}>View All</a>
                     </div>
+                    {ordersStatus === 'loading' && <p>Loading...</p>}
+                    {ordersStatus === 'failed' && <p>Error: {ordersError}</p>}
                     <table>
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Price</th>
-                                <th>Payment</th>
+                                <th>Deposit</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders.map((order) => (
                                 <tr key={order.id}>
-                                    <td>{order.name}</td>
-                                    <td>{order.price}</td>
-                                    <td>{order.payment}</td>
-                                    <td>
-                                        <span className={cx('status', order.status.toLowerCase().replace(' ', '-'))}>
-                                            {order.status}
-                                        </span>
-                                    </td>
+                                    <td>{userMap[order.userId] || 'Unknown'}</td> {/* Display the user name */}
+                                    <td>{order.totalPrice}</td>
+                                    <td>{order.deposit}</td>
+                                    <td>{order.statusPayment ? 'Paid' : 'Pending'}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -107,9 +117,11 @@ const Dashboard = () => {
                     <div className={cx('card-header')}>
                         <h2 onClick={handleRecentUsersClick} style={{ cursor: 'pointer' }}>Recent Users</h2>
                     </div>
+                    {usersStatus === 'loading' && <p>Loading...</p>}
+                    {usersStatus === 'failed' && <p>Error: {usersError}</p>}
                     <table>
                         <tbody>
-                            {accounts.map((account) => (
+                            {displayedUsers.map((account) => (
                                 <tr key={account.id}>
                                     <td style={{ width: '60px' }}>
                                         <div className={cx('img')}>
