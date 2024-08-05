@@ -53,7 +53,6 @@ const Order = () => {
     const handleClickBtnCloseFormOrder = () => {
         setShowFormOrderStatus(false)
     }
-console.log(order);
     //handle book
     const [cartAppetizer, setCartAppetizer] = useState(() => {
         const storedCart = localStorage.getItem('appetizer');
