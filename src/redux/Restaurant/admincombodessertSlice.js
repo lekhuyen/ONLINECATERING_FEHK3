@@ -17,18 +17,19 @@ export const fetchAdminComboDessertData = createAsyncThunk(
     }
 );
 
-// Async thunk to create a new combo-dessert association
 export const createAdminComboDessert = createAsyncThunk(
     "adminComboDessert/createAdminComboDessert",
-    async ({ comboId, dessertId }, thunkAPI)  => {
-        try {
-            const response = await axios.post(apiEndpoint, { comboId, dessertId });
-            return response.data;
-        } catch (error) {
-            throw new Error('Error creating combo-dessert association:', error.response?.data || error.message);
-        }
+    async ({ comboId, dessertId }, thunkAPI) => {
+      try {
+        const response = await axios.post(apiEndpoint, { comboId, dessertId });
+        thunkAPI.dispatch(fetchAdminComboDessertData()); // Refresh data after adding
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
     }
-);
+  );
+  
 
 // Async thunk to delete a combo-dessert association
 export const deleteAdminComboDessert = createAsyncThunk(
