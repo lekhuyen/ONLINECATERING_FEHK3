@@ -58,7 +58,7 @@ export default function AdminDessert() {
 
     return (
         <div className="container mt-5">
-            <h2>Dessert Table</h2>
+            <h2>Dessert Management</h2>
 
             <div className="row mb-3">
                 <div>

@@ -6,27 +6,27 @@ const apiEndpoint = "http://localhost:5265/api/Dish";
 // Async thunk to fetch dish data
 export const fetchDishData = createAsyncThunk(
     "dish/fetchDishData",
-    async () => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get(apiEndpoint);
-            return response.data.data.$values; // Extract the array of dishes
+            return response.data.data.$values; // Adjust according to your API response structure
         } catch (error) {
-            throw new Error('Error fetching dish data:', error.response.data);
+            return rejectWithValue(error.response?.data || 'Error fetching dish data');
         }
     }
 );
 
+
 // Async thunk to create new dish item
 export const createDishItem = createAsyncThunk(
     "dish/createDishItem",
-    async (newDishItem) => {
+    async (newDishItem, { rejectWithValue }) => {
         try {
             const formData = new FormData();
             formData.append('name', newDishItem.name);
             formData.append('price', newDishItem.price);
             formData.append('status', newDishItem.status);
 
-            // Always check if formFile is included
             if (newDishItem.formFile) {
                 formData.append('formFile', newDishItem.formFile);
             } else {
@@ -41,41 +41,39 @@ export const createDishItem = createAsyncThunk(
 
             return response.data.data;
         } catch (error) {
-            throw new Error('Error creating dish item:', error.response?.data || error.message);
+            return rejectWithValue(error.response?.data || 'Error creating dish item');
         }
     }
 );
 
-
 // Async thunk to update dish item
 export const updateDishItem = createAsyncThunk(
     "dish/updateDishItem",
-    async ({ id, name, price,  status, imagePath,  formFile }) => {
+    async ({ id, name, price, status, imagePath, formFile }, { rejectWithValue }) => {
         try {
             const formData = new FormData();
-            formData.append("id", id);
-            formData.append("name", name);
-            formData.append("price", price);
-
-            formData.append("status", status);
+            formData.append('id', id);
+            formData.append('name', name);
+            formData.append('price', price);
+            formData.append('status', status);
 
             if (formFile) {
-                formData.append("formFile", formFile);
+                formData.append('formFile', formFile);
             }
 
-            if (imagePath && imagePath.length > 0) {
-                formData.append("imagePath", JSON.stringify(imagePath));
+            if (imagePath) {
+                formData.append('imagePath', JSON.stringify(imagePath));
             }
 
             const response = await axios.put(`${apiEndpoint}/${id}`, formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                    'Content-Type': 'multipart/form-data'
+                }
             });
 
             return response.data.data;
         } catch (error) {
-            throw new Error("Error updating dish item:", error.response.data);
+            return rejectWithValue(error.response?.data || 'Error updating dish item');
         }
     }
 );
@@ -83,12 +81,12 @@ export const updateDishItem = createAsyncThunk(
 // Async thunk to delete dish item
 export const deleteDishItem = createAsyncThunk(
     "dish/deleteDishItem",
-    async (id) => {
+    async (id, { rejectWithValue }) => {
         try {
             await axios.delete(`${apiEndpoint}/${id}`);
             return id; // Return the deleted item ID for Redux state update
         } catch (error) {
-            throw new Error('Error deleting dish item:', error.response.data);
+            return rejectWithValue(error.response?.data || 'Error deleting dish item');
         }
     }
 );
@@ -112,7 +110,7 @@ const dishSlice = createSlice({
             })
             .addCase(fetchDishData.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                state.error = action.payload;
             })
             .addCase(createDishItem.pending, (state) => {
                 state.status = "loading";
@@ -123,7 +121,7 @@ const dishSlice = createSlice({
             })
             .addCase(createDishItem.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                state.error = action.payload;
             })
             .addCase(updateDishItem.pending, (state) => {
                 state.status = "loading";
@@ -136,7 +134,7 @@ const dishSlice = createSlice({
             })
             .addCase(updateDishItem.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                state.error = action.payload;
             })
             .addCase(deleteDishItem.pending, (state) => {
                 state.status = "loading";
@@ -147,7 +145,7 @@ const dishSlice = createSlice({
             })
             .addCase(deleteDishItem.rejected, (state, action) => {
                 state.status = "failed";
-                state.error = action.error.message;
+                state.error = action.payload;
             });
     },
 });
