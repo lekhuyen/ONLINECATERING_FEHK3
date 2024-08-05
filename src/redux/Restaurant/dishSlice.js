@@ -24,11 +24,13 @@ export const createDishItem = createAsyncThunk(
             const formData = new FormData();
             formData.append('name', newDishItem.name);
             formData.append('price', newDishItem.price);
-            formData.append('quantity', newDishItem.quantity);
             formData.append('status', newDishItem.status);
 
+            // Always check if formFile is included
             if (newDishItem.formFile) {
                 formData.append('formFile', newDishItem.formFile);
+            } else {
+                throw new Error('formFile is required.');
             }
 
             const response = await axios.post(apiEndpoint, formData, {
@@ -39,21 +41,22 @@ export const createDishItem = createAsyncThunk(
 
             return response.data.data;
         } catch (error) {
-            throw new Error('Error creating dish item:', error.response.data);
+            throw new Error('Error creating dish item:', error.response?.data || error.message);
         }
     }
 );
 
+
 // Async thunk to update dish item
 export const updateDishItem = createAsyncThunk(
     "dish/updateDishItem",
-    async ({ id, name, price, quantity, status, imagePath,  formFile }) => {
+    async ({ id, name, price,  status, imagePath,  formFile }) => {
         try {
             const formData = new FormData();
             formData.append("id", id);
             formData.append("name", name);
             formData.append("price", price);
-            formData.append("quantity", quantity);
+
             formData.append("status", status);
 
             if (formFile) {

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
-import { createComboItem } from '../../redux/Restaurant/comboSlice';
+import { createDishItem } from '../../redux/Restaurant/dishSlice';
+
 
 export default function CreateAdminCombo() {
     const [name, setName] = useState('');
@@ -17,7 +18,7 @@ export default function CreateAdminCombo() {
         e.preventDefault();
 
         // Dispatch the action to create a new combo
-        dispatch(createComboItem({
+        dispatch(createDishItem({
             name,
             price: parseFloat(price),
             status: false, // Always false by default
@@ -28,14 +29,13 @@ export default function CreateAdminCombo() {
             // Clear form fields
             setName('');
             setPrice('');
-            setFormFile(null);
             setType('');
-
-            // Navigate to the admin combos list or any other desired location
-            navigate('/admin-combo'); // Example: navigate to the admin combos list page
+            setFormFile(null);
+ 
+            navigate('/dish-admin'); 
         })
         .catch((error) => {
-            console.error('Error creating combo:', error);
+            console.error('Error creating dish:', error);
             // Handle error state or display error message to the user
         });
     };
@@ -75,26 +75,13 @@ export default function CreateAdminCombo() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="price">Price</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                        step="0.01" // Allows decimal prices
-                    />
-                </div>
-
-                <div className="form-group">
                     <label htmlFor="type">Type</label>
                     <input
                         type="number"
                         className="form-control"
                         id="type"
                         value={type}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => setType(e.target.value)}
                         required
 
                     />

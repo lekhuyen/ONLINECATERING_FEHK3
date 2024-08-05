@@ -9,6 +9,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import styles from './AdminComboDetail.module.scss';
 import AppetizerModal from './AppetizerModal';
 import DessertModal from './DessertModal';
+import DishModal from './DishModal';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function AdminComboDetail() {
@@ -75,6 +76,7 @@ export default function AdminComboDetail() {
 
   const handleCreateDish = () => {
     setModalType('dish');
+    setIsModalOpen(true);
   };
 
   const handleDeleteAppetizer = (comboAppetizerId) => {
@@ -326,6 +328,16 @@ export default function AdminComboDetail() {
           comboId={parseInt(id)}
         />
       )}
+
+      {modalType === 'dish' && (
+        <DishModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectDish={handleCreateDish}
+          comboId={parseInt(id)}
+        />
+      )}
+
     </div>
   );
 }

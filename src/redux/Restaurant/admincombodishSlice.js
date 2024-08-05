@@ -16,18 +16,19 @@ export const fetchAdminComboDishData = createAsyncThunk(
     }
 );
 
-// Create new combo-dish association
+
 export const createAdminComboDish = createAsyncThunk(
     "adminComboDish/createAdminComboDish",
-    async ({ comboId, dishId }) => {
-        try {
-            const response = await axios.post(apiEndpoint, { comboId, dishId });
-            return response.data;
-        } catch (error) {
-            throw new Error('Error creating combo-dish association:', error.response?.data || error.message);
-        }
+    async ({ comboId, dishId }, thunkAPI) => {
+      try {
+        const response = await axios.post(apiEndpoint, { comboId, dishId });
+        thunkAPI.dispatch(fetchAdminComboDishData()); // Refresh data after adding
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
     }
-);
+  );
 
 // Delete a combo-dish association
 export const deleteAdminComboDish = createAsyncThunk(
