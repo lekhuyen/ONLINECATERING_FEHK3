@@ -22,6 +22,7 @@ import { fetchUserData } from '../../redux/Restaurant/adminuserSlice';
 export default function AdminComment() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const commentData = useSelector((state) => state.admincomment.items || []);
     const status = useSelector((state) => state.admincomment.status || 'idle');
     const error = useSelector((state) => state.admincomment.error || null);
@@ -32,36 +33,31 @@ export default function AdminComment() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
-
     const [selectedComment, setSelectedComment] = useState(null);
     const [confirmToggle, setConfirmToggle] = useState(false);
+    const [showDetailModal, setShowDetailModal] = useState(false);
 
     useEffect(() => {
         dispatch(fetchCommentData());
         dispatch(fetchDishData());
         dispatch(fetchAppetizerData());
         dispatch(fetchDessertData());
-        dispatch(fetchUserData()); // Fetch user data on component mount
-    }, [dispatch, currentPage]);
+        dispatch(fetchUserData());
+    }, [dispatch]);
 
     const handleInfoClick = (comment) => {
         setSelectedComment(comment);
+        setShowDetailModal(true);
     };
 
     const handleToggleStatus = (id, currentStatus) => {
         if (confirmToggle) {
             const newStatus = !currentStatus;
             dispatch(toggleCommentStatus({ id, status: newStatus }))
-                .then(() => {
-                    setConfirmToggle(false);
-                })
+                .then(() => setConfirmToggle(false))
                 .catch((error) => {
                     console.error('Error toggling comment status:', error);
-                    if (error.response && error.response.data && error.response.data.message) {
-                        alert(error.response.data.message);
-                    } else {
-                        alert('Failed to toggle comment status. Please try again.');
-                    }
+                    alert(error.response?.data?.message || 'Failed to toggle comment status. Please try again.');
                 });
         } else {
             setConfirmToggle(true);
@@ -79,12 +75,7 @@ export default function AdminComment() {
     const detectBadWords = (content) => {
         const badWords = ['bad', 'inappropriate', 'offensive', 'hate'];
         const lowerCaseContent = content.toLowerCase();
-        for (let word of badWords) {
-            if (lowerCaseContent.includes(word)) {
-                return true;
-            }
-        }
-        return false;
+        return badWords.some(word => lowerCaseContent.includes(word));
     };
 
     const dessertNameById = dessertData.reduce((acc, dessert) => {
@@ -122,10 +113,7 @@ export default function AdminComment() {
         return <div>Error: {error}</div>;
     }
 
-    // Calculate total comments from users
     const totalCommentsFromUsers = commentData.length;
-
-    // Calculate bad comments from users
     const badCommentsFromUsers = commentData.filter(comment => detectBadWords(comment.content)).length;
 
     return (
@@ -164,8 +152,6 @@ export default function AdminComment() {
                                     <button
                                         className="btn btn-outline-primary"
                                         onClick={() => handleInfoClick(comment)}
-                                        data-toggle="modal"
-                                        data-target="#myModal"
                                     >
                                         <BsInfoCircle />
                                     </button>
@@ -185,39 +171,52 @@ export default function AdminComment() {
             </div>
 
             {/* Modal for Comment Details */}
-            <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="myModalTitle">Comment Details</h5>
-                            <button type="button" className="btn-close" data-dismiss="modal" aria-label="Close" onClick={() => setSelectedComment(null)}></button>
-                        </div>
-                        <div className="modal-body">
-                            {selectedComment && (
-                                <div>
-                                    <h5>User: {usernameById[selectedComment.userId]}</h5>
-                                    <p><strong>Dish:</strong> {dishNameById[selectedComment.dishId]}</p>
-                                    <p><strong>Appetizer:</strong> {appetizerNameById[selectedComment.appetizerId]}</p>
-                                    <p><strong>Dessert:</strong> {dessertNameById[selectedComment.dessertId]}</p>
-                                    <p><strong>Content:</strong> {selectedComment.content}</p>
-                                    <p><strong>Status:</strong> {selectedComment.status ? 'Blocked' : 'Display'}</p>
-                                    <p>
-                                        <strong>Content Analysis:</strong>{' '}
-                                        {detectBadWords(selectedComment.content) ? (
-                                            <span className="text-danger">Contains bad words!</span>
-                                        ) : (
-                                            <span className="text-success">No bad words detected.</span>
-                                        )}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => setSelectedComment(null)}>Close</button>
+            {showDetailModal && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Comment Details</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowDetailModal(false)}
+                                    aria-label="Close"
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedComment && (
+                                    <div>
+                                        <h5>User: {usernameById[selectedComment.userId]}</h5>
+                                        <p><strong>Dish:</strong> {dishNameById[selectedComment.dishId]}</p>
+                                        <p><strong>Appetizer:</strong> {appetizerNameById[selectedComment.appetizerId]}</p>
+                                        <p><strong>Dessert:</strong> {dessertNameById[selectedComment.dessertId]}</p>
+                                        <p><strong>Content:</strong> {selectedComment.content}</p>
+                                        <p><strong>Status:</strong> {selectedComment.status ? 'Blocked' : 'Display'}</p>
+                                        <p>
+                                            <strong>Content Analysis:</strong>{' '}
+                                            {detectBadWords(selectedComment.content) ? (
+                                                <span className="text-danger">Contains bad words!</span>
+                                            ) : (
+                                                <span className="text-success">No bad words detected.</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             <div className='row'>
                 <div className='col-sm-6'>
