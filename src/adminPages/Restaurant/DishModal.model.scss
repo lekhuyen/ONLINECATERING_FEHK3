@@ -39,22 +39,22 @@
     padding: 1rem;
   }
   
-  .dessert-table {
+  .dish-table {
     width: 100%;
     border-collapse: collapse;
   }
   
-  .dessert-table th, .dessert-table td {
+  .dish-table th, .dish-table td {
     border: 1px solid #ddd;
     padding: 0.75rem;
     text-align: left;
   }
   
-  .dessert-table th {
+  .dish-table th {
     background-color: #f4f4f4;
   }
   
-  .dessert-table button {
+  .dish-table button {
     background-color: #3498db;
     border: none;
     color: #fff;

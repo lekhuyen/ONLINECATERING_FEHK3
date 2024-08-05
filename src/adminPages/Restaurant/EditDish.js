@@ -103,16 +103,7 @@ export default function EditDish() {
                         required
                     />
                 </div>
-                <div className="form-group">
-                    <label>Quantity</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        required
-                    />
-                </div>
+
                 <div className="form-group">
                     <label>Status</label>
                     <select

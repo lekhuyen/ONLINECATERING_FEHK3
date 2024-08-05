@@ -4,11 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchComboData } from '../../redux/Restaurant/comboSlice';
 import { fetchAdminComboAppetizerData, deleteAdminComboAppetizer, createAdminComboAppetizer } from '../../redux/Restaurant/admincomboappetizerSlice';
 import { fetchAdminComboDessertData, deleteAdminComboDessert, createAdminComboDessert } from '../../redux/Restaurant/admincombodessertSlice';
-import { fetchAdminComboDishData, deleteAdminComboDish, createComboDish } from '../../redux/Restaurant/admincombodishSlice';
+import { fetchAdminComboDishData, deleteAdminComboDish, createAdminComboDish } from '../../redux/Restaurant/admincombodishSlice';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import styles from './AdminComboDetail.module.scss';
 import AppetizerModal from './AppetizerModal';
-import DessertModal from './DessertModal'; // Import DessertModal
+import DessertModal from './DessertModal';
+import DishModal from './DishModal';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function AdminComboDetail() {
@@ -17,7 +18,6 @@ export default function AdminComboDetail() {
   const navigate = useNavigate();
   const [modalType, setModalType] = useState('');
   const [selectedAppetizer, setSelectedAppetizer] = useState(null);
-  const [selectedDessert, setSelectedDessert] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetching Combo Data
@@ -48,6 +48,17 @@ export default function AdminComboDetail() {
     dispatch(fetchAdminComboDessertData());
     dispatch(fetchAdminComboDishData());
   }, [dispatch, combo, comboStatus, id]);
+
+  // Debugging Logs
+  useEffect(() => {
+    console.log('Admin Combo Appetizers:', adminComboAppetizers);
+  }, [adminComboAppetizers]);
+
+  useEffect(() => {
+    const someId = 1; // Use the correct logic to get this ID
+    const selectedAppetizer = adminComboAppetizers.find(app => app.id === someId);
+    console.log('Selected Appetizer:', selectedAppetizer);
+  }, [adminComboAppetizers]);
 
   const handleGoBack = () => {
     navigate(-1);
@@ -121,108 +132,212 @@ export default function AdminComboDetail() {
               <div className={styles.cardBody}>
                 <div className={styles.row}>
                   <div className={styles.detailsContainer}>
-                    <img src={combo.imagePath} alt={combo.name} className={styles.image} />
-                    <h3 className={styles.name}>{combo.name}</h3>
-                    <p className={styles.description}>{combo.description}</p>
-                    <p className={styles.price}>${combo.price.toFixed(2)}</p>
+                    <img src={combo.imagePath} alt={combo.name} className={styles.imgThumbnail} />
+                  </div>
+                  <div className={styles.detailsTable}>
+                    <table className={styles.table}>
+                      <tbody>
+                        <tr>
+                          <th>Id</th>
+                          <td>{combo.id}</td>
+                        </tr>
+                        <tr>
+                          <th>Name</th>
+                          <td>{combo.name}</td>
+                        </tr>
+                        <tr>
+                          <th>Price</th>
+                          <td>${combo.price}</td>
+                        </tr>
+                        <tr>
+                          <th>Type</th>
+                          <td>{combo.type}</td>
+                        </tr>
+                        <tr>
+                          <th>Status</th>
+                          <td>{combo.status ? 'Active' : 'Inactive'}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-              </div>
-              <div className={styles.buttons}>
-                <button className={styles.addButton} onClick={handleCreateAppetizer}>Add Appetizer</button>
-                <button className={styles.addButton} onClick={handleCreateDessert}>Add Dessert</button>
-                <button className={styles.addButton} onClick={handleCreateDish}>Add Dish</button>
-              </div>
-              <div className={styles.tableContainer}>
-                <h3>Appetizers</h3>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {relatedAppetizers.map(appetizer => (
-                      <tr key={appetizer.id}>
-                        <td>{appetizer.appetizerName}</td>
-                        <td>${appetizer.price.toFixed(2)}</td>
-                        <td>{appetizer.quantity}</td>
-                        <td>
-                          <button className={styles.deleteButton} onClick={() => handleDeleteAppetizer(appetizer.id)}>
-                            <FaRegTrashAlt /> Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                <h3>Desserts</h3>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {relatedDesserts.map(dessert => (
-                      <tr key={dessert.id}>
-                        <td>{dessert.dessertName}</td>
-                        <td>${dessert.price.toFixed(2)}</td>
-                        <td>{dessert.quantity}</td>
-                        <td>
-                          <button className={styles.deleteButton} onClick={() => handleDeleteDessert(dessert.id)}>
-                            <FaRegTrashAlt /> Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-
-                <h3>Dishes</h3>
-                <table className={styles.table}>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {relatedDishes.map(dish => (
-                      <tr key={dish.id}>
-                        <td>{dish.dishName}</td>
-                        <td>${dish.price.toFixed(2)}</td>
-                        <td>{dish.quantity}</td>
-                        <td>
-                          <button className={styles.deleteButton} onClick={() => handleDeleteDish(dish.id)}>
-                            <FaRegTrashAlt /> Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>
         ) : (
-          <p>Combo not found</p>
+          <p>No combo item found with ID {id}</p>
         )}
       </div>
 
-      {/* Render modals */}
-      <AppetizerModal isOpen={isModalOpen && modalType === 'appetizer'} comboId={id} onClose={() => setIsModalOpen(false)} />
-      <DessertModal isOpen={isModalOpen && modalType === 'dessert'} comboId={id} onClose={() => setIsModalOpen(false)} />
-      {/* Add Dish Modal */}
+      <div className={styles.contentContainer}>
+        <div className={styles.row}>
+          {/* Appetizers Table */}
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
+              <h3>Appetizers</h3>
+              <button className={styles.createButton} onClick={handleCreateAppetizer}>
+                Create
+              </button>
+            </div>
+            {relatedAppetizers.length > 0 ? (
+              <ul className={styles.listGroup}>
+                {relatedAppetizers.map((app, index) => (
+                  <li
+                    key={app.comboAppetizerId}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={app.appetizerImage} alt={app.appetizerName} className={styles.imgThumbnail} />
+                      </div>
+                      <div className={styles.detailsInfo}>
+                        <div className={styles.row}>
+                          <div className={styles.col}>
+                            <p><strong>Id:</strong> {app.appetizerId}</p>
+                            <p><strong>Name:</strong> {app.appetizerName}</p>
+                            <p><strong>Price:</strong> ${app.appetizerPrice}</p>
+                            <p><strong>Quantity:</strong> {app.appetizerQuantity}</p>
+                          </div>
+                          <div className={styles.deleteButtonContainer}>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() => handleDeleteAppetizer(app.comboAppetizerId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No appetizers found for this combo.</p>
+            )}
+          </div>
+
+          {/* Desserts Table */}
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
+              <h3>Desserts</h3>
+              <button className={styles.createButton} onClick={handleCreateDessert}>
+                Create
+              </button>
+            </div>
+            {relatedDesserts.length > 0 ? (
+              <ul className={styles.listGroup}>
+                {relatedDesserts.map((dessert, index) => (
+                  <li
+                    key={dessert.comboDessertId}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={dessert.dessertImage} alt={dessert.dessertName} className={styles.imgThumbnail} />
+                      </div>
+                      <div className={styles.detailsInfo}>
+                        <div className={styles.row}>
+                          <div className={styles.col}>
+                            <p><strong>Id:</strong> {dessert.dessertId}</p>
+                            <p><strong>Name:</strong> {dessert.dessertName}</p>
+                            <p><strong>Price:</strong> ${dessert.dessertPrice}</p>
+                            <p><strong>Quantity:</strong> {dessert.dessertQuantity}</p>
+                          </div>
+                          <div className={styles.deleteButtonContainer}>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() => handleDeleteDessert(dessert.comboDessertId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No desserts found for this combo.</p>
+            )}
+          </div>
+
+          {/* Dishes Table */}
+          <div className={styles.column}>
+            <div className={styles.sectionHeader}>
+              <h3>Dishes</h3>
+              <button className={styles.createButton} onClick={handleCreateDish}>
+                Create
+              </button>
+            </div>
+            {relatedDishes.length > 0 ? (
+              <ul className={styles.listGroup}>
+                {relatedDishes.map((dish, index) => (
+                  <li
+                    key={dish.comboDishId}
+                    className={`${styles.listGroupItem} ${index % 2 === 0 ? styles.even : styles.odd}`}
+                  >
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsImage}>
+                        <img src={dish.dishImage} alt={dish.dishName} className={styles.imgThumbnail} />
+                      </div>
+                      <div className={styles.detailsInfo}>
+                        <div className={styles.row}>
+                          <div className={styles.col}>
+                            <p><strong>Id:</strong> {dish.dishId}</p>
+                            <p><strong>Name:</strong> {dish.dishName}</p>
+                            <p><strong>Price:</strong> ${dish.dishPrice}</p>
+                            <p><strong>Quantity:</strong> {dish.dishQuantity}</p>
+                          </div>
+                          <div className={styles.deleteButtonContainer}>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() => handleDeleteDish(dish.comboDishId)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No dishes found for this combo.</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Modal Section */}
+      {modalType === 'appetizer' && (
+        <AppetizerModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectAppetizer={handleSelectAppetizer}
+          comboId={parseInt(id)}
+        />
+      )}
+      {modalType === 'dessert' && (
+        <DessertModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectDessert={handleSelectDessert}
+          comboId={parseInt(id)}
+        />
+      )}
+
+      {modalType === 'dish' && (
+        <DishModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSelectDish={handleCreateDish}
+          comboId={parseInt(id)}
+        />
+      )}
+
     </div>
   );
 }
