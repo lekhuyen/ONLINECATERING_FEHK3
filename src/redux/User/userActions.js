@@ -22,3 +22,14 @@ export const sendMailRegister = createAsyncThunk('user/sendmailRegister', async(
         return rejectWithValue(error.message || 'Failed to register user');
     }
 })
+
+// export const resetPassword = createAsyncThunk('user/resetPassword', async(data, {rejectWithValue})=>{
+//     try {
+//         const response = await apiUserResetPassword(data);
+
+//         if (response.status !== 0) return rejectWithValue(response);
+//         return response;
+//     } catch (error) {
+//         return rejectWithValue(error.message || 'Failed to reset password');
+//     }
+// });
