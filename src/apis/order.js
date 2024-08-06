@@ -9,6 +9,8 @@ export const apiGetOrderByUserId = (userId)  => axios({
     url: `/restaurant-service/order/booked/${userId}`,
     method: 'GET',
 })
+
+//bỏ
 export const apiAddOrderAppetizer = (data)  => axios({
     url: `/restaurant-service/appetizerCombo/order-create-comboApettizer`,
     method: 'POST',
