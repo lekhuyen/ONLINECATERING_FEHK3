@@ -7,7 +7,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { fetchAboutTypes, createAboutType, deleteAboutType, updateAboutType } from '../../redux/Information/aboutTypeSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { IoMdCreate } from 'react-icons/io';
-import styles from './AboutUs.module.scss';
+import styles from './AdminAboutUs.module.scss';
 
 
 function AboutUs() {
