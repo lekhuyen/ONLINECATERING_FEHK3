@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
 import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
 import { useParams } from 'react-router-dom';
-import { apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
+import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
@@ -28,11 +28,6 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     setBookingTime,
     order,
     setLobbyId,
-
-    // appetizerDetails,
-    // dessertDetails,
-    // dishDetails
-    cartDess, cartDishs, cartAppet
 
 }) => {
     const [lobby, setLobby] = useState(null)
@@ -135,28 +130,32 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     const handleClickCreateOrder = async () => {
-        // const response = await apiCreateOrder(order)
-        // if(response.status === 0) {
-        //     console.log(response);
-        //     const data = {
-        //         orderType: 'ban tiec',
-        //         amount: response?.data?.deposit,
-        //         orderDescription: 'tiec',
-        //         name: userCurrent?.phone,
-        //         orderIdBooked: response?.data?.id
-        //     }            
-        //     const resPayment = await apiPayment(data)
-        //     if(resPayment.status === 0) {
-        //         console.log(resPayment);
+        const response = await apiAddOrder(order)
+        if(response.status === 0) {
+            
+            localStorage.removeItem('appetizer');
+            localStorage.removeItem('dish');
+            localStorage.removeItem('dessert');
 
-        //         window.location.href = resPayment?.url;
-        //     }
+            const data = {
+                orderType: 'ban tiec',
+                amount: response?.data?.deposit,
+                orderDescription: 'tiec',
+                name: userCurrent?.phone,
+                orderIdBooked: response?.data?.id
+            }            
+            const resPayment = await apiPayment(data)
+            if(resPayment.status === 0) {
+                console.log(resPayment);
 
-        // }
+                window.location.href = resPayment?.url;
+            }
 
-        const response = await apiAddOrderAppetizer(cartAppet)
-        console.log(response);
-        
+        }
+
+        // const response = await apiAddOrder(cartAppet)
+        // console.log(order);
+
 
     }
 
