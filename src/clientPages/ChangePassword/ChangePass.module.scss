@@ -48,51 +48,51 @@
 }
 
 .changePw_otp {
-    display: flex;                // Use flexbox to align items horizontally
-    align-items: center;         // Center align items vertically
-    gap: 10px;                    // Space between the input and button
-    margin-bottom: 20px;          // Space below the container (adjust as needed)
+    display: flex;               
+    align-items: center;        
+    gap: 10px;                   
+    margin-bottom: 20px;         
 }
 
 .otpAndPasswordContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px; // Adds space between each section (OTP and Update Password)
+    gap: 20px; 
 }
 
-// Container for each section (OTP and Update Password)
+
 .sectionContainer {
     display: flex;
     flex-direction: row;
-    gap: 10px; // Adds space between input and button
-    align-items: center; // Center align items vertically
+    gap: 10px; 
+    align-items: center; 
 }
 
-// Style for input fields
+
 .inputField {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 100%; // Ensures input fields take full width of container
-    flex: 1; // Allows input to take up remaining space
+    width: 100%; 
+    flex: 1; 
 }
 
-// Style for buttons
+
 .button {
     background-color: #f7d794;
     color: #B33771;
-    padding: 12px 20px; // Increased padding for a more rectangular appearance
+    padding: 12px 20px; 
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: auto; // Width adjusts to content size
-    white-space: nowrap; // Prevents text from wrapping to the next line
-    text-align: center; // Center align text within button
-    display: inline-block; // Ensures the button does not stretch
+    width: auto; 
+    white-space: nowrap; 
+    text-align: center; 
+    display: inline-block; 
     font-weight: 600;
 }
 
-// Add hover effect for buttons
+
 .button:hover {
     background-color: #e0c970;
 }
