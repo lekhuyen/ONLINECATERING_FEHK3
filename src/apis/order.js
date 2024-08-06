@@ -14,3 +14,10 @@ export const apiAddOrderAppetizer = (data)  => axios({
     method: 'POST',
     data
 })
+
+//co dish, apppetizer, dessert
+export const apiAddOrder = (data)  => axios({
+    url: `/restaurant-service/order/combo`,
+    method: 'POST',
+    data
+})
