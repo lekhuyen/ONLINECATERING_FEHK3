@@ -1,22 +1,28 @@
-
+// General container styling
 .contactUs_container {
   margin-top: 70px;
   font-family: cursive;
   margin-bottom: 0;
 }
+
+// Header styles
 .contactUs_header_title {
   display: flex;
   justify-content: center;
   padding-top: 20px;
-  color:#f7d794;
-}
-.contactUs_title{
   color: #f7d794;
 }
-.contactUs_text{  
+
+.contactUs_title {
+  color: #f7d794;
+}
+
+.contactUs_text {
   color: #CAD3C8;
 }
-.contactUs_button{
+
+// Button styles
+.contactUs_button {
   border: none;
   border-radius: 30px;
   padding: 10px;
@@ -25,10 +31,12 @@
   font-size: 20px;
   font-weight: bold;
 }
-.contactUs_form{
-  color:#CAD3C8;
+
+.contactUs_form {
+  color: #CAD3C8;
 }
 
+// Form layout
 .contactUs_row {
   display: flex;
   justify-content: center;
@@ -36,14 +44,14 @@
 
 .contactUs_left {
   flex: 1;
-  padding: 0 15px; /* Added padding for spacing */
+  padding: 0 15px;
   margin-top: 80px;
 }
 
 .contactUs_right {
   flex: 1;
-  padding: 0 15px; /* Added padding for spacing */
-  margin-left: 20px; /* Added margin for separation */
+  padding: 0 15px;
+  margin-left: 20px;
 }
 
 @media (max-width: 768px) {
@@ -53,7 +61,115 @@
   }
 
   .contactUs_right {
-    margin-left: 0; /* Adjusted margin for smaller screens */
-    margin-top: 20px; /* Added margin for spacing */
+    margin-left: 0;
+    margin-top: 20px;
   }
+}
+
+// Modal styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-dialog {
+  background: #ffffff;
+  border-radius: 0.3rem;
+  max-width: 500px;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  border: 1px solid #dee2e6;
+  border-radius: 0.3rem;
+}
+
+.modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff; /* Match button color */
+  color: #B33771; /* Header text color */
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem; /* Larger title for emphasis */
+  font-weight: 600;
+  color: #B33771; /* Bright yellow for the title */
+}
+
+.modal-body {
+  padding: 1rem;
+  color: #000000; /* Bright yellow for modal body text */
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: flex-end;
+  background-color: #ffffff; /* Match header color */
+}
+
+.btn-close {
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #B33771; /* Bright yellow for the close button */
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-outline-secondary {
+  border-color: #B33771;
+  color: #B33771;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #B33771;
+  color: #fff;
 }

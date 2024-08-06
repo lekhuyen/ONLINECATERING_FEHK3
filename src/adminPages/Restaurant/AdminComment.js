@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
+import styles from './AdminComment.module.scss';
 
 import {
     fetchCommentData,
@@ -117,11 +118,11 @@ export default function AdminComment() {
     const badCommentsFromUsers = commentData.filter(comment => detectBadWords(comment.content)).length;
 
     return (
-        <div className="container mt-5">
+        <div className={`container mt-5 ${styles.container}`}>
             <h2>Comment Management</h2>
 
             <div className="container mt-5">
-                <table className="table table-hover">
+                <table className={`table table-hover ${styles.table}`}>
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -131,6 +132,7 @@ export default function AdminComment() {
                             <th>Dessert</th>
                             <th>Content</th>
                             <th>Status</th>
+                            <th>Detail</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -150,7 +152,7 @@ export default function AdminComment() {
                                 </td>
                                 <td>
                                     <button
-                                        className="btn btn-outline-primary"
+                                        className={`btn btn-outline-primary ${styles.btnOutlinePrimary}`}
                                         onClick={() => handleInfoClick(comment)}
                                     >
                                         <BsInfoCircle />
@@ -158,7 +160,7 @@ export default function AdminComment() {
                                 </td>
                                 <td>
                                     <button
-                                        className="btn btn-outline-primary"
+                                        className={`btn btn-outline-primary ${styles.btnOutlinePrimary}`}
                                         onClick={() => handleToggleStatus(comment.id, comment.status)}
                                     >
                                         {confirmToggle ? 'Are you sure?' : comment.status ? 'Unblock' : 'Block'}
@@ -172,19 +174,19 @@ export default function AdminComment() {
 
             {/* Modal for Comment Details */}
             {showDetailModal && (
-                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Comment Details</h5>
+                <div className={styles.modalOverlay} tabIndex="-1" role="dialog">
+                    <div className={styles.modalDialog} role="document">
+                        <div className={styles.modalContent}>
+                            <div className={styles.modalHeader}>
+                                <h5 className={styles.modalTitle}>Comment Details</h5>
                                 <button
                                     type="button"
-                                    className="btn-close"
+                                    className={`btn-close ${styles.btnClose}`}
                                     onClick={() => setShowDetailModal(false)}
                                     aria-label="Close"
                                 ></button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles.modalBody}>
                                 {selectedComment && (
                                     <div>
                                         <h5>User: {usernameById[selectedComment.userId]}</h5>
@@ -204,7 +206,7 @@ export default function AdminComment() {
                                     </div>
                                 )}
                             </div>
-                            <div className="modal-footer">
+                            <div className={styles.modalFooter}>
                                 <button
                                     type="button"
                                     className="btn btn-secondary"
@@ -222,7 +224,7 @@ export default function AdminComment() {
                 <div className='col-sm-6'>
                     {/* Pagination */}
                     <nav>
-                        <ul className="pagination">
+                        <ul className={`pagination ${styles.pagination}`}>
                             <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                                 <button className="page-link" onClick={() => paginate(currentPage - 1)}>Previous</button>
                             </li>

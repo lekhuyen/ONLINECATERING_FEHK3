@@ -7,6 +7,7 @@ import { IoNewspaperOutline } from "react-icons/io5";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { fetchNewsData, deleteNewsItem } from "../../redux/Information/newsSlice";
 import { fetchNewsTypes, editNewsType, deleteNewsType, createNewsType } from "../../redux/Information/newsTypeSlice";
+import styles from './News.module.scss'; // Import your SCSS file
 
 function NewsAd() {
     const dispatch = useDispatch();
@@ -46,18 +47,18 @@ function NewsAd() {
     };
 
     const handleAddNewsType = async () => {
-      if (!addNewsTypeName.trim()) return;
-      
-      setIsSubmitting(true);
-      try {
-          await dispatch(createNewsType({ newsTypeName: addNewsTypeName }));
-          setAddNewsTypeName("");
-          setShowTypeModal(false);
-      } catch (error) {
-          console.error('Error adding news type:', error);
-      } finally {
-          setIsSubmitting(false);
-      }
+        if (!addNewsTypeName.trim()) return;
+        
+        setIsSubmitting(true);
+        try {
+            await dispatch(createNewsType({ newsTypeName: addNewsTypeName }));
+            setAddNewsTypeName("");
+            setShowTypeModal(false);
+        } catch (error) {
+            console.error('Error adding news type:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleEditType = async (id, newName) => {
@@ -119,7 +120,7 @@ function NewsAd() {
     }
 
     return (
-        <div className="container">
+        <div className={styles.container}>
             <h2>News Data</h2>
 
             <div className="row mb-3">
@@ -140,7 +141,7 @@ function NewsAd() {
                     <h2>News Type</h2>
                     <button
                         type="button"
-                        className="btn btn-info btn-lg"
+                        className={`btn btn-info btn-lg ${styles['btn-primary']}`}
                         onClick={() => setShowTypeModal(true)}
                     >
                         Create News Type
@@ -149,13 +150,13 @@ function NewsAd() {
             </div>
 
             <button
-                className="btn btn-success mb-3"
+                className={`btn btn-success mb-3 ${styles['btn-primary']}`}
                 onClick={() => navigate("/newsadmin/create-news")}
             >
                 Create News <IoNewspaperOutline />
             </button>
 
-            <table className="table table-hover">
+            <table className={styles.table}>
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -178,12 +179,7 @@ function NewsAd() {
                                     <img
                                         src={news.imagePaths[0]}
                                         alt={`News ${news.id}`}
-                                        style={{
-                                            width: "100px",
-                                            height: "100px",
-                                            objectFit: "cover",
-                                            marginBottom: "5px"
-                                        }}
+                                        className="img-fluid"
                                     />
                                 )}
                             </td>
@@ -217,22 +213,22 @@ function NewsAd() {
 
             {/* Modal for News Details */}
             {showDetailModal && (
-                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h4 className="modal-title float-start">
+                <div className={styles['modal-overlay']}>
+                    <div className={styles['modal-dialog']}>
+                        <div className={styles['modal-content']}>
+                            <div className={styles['modal-header']}>
+                                <h4 className={styles['modal-title']}>
                                     News Title: {selectedNews && selectedNews.title}
                                 </h4>
                                 <button
                                     type="button"
-                                    className="btn btn-danger float-end"
+                                    className={`btn-close ${styles['btn-close']}`}
                                     onClick={() => setShowDetailModal(false)}
                                 >
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles['modal-body']}>
                                 {selectedNews && (
                                     <div>
                                         <h5>News Content:</h5>
@@ -244,12 +240,6 @@ function NewsAd() {
                                                     key={index}
                                                     src={imagePath}
                                                     alt={`News ${selectedNews.id}`}
-                                                    style={{
-                                                        width: "100px",
-                                                        height: "100px",
-                                                        objectFit: "cover",
-                                                        marginBottom: "5px"
-                                                    }}
                                                 />
                                             ))
                                         ) : (
@@ -258,10 +248,10 @@ function NewsAd() {
                                     </div>
                                 )}
                             </div>
-                            <div className="modal-footer">
+                            <div className={styles['modal-footer']}>
                                 <button
                                     type="button"
-                                    className="btn btn-danger"
+                                    className={`btn btn-danger ${styles['btn-danger']}`}
                                     onClick={() => setShowDetailModal(false)}
                                 >
                                     Close
@@ -274,20 +264,20 @@ function NewsAd() {
 
             {/* Modal for Create News Type */}
             {showTypeModal && (
-                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h4 className="modal-title">Type of News</h4>
+                <div className={styles['modal-overlay']}>
+                    <div className={styles['modal-dialog']}>
+                        <div className={styles['modal-content']}>
+                            <div className={styles['modal-header']}>
+                                <h4 className={styles['modal-title']}>Type of News</h4>
                                 <button
                                     type="button"
-                                    className="btn-close"
+                                    className={`btn-close ${styles['btn-close']}`}
                                     onClick={() => setShowTypeModal(false)}
                                     aria-label="Close"
                                 ></button>
                             </div>
-                            <div className="modal-body">
-                                <table className="table">
+                            <div className={styles['modal-body']}>
+                                <table className={styles.table}>
                                     <thead>
                                         <tr>
                                             <th>News Type Name</th>
@@ -335,17 +325,17 @@ function NewsAd() {
                                 </div>
                                 <button
                                     type="button"
-                                    className="btn btn-primary"
+                                    className={`btn btn-primary ${styles['btn-primary']}`}
                                     onClick={handleAddNewsType}
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? 'Adding...' : 'Add Type'}
                                 </button>
                             </div>
-                            <div className="modal-footer">
+                            <div className={styles['modal-footer']}>
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className={`btn btn-secondary ${styles['btn-outline-secondary']}`}
                                     onClick={() => setShowTypeModal(false)}
                                 >
                                     Close
@@ -358,7 +348,7 @@ function NewsAd() {
 
             {/* Pagination */}
             <nav>
-                <ul className="pagination">
+                <ul className={`pagination ${styles.pagination}`}>
                     <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                         <button className="page-link" onClick={() => paginate(currentPage - 1)}>
                             Previous
