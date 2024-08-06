@@ -24,11 +24,11 @@ const ChangePassword = () => {
     const handleSubmit = () => {
         if (otpSent) {
             if (newPassword !== confirmNewPassword) {
-                // alert("New password and confirm new password must be matched.");
+                alert("New password and confirm new password must be matched.");
                 return;
             }
             if (newPassword === oldPassword) {
-                // alert("New password cannot be the same as the old password.");
+                alert("New password cannot be the same as the old password.");
                 return;
             }
             dispatch(updatePassword({ email, password: newPassword, otp }));

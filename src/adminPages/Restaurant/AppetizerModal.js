@@ -27,13 +27,13 @@ export default function AppetizerModal({ comboId, isOpen, onClose }) {
       return;
     }
 
-    // Check if the appetizer is already associated with the combo
+      // Check if the appetizer is already associated with the current combo
     const isDuplicate = comboAppetizers.some(
-      comboApp => comboApp.appetizerId === appetizerId
+      comboApp => comboApp.comboId === comboId && comboApp.appetizerId === appetizerId
     );
-
+  
     if (isDuplicate) {
-      setErrorMsg('This appetizer is already associated with the combo.');
+      setErrorMsg('This appetizer is already associated with the current combo.');
       return;
     }
 

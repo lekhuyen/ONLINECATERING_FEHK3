@@ -26,27 +26,15 @@ export default function DessertModal({ comboId, isOpen, onClose }) {
       return;
     }
 
-    // Check if the appetizer is already associated with the combo
-    const isDuplicate = comboDesserts.some(
-      comboDes => comboDes.dessertId === dessertId
-    );
+    // Check if the dessert is already associated with the current combo
+  const isDuplicate = comboDesserts.some(
+    comboDes => comboDes.comboId === comboId && comboDes.dessertId === dessertId
+  );
 
-    if (isDuplicate) {
-      setErrorMsg('This Dessert is already associated with the combo.');
-      return;
-    }
-
-    // Check if desserts is defined and not empty before checking if dessert is already added
-    if (desserts && desserts.length > 0) {
-      // Check if dessert is already added to the combo
-      const isAlreadyAdded = desserts.some(dessert => dessert.comboId === comboId && dessert.dessertId === dessertId);
-      if (isAlreadyAdded) {
-        alert("This dessert is already added to the combo.");
-        return;
-      }
-    }
-
-
+  if (isDuplicate) {
+    setErrorMsg('This dessert is already associated with the current combo.');
+    return;
+  }
     dispatch(createAdminComboDessert({ comboId, dessertId }));
   };
 
