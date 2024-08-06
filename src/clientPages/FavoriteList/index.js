@@ -10,7 +10,7 @@ function FavoriteList(props) {
       </div>
       <div className={styles.user_favorite_row}>
         <div className={styles.user_favorite_left} >
-          <img src={images.SurfnTurf} className={styles.user_favorite_images} />
+          <img alt='' src={images.SurfnTurf} className={styles.user_favorite_images} />
         </div>
         <div className={styles.user_favorite_right} >
           <p>
@@ -25,7 +25,7 @@ function FavoriteList(props) {
       </div>
       <div className={styles.user_favorite_row}>
         <div className={styles.user_favorite_left} >
-          <img src={images.dumaloo} className={styles.user_favorite_images} />
+          <img alt='' src={images.dumaloo} className={styles.user_favorite_images} />
         </div>
         <div className={styles.user_favorite_right} >
           <p>
@@ -40,7 +40,7 @@ function FavoriteList(props) {
       </div>
       <div className={styles.user_favorite_row}>
         <div className={styles.user_favorite_left} >
-          <img src={images.applewalnut} className={styles.user_favorite_images} />
+          <img alt="" src={images.applewalnut} className={styles.user_favorite_images} />
         </div>
         <div className={styles.user_favorite_right} >
           <p>

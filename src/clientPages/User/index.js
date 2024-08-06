@@ -82,7 +82,9 @@ const User = () => {
                     }
                     {
                         statusUserTab === 3 &&
-                        <HistoryBooking />
+                        <HistoryBooking
+                        userId={userCurrent?.id}
+                        />
                     }
                 </div>
             </div>
