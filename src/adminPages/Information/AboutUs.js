@@ -24,6 +24,9 @@ function AboutUs() {
     const [newAboutTypeName, setNewAboutTypeName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [showTypeModal, setShowTypeModal] = useState(false);
+
     useEffect(() => {
         dispatch(fetchAboutData());
         dispatch(fetchAboutTypes());
@@ -39,6 +42,7 @@ function AboutUs() {
 
     const handleInfoClick = (aboutus) => {
         setSelectedAboutUs(aboutus);
+        setShowDetailModal(true);
     };
 
     const handleDeleteType = (id) => {
@@ -58,10 +62,7 @@ function AboutUs() {
                 body: JSON.stringify(updatedType),
             });
             if (response.ok) {
-                // Assuming the response returns updated data, you may dispatch an action
-                // to update your Redux store if needed.
-                dispatch(updateAboutType(updatedType)); // Assuming you have an action like this in your redux
-                // Or you can re-fetch the types after successful update
+                dispatch(updateAboutType(updatedType));
                 dispatch(fetchAboutTypes());
             } else {
                 console.error('Failed to edit About Type:', response.statusText);
@@ -106,6 +107,7 @@ function AboutUs() {
         try {
             await dispatch(createAboutType({ aboutTypeName: newAboutTypeName }));
             setNewAboutTypeName("");
+            setShowTypeModal(false);
         } catch (error) {
             console.error('Error adding about type:', error);
         } finally {
@@ -153,8 +155,7 @@ function AboutUs() {
                         <button
                             type="button"
                             className="btn btn-info btn-lg me-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#TypeModal"
+                            onClick={() => setShowTypeModal(true)}
                         >
                             Create About Type
                         </button>
@@ -184,25 +185,23 @@ function AboutUs() {
                                 <td>{limitContent(about.content)}</td>
                                 <td>{about.aboutTypeName}</td>
                                 <td>
-                                        {about.imagePaths && about.imagePaths.length > 0 && (
-                                            <img
-                                                src={about.imagePaths[0]} // Displaying the first image from imagePaths array
-                                                alt={`about ${about.id}`}
-                                                style={{
-                                                    width: "100px",
-                                                    height: "auto",
-                                                    objectFit: "cover",
-                                                    marginBottom: "5px"
-                                                }}
-                                            />
-                                        )}
-                                    </td>
+                                    {about.imagePaths && about.imagePaths.length > 0 && (
+                                        <img
+                                            src={about.imagePaths[0]} // Displaying the first image from imagePaths array
+                                            alt={`about ${about.id}`}
+                                            style={{
+                                                width: "100px",
+                                                height: "auto",
+                                                objectFit: "cover",
+                                                marginBottom: "5px"
+                                            }}
+                                        />
+                                    )}
+                                </td>
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
                                         onClick={() => handleInfoClick(about)}
-                                        data-toggle="modal"
-                                        data-target="#myModal"
                                     >
                                         <BsInfoCircle />
                                     </button>
@@ -226,69 +225,75 @@ function AboutUs() {
             </div>
 
             {/* Modal for About Details */}
-            <div className="modal fade" id="myModal" role="dialog">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title float-start">
-                                News Title: {selectedAboutUs && selectedAboutUs.title}
-                            </h4>
-                            <button
-                                type="button"
-                                className="btn btn-danger float-end"
-                                data-dismiss="modal"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            {selectedAboutUs && (
-                                <div>
-                                    <h5>News Content:</h5>
-                                    <p>{selectedAboutUs.content}</p>
-                                    <h5>News Image(s):</h5>
-                                    {selectedAboutUs.imagePaths && selectedAboutUs.imagePaths.length > 0 ? (
-                                        selectedAboutUs.imagePaths.map((imagePath, index) => (
-                                            <img
-                                                key={index}
-                                                src={imagePath}
-                                                alt={`about ${selectedAboutUs.id}`}
-                                                style={{
-                                                    width: "100px",
-                                                    height: "auto",
-                                                    objectFit: "cover",
-                                                    marginBottom: "5px"
-                                                }}
-                                            />
-                                        ))
-                                    ) : (
-                                        <p>No images available</p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-dismiss="modal"
-                            >
-                                Close
-                            </button>
+            {showDetailModal && (
+                <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                    <div className="modal-dialog modal-lg" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h4 className="modal-title float-start">
+                                    News Title: {selectedAboutUs && selectedAboutUs.title}
+                                </h4>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger float-end"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedAboutUs && (
+                                    <div>
+                                        <h5>News Content:</h5>
+                                        <p>{selectedAboutUs.content}</p>
+                                        <h5>News Image(s):</h5>
+                                        {selectedAboutUs.imagePaths && selectedAboutUs.imagePaths.length > 0 ? (
+                                            selectedAboutUs.imagePaths.map((imagePath, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={imagePath}
+                                                    alt={`about ${selectedAboutUs.id}`}
+                                                    style={{
+                                                        width: "100px",
+                                                        height: "auto",
+                                                        objectFit: "cover",
+                                                        marginBottom: "5px"
+                                                    }}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p>No images available</p>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Modal for Create About Type */}
-            <div className='container'>
-
-                <div className="modal fade" id="TypeModal" role="dialog">
-                    <div className="modal-dialog modal-lg">
+            {showTypeModal && (
+                <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+                    <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h4 className="modal-title">Type of About Us</h4>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowTypeModal(false)}
+                                    aria-label="Close"
+                                ></button>
                             </div>
                             <div className="modal-body">
                                 <table className="table">
@@ -342,12 +347,18 @@ function AboutUs() {
                                 </button>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowTypeModal(false)}
+                                >
+                                    Close
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             <nav>
                 <ul className="pagination">

@@ -10,7 +10,7 @@
     gap: 20px;
     padding-top: 30px;
     h3{
-        color: darkkhaki;
+        color: chocolate;
     }
 }
 
@@ -66,11 +66,13 @@ height: 300px;
     margin-top: 40px;
 }
 .comment_row_left {
-    border: 1px solid red;
+    border: 1px solid darkkhaki;
+    border-radius: 5px;
     height: max-content;
 }
 .comment_row_left h3 {
     text-align: center;
+    color: yellowgreen;
 }
 .comment_row_left p {
     margin-bottom: 0;
@@ -84,7 +86,7 @@ height: 300px;
     padding-left: 20px;
     transition: .5s;
     cursor: pointer;
-    color: white;
+    color: chocolate;
 }
 
 .comment_dish_item:hover {
