@@ -76,7 +76,7 @@ const Login = () => {
                     Swal.fire('Oop!',
                         response.message, 'error')
                 }
-                
+
             }
             else {
                 const rs = await apiUserLogin(token ? loginToken : data)
@@ -223,6 +223,11 @@ const Login = () => {
                                         className={cx('forget')}>Go Login</p>
                                 )
                             }
+                            <p
+                                onClick={() => {
+                                    navigate('/')
+                                }}
+                                className={cx('forget')}>Go Home</p>
                         </>
                     </div>
                 </div>

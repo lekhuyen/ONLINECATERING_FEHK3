@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
 import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
 import { useParams } from 'react-router-dom';
-import { apiCreateOrder } from '../../apis/order';
+import { apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
@@ -28,17 +28,24 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     setBookingTime,
     order,
     setLobbyId,
+
+    // appetizerDetails,
+    // dessertDetails,
+    // dishDetails
+    cartDess, cartDishs, cartAppet
+
 }) => {
     const [lobby, setLobby] = useState(null)
     const [combos, setCombos] = useState([])
 
-    const {success} = useParams()
-    if(success){
+    // chua xong
+    const { success } = useParams()
+    if (success) {
         Swal.fire('Congratulation',
             success, 'success')
     }
-    console.log(success);
-    
+    // ---------------
+
     // ---------------
     const [lobbySelect, setLobbySelect] = useState(null)
     const [selectTable, setSelectTable] = useState(null)
@@ -51,7 +58,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
             setUserCurrent(user);
         }
     }, [isLoggedIn])
-    
+
     const getAllLobby = async () => {
         const response = await apiGetAllLobby()
         if (response.status === 0) {
@@ -110,7 +117,6 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
     }
 
-
     useEffect(() => {
         getOneLobby()
     }, [lobbySelect])
@@ -129,28 +135,29 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     const handleClickCreateOrder = async () => {
-        const response = await apiCreateOrder(order)
-        if(response.status === 0) {
-            console.log(response);
-            const data = {
-                orderType: 'ban tiec',
-                amount: response?.data?.deposit,
-                orderDescription: 'tiec',
-                name: userCurrent?.phone,
-                orderIdBooked: response?.data?.id
-            }
-            // console.log(data);
-            
-            const resPayment = await apiPayment(data)
-            if(resPayment.status === 0) {
-                console.log(resPayment);
-                
-                window.location.href = resPayment?.url;
-                // console.log(resPayment?.url);
-                // window.open(resPayment?.url, '_blank');
-            }
-            
-        }
+        // const response = await apiCreateOrder(order)
+        // if(response.status === 0) {
+        //     console.log(response);
+        //     const data = {
+        //         orderType: 'ban tiec',
+        //         amount: response?.data?.deposit,
+        //         orderDescription: 'tiec',
+        //         name: userCurrent?.phone,
+        //         orderIdBooked: response?.data?.id
+        //     }            
+        //     const resPayment = await apiPayment(data)
+        //     if(resPayment.status === 0) {
+        //         console.log(resPayment);
+
+        //         window.location.href = resPayment?.url;
+        //     }
+
+        // }
+
+        const response = await apiAddOrderAppetizer(cartAppet)
+        console.log(response);
+        
+
     }
 
     return (

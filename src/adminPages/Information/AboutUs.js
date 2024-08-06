@@ -7,6 +7,8 @@ import { BsInfoCircle } from "react-icons/bs";
 import { fetchAboutTypes, createAboutType, deleteAboutType, updateAboutType } from '../../redux/Information/aboutTypeSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { IoMdCreate } from 'react-icons/io';
+import styles from './AboutUs.module.scss';
+
 
 function AboutUs() {
     const dispatch = useDispatch();
@@ -124,7 +126,7 @@ function AboutUs() {
     }
 
     return (
-        <div className='container'>
+        <div className={styles.container}>
             <h2>About Us Content</h2>
 
             <div className="row mb-3">
@@ -166,7 +168,7 @@ function AboutUs() {
             <button className="btn btn-success mb-3" onClick={() => navigate('/aboutus/create-aboutus')}>Add About Us</button>
 
             <div className="container mt-5">
-                <table className="table table-hover">
+                <table className={styles.table}>
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -189,12 +191,6 @@ function AboutUs() {
                                         <img
                                             src={about.imagePaths[0]} // Displaying the first image from imagePaths array
                                             alt={`about ${about.id}`}
-                                            style={{
-                                                width: "100px",
-                                                height: "auto",
-                                                objectFit: "cover",
-                                                marginBottom: "5px"
-                                            }}
                                         />
                                     )}
                                 </td>
@@ -226,22 +222,22 @@ function AboutUs() {
 
             {/* Modal for About Details */}
             {showDetailModal && (
-                <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
+                <div className={styles['modal-overlay']} role="dialog">
+                    <div className={styles['modal-dialog']} role="document">
+                        <div className={styles['modal-content']}>
+                            <div className={styles['modal-header']}>
                                 <h4 className="modal-title float-start">
                                     News Title: {selectedAboutUs && selectedAboutUs.title}
                                 </h4>
                                 <button
                                     type="button"
-                                    className="btn btn-danger float-end"
+                                    className="btn-close"
                                     onClick={() => setShowDetailModal(false)}
                                 >
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles['modal-body']}>
                                 {selectedAboutUs && (
                                     <div>
                                         <h5>News Content:</h5>
@@ -253,12 +249,6 @@ function AboutUs() {
                                                     key={index}
                                                     src={imagePath}
                                                     alt={`about ${selectedAboutUs.id}`}
-                                                    style={{
-                                                        width: "100px",
-                                                        height: "auto",
-                                                        objectFit: "cover",
-                                                        marginBottom: "5px"
-                                                    }}
                                                 />
                                             ))
                                         ) : (
@@ -267,7 +257,7 @@ function AboutUs() {
                                     </div>
                                 )}
                             </div>
-                            <div className="modal-footer">
+                            <div className={styles['modal-footer']}>
                                 <button
                                     type="button"
                                     className="btn btn-danger"
@@ -283,19 +273,20 @@ function AboutUs() {
 
             {/* Modal for Create About Type */}
             {showTypeModal && (
-                <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
+                <div className={styles['modal-overlay']} role="dialog">
+                    <div className={styles['modal-dialog']} role="document">
+                        <div className={styles['modal-content']}>
+                            <div className={styles['modal-header']}>
                                 <h4 className="modal-title">Type of About Us</h4>
                                 <button
                                     type="button"
                                     className="btn-close"
                                     onClick={() => setShowTypeModal(false)}
-                                    aria-label="Close"
-                                ></button>
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div className="modal-body">
+                            <div className={styles['modal-body']}>
                                 <table className="table">
                                     <thead>
                                         <tr>
@@ -346,10 +337,10 @@ function AboutUs() {
                                     <IoMdCreate /> {isSubmitting ? 'Adding...' : 'Add Type'}
                                 </button>
                             </div>
-                            <div className="modal-footer">
+                            <div className={styles['modal-footer']}>
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-danger"
                                     onClick={() => setShowTypeModal(false)}
                                 >
                                     Close
@@ -359,6 +350,7 @@ function AboutUs() {
                     </div>
                 </div>
             )}
+
 
             <nav>
                 <ul className="pagination">

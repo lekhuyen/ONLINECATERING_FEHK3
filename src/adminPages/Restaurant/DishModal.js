@@ -29,23 +29,13 @@ export default function DishModal({ comboId, isOpen, onClose }) {
       return;
     }
 
-    // Check if the dish is already associated with the combo
-    const isDuplicate = comboDishes.some(comboDish => comboDish.dishId === dishId);
+    // Check if the dish is already associated with the current combo
+  const isDuplicate = comboDishes.some(comboDish => comboDish.comboId === comboId && comboDish.dishId === dishId);
 
-    if (isDuplicate) {
-      setErrorMsg('This dish is already associated with the combo.');
-      return;
-    }
-
-    // Check if dishes is defined and not empty before checking if dish is already added
-    if (dishes && dishes.length > 0) {
-      // Check if dish is already added to the combo
-      const isAlreadyAdded = dishes.some(dish => dish.comboId === comboId && dish.dishId === dishId);
-      if (isAlreadyAdded) {
-        alert("This dish is already added to the combo.");
-        return;
-      }
-    }
+  if (isDuplicate) {
+    setErrorMsg('This dish is already associated with the current combo.');
+    return;
+  }
 
     dispatch(createAdminComboDish({ comboId, dishId }));
   };
