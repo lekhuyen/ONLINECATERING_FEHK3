@@ -38,16 +38,17 @@ const Contact = () => {
 
     try {
       const now = new Date();
-      const lastSubmitTime = localStorage.getItem('lastSubmitTime');
-      const lastSubmitEmail = localStorage.getItem('lastSubmitEmail');
+      const lastSubmitTimes = JSON.parse(localStorage.getItem('submissionTimes') || '{}');
+      const emailSubmissionTimes = lastSubmitTimes[contact.email] || [];
 
-      if (lastSubmitEmail === contact.email && lastSubmitTime) {
-        const lastSubmitDate = new Date(lastSubmitTime);
-        if (now.toDateString() === lastSubmitDate.toDateString()) {
-          setModalMessage('You have reached the limit for sending messages today using this email.');
-          setShowModal(true);
-          return;
-        }
+      // Filter out submissions from today
+      const today = now.toDateString();
+      const todaysSubmissions = emailSubmissionTimes.filter(time => new Date(time).toDateString() === today);
+
+      if (todaysSubmissions.length >= 2) {
+        setModalMessage('You have reached the limit for sending messages today using this email.');
+        setShowModal(true);
+        return;
       }
 
       setIsSubmitting(true);
@@ -66,8 +67,10 @@ const Contact = () => {
         content: ''
       });
 
-      localStorage.setItem('lastSubmitTime', now.toString());
-      localStorage.setItem('lastSubmitEmail', contact.email);
+      // Update submission times
+      emailSubmissionTimes.push(now.toISOString());
+      lastSubmitTimes[contact.email] = emailSubmissionTimes;
+      localStorage.setItem('submissionTimes', JSON.stringify(lastSubmitTimes));
 
       setIsSubmitting(false);
       setModalMessage('Your message has been successfully sent to us.');

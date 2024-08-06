@@ -85,5 +85,4 @@ const adminorderSlice = createSlice({
     },
 });
 
-
 export default adminorderSlice.reducer;
