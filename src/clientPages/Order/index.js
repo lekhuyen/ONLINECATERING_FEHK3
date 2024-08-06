@@ -31,6 +31,10 @@ const Order = () => {
     const { isLoggedIn } = useSelector(state => state.user)
     const [comboid, setComboid] = useState(null)
 
+    const [appetizerDetails, setAppetizerDetails] = useState([])
+    const [dessertDetails, setDessertDetails] = useState([])
+    const [dishDetails, setDishDetails] = useState([])
+
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -47,6 +51,8 @@ const Order = () => {
         deposit: deposit,
         oganization: bookingDate + ' ' + bookingTime
     }
+
+    
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
     }
@@ -67,11 +73,26 @@ const Order = () => {
         return storedCart ? JSON.parse(storedCart) : [];
     });
 
+    const cartAppet = cartAppetizer.map(appetizer => ({
+        appetizerId: appetizer.item.id,
+        quantity: appetizer.quantity,
+        comboId: comboid,
+    }));
+    const cartDess = cartDessert.map(dessert => ({
+        id: dessert.item.id,
+        quantity: dessert.quantity,
+        comboId: comboid,
+    }));
+    const cartDishs = cartDish.map(dish => ({
+        id: dish.item.id,
+        quantity: dish.quantity,
+        comboId: comboid,
+    }));
 
     useEffect(() => {
-        var appetizer = JSON.parse(localStorage.getItem('appetizer'))
-        var dessert = JSON.parse(localStorage.getItem('dessert'))
-        var dish = JSON.parse(localStorage.getItem('dish'))
+        var appetizer = JSON.parse(localStorage.getItem('appetizer')) || []
+        var dessert = JSON.parse(localStorage.getItem('dessert')) || [];
+        var dish = JSON.parse(localStorage.getItem('dish')) || []
 
         if (dessert.length > 0) setCartDessert(dessert)
 
@@ -79,7 +100,28 @@ const Order = () => {
 
         if (dish.length > 0) setCartDish(dish)
 
+        // const appetizerDetails = appetizer.map(appetizer => ({
+        //     id: appetizer.item.id,
+        //     quantity: appetizer.quantity,
+        //     comboid
+        // }));
+        // setAppetizerDetails(appetizerDetails)
+        // const dessertDetails = dessert.map(dessert => ({
+        //     id: dessert.item.id,
+        //     quantity: dessert.quantity,
+        // }));
+        // setDessertDetails(dessertDetails)
+        // const dishDetails = dish.map(dish => ({
+        //     id: dish.item.id,
+        //     quantity: dish.quantity,
+        // }));
+
+        // setDishDetails(dishDetails)
+        
+            
     }, []);
+
+    
 
     useEffect(() => {
         let total = 0;
@@ -343,6 +385,12 @@ const Order = () => {
                             setLobbyId={setLobbyId}
                             table
 
+                            // appetizerDetails={appetizerDetails}
+                            // dessertDetails={dessertDetails}
+                            // dishDetails={dishDetails}
+                            cartDess={cartDess}
+                            cartDishs={cartDishs}
+                            cartAppet={cartAppet}
                             showFormOrderStatus={showFormOrderStatus}
                             handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
                     </div>
