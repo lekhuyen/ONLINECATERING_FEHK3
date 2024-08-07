@@ -97,7 +97,6 @@ export default function AdminDish() {
                             <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
-                            <th>Status</th>
                             <th>Image</th>
                             <th>Actions</th>
                         </tr>
@@ -110,7 +109,6 @@ export default function AdminDish() {
                                     <td>{dish.id}</td>
                                     <td>{dish.name}</td>
                                     <td>{dish.price}</td>
-                                    <td>{dish.status ? 'Active' : 'Inactive'}</td>
                                     <td>
                                         {dish.image && dish.image.length > 0 ? (
                                             <img
