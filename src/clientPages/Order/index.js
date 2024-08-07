@@ -229,7 +229,7 @@ const Order = () => {
         <div className={clsx(styles.order_container, "app__bg")}>
             <div className={cx("order_header_title")}><h2>Order Menu</h2></div>
             <div className={cx("order_row")}>
-                <h1>Dessert</h1>
+                <h1>{cartDessert.length > 0 ? 'Dessert' : ''}</h1>
                 {
                     cartDessert?.length > 0 && cartDessert.map(dessert => (
                         <div className={cx("item-restaurant")}>
@@ -259,8 +259,8 @@ const Order = () => {
                     ))
                 }
 
-
-                <h1>Appettizer</h1>
+                
+                <h1>{cartAppetizer?.length ? "Appettizer": ""}</h1>
                 {
                     cartAppetizer?.length > 0 && cartAppetizer?.map(appettizer => (
                         <div className={cx("item-restaurant")}>
@@ -290,7 +290,7 @@ const Order = () => {
                     ))
                 }
 
-                <h1>Dish</h1>
+                <h1>{cartDish.length > 0 ? 'Dish' : ''}</h1>
                 {
                     cartDish?.length > 0 && cartDish?.map(dish => (
                         <div className={cx("item-restaurant")}>
