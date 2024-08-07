@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppetizerData, updateAdminAppetizerItem } from '../../redux/Restaurant/adminappetizersSlice';
-
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function EditAdminAppetizer() {
     const { id } = useParams(); // Get id from URL params
@@ -15,6 +15,11 @@ export default function EditAdminAppetizer() {
     const [quantity, setQuantity] = useState('');
     const [formFile, setFormFile] = useState(null); // For handling file upload
     const [appetizerImage, setAppetizerImage] = useState(''); // Current image path
+    const [errors, setErrors] = useState({ // State for validation
+        name: false,
+        price: false,
+        quantity: false,
+    });
 
     // Redux state
     const appetizerStatus = useSelector((state) => state.adminappetizer.status);
@@ -37,6 +42,35 @@ export default function EditAdminAppetizer() {
     }, [appetizerItem]);
 
     const handleUpdate = async () => {
+        // Reset errors
+        setErrors({
+            name: false,
+            price: false,
+            quantity: false,
+        });
+
+        // Validation: Check if fields are valid
+        let hasError = false;
+
+        if (!appetizerName) {
+            setErrors((prev) => ({ ...prev, name: true }));
+            hasError = true;
+        }
+
+        if (!price || price < 0) {
+            setErrors((prev) => ({ ...prev, price: true }));
+            hasError = true;
+        }
+
+        if (!quantity || quantity < 0) {
+            setErrors((prev) => ({ ...prev, quantity: true }));
+            hasError = true;
+        }
+
+        if (hasError) {
+            return; 
+        }
+
         try {
             const formData = new FormData();
             formData.append('id', id);
@@ -78,39 +112,49 @@ export default function EditAdminAppetizer() {
         return <p>Error: {appetizerError}</p>;
     }
 
+    const handleGoBack = () => {
+        navigate('/appetizer-admin'); // Navigate back to dessert list page
+    };
+
     return (
         <div className='container'>
             <h2>Edit Appetizer</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form>
                 <div className="form-group">
                     <label>Appetizer Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                         value={appetizerName}
                         onChange={(e) => setAppetizerName(e.target.value)}
                         required
                     />
+                    {errors.name && <div className="invalid-feedback">Appetizer name is required.</div>}
                 </div>
                 <div className="form-group">
                     <label>Price</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
                     />
+                    {errors.price && <div className="invalid-feedback">Price must be a positive number.</div>}
                 </div>
                 <div className="form-group">
                     <label>Quantity</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
                         required
                     />
+                    {errors.quantity && <div className="invalid-feedback">Quantity must be a positive number.</div>}
                 </div>
 
                 <div className="form-group">

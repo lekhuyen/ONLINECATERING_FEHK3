@@ -80,6 +80,7 @@ export default function CreateAdminDessert() {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
+                        min="0"
                     />
                 </div>
 
@@ -93,6 +94,7 @@ export default function CreateAdminDessert() {
                         onChange={(e) => setQuantity(e.target.value)}
                         required
                         step="1" // Integer values for quantity
+                        
                     />
                 </div>
 

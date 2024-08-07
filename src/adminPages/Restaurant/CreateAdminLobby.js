@@ -112,6 +112,7 @@ export default function CreateAdminLobby() {
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                         required
+                        min="0"
                     />
                 </div>
 
@@ -124,6 +125,7 @@ export default function CreateAdminLobby() {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
+                        min="0"
                     />
                 </div>
 
