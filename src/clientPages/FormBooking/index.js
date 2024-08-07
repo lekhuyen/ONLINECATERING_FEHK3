@@ -28,6 +28,10 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     setBookingTime,
     order,
     setLobbyId,
+    bookingDate,
+    bookingTime,
+    quantityTable,
+    lobbyPrice
 
 }) => {
     const [lobby, setLobby] = useState(null)
@@ -67,6 +71,12 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleSelectTable = (e) => {
         if (setQuantityTable) setQuantityTable(e.target.value);
     }
+    const now = new Date()
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear();
+
+
     const handleChangeDate = (e) => {
         setBookingDate(e.target.value);
     }
@@ -75,6 +85,8 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     }
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
+        console.log(selectedId);
+        
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
         if (setLobbyId) setLobbyId(selectedId)
     }
@@ -130,28 +142,38 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     const handleClickCreateOrder = async () => {
-        const response = await apiAddOrder(order)
-        if(response.status === 0) {
-            
-            localStorage.removeItem('appetizer');
-            localStorage.removeItem('dish');
-            localStorage.removeItem('dessert');
-
-            const data = {
-                orderType: 'ban tiec',
-                amount: response?.data?.deposit,
-                orderDescription: 'tiec',
-                name: userCurrent?.phone,
-                orderIdBooked: response?.data?.id
-            }            
-            const resPayment = await apiPayment(data)
-            if(resPayment.status === 0) {
-                console.log(resPayment);
-
-                window.location.href = resPayment?.url;
-            }
-
+        
+        if (bookingTime === "" || bookingDate === "" || quantityTable === "" || lobbySelect === "") {
+            Swal.fire('Oop!',
+                "Not Empty", 'error')
         }
+        else if (bookingDate < `${year}-${month}-${day}`) {
+            Swal.fire('Oop!',
+                "Invalid date", 'error')
+        } 
+        else {
+            const response = await apiAddOrder(order)
+            if (response.status === 0) {
+                localStorage.removeItem('appetizer');
+                localStorage.removeItem('dish');
+                localStorage.removeItem('dessert');
+
+                const data = {
+                    orderType: 'ban tiec',
+                    amount: response?.data?.deposit,
+                    orderDescription: 'tiec',
+                    name: userCurrent?.phone,
+                    orderIdBooked: response?.data?.id
+                }
+                const resPayment = await apiPayment(data)
+                if (resPayment.status === 0) {
+
+                    window.location.href = resPayment?.url;
+                }
+
+            }
+        }
+
     }
 
     return (

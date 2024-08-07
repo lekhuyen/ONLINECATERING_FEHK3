@@ -368,7 +368,11 @@ const Order = () => {
                             setComboid={setComboid}
                             setLobbyId={setLobbyId}
                             table
-
+                            
+                            bookingTime={bookingTime}
+                            bookingDate={bookingDate}
+                            quantityTable={quantityTable}
+                            lobbyPrice={lobbyPrice}
 
                             showFormOrderStatus={showFormOrderStatus}
                             handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />

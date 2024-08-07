@@ -4,12 +4,16 @@ import styles from './History.module.scss'
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { apiPayment } from '../../apis/payment';
 
 const HistoryBooking = ({ userId }) => {
     const [orderBooked, setOrderBooked] = useState(null)
     const [expandedIndex, setExpandedIndex] = useState(null);
     const { isLoggedIn } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
+
+    
+
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -20,6 +24,8 @@ const HistoryBooking = ({ userId }) => {
         const fetchOrders = async () => {
             try {
                 const response = await apiGetOrderByUserId(userId);
+                console.log(response);
+
                 if (response.status === 0 && response.data?.$values) {
                     setOrderBooked(response.data.$values);
                 } else {
@@ -31,6 +37,25 @@ const HistoryBooking = ({ userId }) => {
         };
         fetchOrders();
     }, [userId]);
+
+    
+
+
+    const handleSubmitOrder = async (item) => {
+        const data = {
+            orderType: 'ban tiec',
+            amount: item.deposit,
+            orderDescription: 'tiec',
+            name: userCurrent?.phone,
+            orderIdBooked: item.id
+        }
+        
+        const resPayment = await apiPayment(data)
+        if (resPayment.status === 0) {
+            window.location.href = resPayment?.url;
+        }
+    }
+
     const handleViewMore = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     }
@@ -203,6 +228,12 @@ const HistoryBooking = ({ userId }) => {
                                         style={{ cursor: "pointer" }}>
                                         Delete
                                     </p>
+
+                                    <p
+                                        onClick={()=>handleSubmitOrder(item)}
+                                        style={{ cursor: "pointer", marginRight: "10px" }}>
+                                        {!item?.statusPayment ? "Pay" : ""}
+                                    </p>
                                 </div>
                             </div>
                         ))
@@ -210,8 +241,6 @@ const HistoryBooking = ({ userId }) => {
                     :
                     <>No bookings found.</>
             }
-
-
         </div>
     );
 };
