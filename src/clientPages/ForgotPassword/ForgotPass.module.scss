@@ -172,3 +172,9 @@ section .color:nth-child(3){
         font-weight: 600;
     }
 }
+
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}

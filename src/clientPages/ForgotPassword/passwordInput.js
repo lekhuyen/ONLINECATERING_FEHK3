@@ -26,14 +26,20 @@ const PasswordInput = () => {
     }
     payload.userEmail = mailOtp
     const handleSubmit = async () => {
-        const response = await apiUserSendPassword(payload)
-        if (response.status === 0) {
-            Swal.fire('Congratulation',
-                response.message, 'success')
-                .then(() => {
-                    navigate('/login')
-                })
+        if(payload.password !== "" && payload.userEmail != "") {
+                const response = await apiUserSendPassword(payload)
+            if (response.status === 0) {
+                Swal.fire('Congratulation',
+                    response.message, 'success')
+                    .then(() => {
+                        navigate('/login')
+                    })
+            }
+        }else{
+            Swal.fire('Oop!',
+            "Not Empty", 'error')
         }
+        
         
     }
     return (

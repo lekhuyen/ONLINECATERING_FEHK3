@@ -1,8 +1,8 @@
-// src/clientPages/News/News.module.scss
-
 .news_container {
   padding: 2rem;
-  background: transparent; // Set background to transparent
+
+  border-radius: 0.5rem; // Optional: Rounded corners for the container
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); // Optional: Light shadow for a card effect
 }
 
 .news_header_title {
@@ -11,6 +11,8 @@
 
   h1 {
     color: #f7d794; // Title color
+    font-size: 2rem; // Adjust font size for better readability
+    margin: 0;
   }
 }
 
@@ -24,25 +26,32 @@
   flex: 1 1 calc(33.333% - 1rem); // Three cards per row with a gap
   display: flex;
   flex-direction: column;
-  background: transparent; // Ensure the background is transparent
+
   padding: 1rem;
   box-sizing: border-box; // To include padding in width calculations
-  border: none; // Remove borders
-  border-radius: 0.5rem; // Optional: Rounded corners
+  border: 1px solid; // Optional: Light border for separation
+  border-radius: 0.5rem; // Rounded corners for the card
+  transition: transform 0.3s ease, box-shadow 0.3s ease; // Smooth hover effects
 
-  // Container for image and content
+  // Hover effects for the card
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .news_image {
+    width: 100%; // Make image take full width of the card
+    height: 200px; // Adjust height to be more compact
+    object-fit: cover;
+    margin-bottom: 0.5rem; // Space between image and content
+    border-radius: 0.5rem; // Rounded corners for the image
+  }
+
   .news_content {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     height: 100%; // Ensures content takes full height of the card
-  }
-
-  .news_image {
-    width: 80%;
-    height: 400px; // Fixed height for images
-    object-fit: cover;
-    margin-bottom: 0.5rem; // Space between image and content
   }
 
   .news_title {
@@ -66,9 +75,7 @@
     color: #B33771;
     cursor: pointer;
     text-decoration: underline;
-    padding: 0;
     font-size: 1rem;
-    margin-left: 5px;
   }
 }
 

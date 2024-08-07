@@ -21,10 +21,9 @@ const Newsletter = () => {
         setLoading(true);
 
         try {
-            // Send email as part of JSON object with 'email' key
             const response = await axios.post(
                 "http://localhost:5034/api/Contact/subscribe",
-                { email }, // Sending email in the expected format
+                { email },
                 {
                     headers: {
                         "Content-Type": "application/json"
@@ -67,6 +66,7 @@ const Newsletter = () => {
                     {loading ? "Subscribing..." : "Subscribe"}
                 </button>
             </div>
+            {message && <p className="app__newsletter-message">{message}</p>}
         </div>
     );
 };

@@ -56,7 +56,7 @@ export default function AdminOrder() {
                     {adminOrders.map(order => (
                         <tr key={order.id}>
                             <td>{order.id}</td>
-                            <td>{order.userName || 'Unknown'}</td>
+                            <td>{order.Username || 'Unknown'}</td>
                             <td>{order.totalPrice}</td>
                             <td>{order.quantityTable}</td>
                             <td>{order.statusPayment ? 'Paid' : 'Pending'}</td>
