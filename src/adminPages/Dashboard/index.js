@@ -87,7 +87,7 @@ const Dashboard = () => {
                 <div className={cx('recent-order')}>
                     <div className={cx('card-header')}>
                         <h2>Recent Orders</h2>
-                        <a className={cx('btn')}>View All</a>
+                        <button className={cx('btn')}>View All</button>
                     </div>
                     {ordersStatus === 'loading' && <p>Loading...</p>}
                     {ordersStatus === 'failed' && <p>Error: {ordersError}</p>}

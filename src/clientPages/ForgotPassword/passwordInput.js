@@ -39,7 +39,7 @@ const PasswordInput = () => {
         }
 
         
-        if(payload.password !== "" && payload.userEmail != "") {
+        if(payload.password !== "" && payload.userEmail !== "") {
                 const response = await apiUserSendPassword(payload)
             if (response.status === 0) {
                 Swal.fire('Congratulation',
