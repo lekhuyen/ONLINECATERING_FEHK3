@@ -24,8 +24,6 @@ const HistoryBooking = ({ userId }) => {
         const fetchOrders = async () => {
             try {
                 const response = await apiGetOrderByUserId(userId);
-                console.log(response);
-
                 if (response.status === 0 && response.data?.$values) {
                     setOrderBooked(response.data.$values);
                 } else {
