@@ -11,13 +11,13 @@ import AppetizerModal from './AppetizerModal';
 import DessertModal from './DessertModal';
 import DishModal from './DishModal';
 import { RiArrowGoBackLine } from 'react-icons/ri';
+import cx from 'classnames'; // Import classnames utility
 
 export default function AdminComboDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [modalType, setModalType] = useState('');
-  const [selectedAppetizer, setSelectedAppetizer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetching Combo Data
@@ -126,51 +126,51 @@ export default function AdminComboDetail() {
       <div>
         {combo ? (
           <div>
-            <div className={styles.header}>
-              <h2>Combo Details</h2>
-              <button className={styles.goBackButton} onClick={handleGoBack}>
-                <RiArrowGoBackLine /> Back
-              </button>
-            </div>
-            <div className={styles.card}>
-              <div className={styles.cardBody}>
-                <div className={styles.row}>
-                  <div className={styles.detailsContainer}>
-                    <img src={combo.imagePath} alt={combo.name} className={styles.imgThumbnail} />
-                  </div>
-                  <div className={styles.detailsTable}>
-                    <table className={styles.table}>
-                      <tbody>
-                        <tr>
-                          <th>Id</th>
-                          <td>{combo.id}</td>
-                        </tr>
-                        <tr>
-                          <th>Name</th>
-                          <td>{combo.name}</td>
-                        </tr>
-                        <tr>
-                          <th>Price</th>
-                          <td>${combo.price}</td>
-                        </tr>
-                        <tr>
-                          <th>Type</th>
-                          <td>{combo.type}</td>
-                        </tr>
-                        <tr>
-                          <th>Status</th>
-                          <td>{combo.status ? 'Active' : 'Inactive'}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+              <div className={cx(styles.header)}>
+                  <h2 className={cx(styles.comboTitle)}>Combo Details</h2>
+                  <button className={cx(styles.goBackButton)} onClick={handleGoBack}>
+                      <RiArrowGoBackLine /> Back
+                  </button>
               </div>
-            </div>
+              <div className={cx(styles.card)}>
+                  <div className={cx(styles.cardBody)}>
+                      <div className={cx(styles.row)}>
+                          <div className={cx(styles.detailsContainer)}>
+                              <img src={combo.imagePath} alt={combo.name} className={cx(styles.imgThumbnail)} />
+                          </div>
+                          <div className={cx(styles.detailsTable)}>
+                              <table className={cx(styles.table)}>
+                                  <tbody>
+                                      <tr>
+                                          <th>Id</th>
+                                          <td>{combo.id}</td>
+                                      </tr>
+                                      <tr>
+                                          <th>Name</th>
+                                          <td>{combo.name}</td>
+                                      </tr>
+                                      <tr>
+                                          <th>Price</th>
+                                          <td>${combo.price.toFixed(2)}</td>
+                                      </tr>
+                                      <tr>
+                                          <th>Type</th>
+                                          <td>{combo.type}</td>
+                                      </tr>
+                                      <tr>
+                                          <th>Status</th>
+                                          <td>{combo.status ? 'Active' : 'Inactive'}</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
-        ) : (
+      ) : (
           <p>No combo item found with ID {id}</p>
-        )}
+      )}
       </div>
 
       <div className={styles.contentContainer}>

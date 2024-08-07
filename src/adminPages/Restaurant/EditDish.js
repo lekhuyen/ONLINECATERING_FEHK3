@@ -100,6 +100,7 @@ export default function EditDish() {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
+                        min="0"
                     />
                 </div>
 
