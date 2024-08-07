@@ -218,24 +218,9 @@ const MenuDish = () => {
                             </>
                         )
                     }
-
-                    {/* Form Booking Button */}
-                    {/* <div className={styles.book_btn}>
-                        <button
-                            onClick={handleClickBtnShowFormOrder}
-                        >BOOK NOW</button>
-                    </div> */}
+                    
                 </div>
-                {/* form booking */}
-                {/* {
-                    showFormOrderStatus && (
-                        <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
-                            <FormBooking
-                                showFormOrderStatus={showFormOrderStatus}
-                                handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
-                        </div>
-                    )
-                } */}
+                
             </div>
         </div>
     );

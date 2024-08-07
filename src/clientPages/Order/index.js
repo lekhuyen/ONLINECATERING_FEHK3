@@ -22,8 +22,13 @@ const Order = () => {
     const [comboPrice, setComboPrice] = useState(null)
     const [lobbyId, setLobbyId] = useState(null)
 
-    const totalPrice = (totalDesserts + totalAppetizer + totalDish) + (quantityTable * comboPrice) + lobbyPrice
-    const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
+    const totalPrice = comboPrice !== null
+        ? (totalDesserts + totalAppetizer + totalDish) + ((quantityTable * comboPrice)) + lobbyPrice
+        : (totalDesserts + totalAppetizer + totalDish)*quantityTable + lobbyPrice
+
+    const deposit = comboPrice !== null 
+        ? parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2) 
+        : parseFloat(totalPrice * 0.3).toFixed(2)
 
     const [userCurrent, setUserCurrent] = useState('')
     const [bookingDate, setBookingDate] = useState('')
@@ -39,9 +44,9 @@ const Order = () => {
         }
     }, [isLoggedIn])
 
-    
 
-    
+
+
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
     }
@@ -66,9 +71,9 @@ const Order = () => {
         appetizerId: appetizer.item.id,
         quantity: appetizer.quantity,
     }));
-    
+
     const orderDessert = cartDessert.map(dessert => ({
-        dessertId:dessert?.item.id,
+        dessertId: dessert?.item.id,
         quantity: dessert.quantity,
     }));
     const orderDish = cartDish.map(dish => ({
@@ -100,7 +105,7 @@ const Order = () => {
 
     }, []);
 
-    
+
 
     useEffect(() => {
         let total = 0;
@@ -157,7 +162,7 @@ const Order = () => {
             return updatedCart
         })
     }
-    
+
 
     //tru SL appetizer
     const handleClickMinusQuantityAppetizer = (id) => {
@@ -176,7 +181,7 @@ const Order = () => {
             return updateCart
         })
     }
-    
+
     const handleClickPlusQuantityAppetizer = (id) => {
         setCartAppetizer(prev => {
             const updatedCart = prev.map(cartItem => {
@@ -189,7 +194,7 @@ const Order = () => {
             return updatedCart
         })
     }
-    
+
 
     //tru sl dish
     const handleClickMinusQuantityDish = (id) => {
@@ -278,7 +283,7 @@ const Order = () => {
                                     onClick={() => handleClickMinusQuantityAppetizer(appettizer.item.id)}
                                 ><FaMinusCircle /></button></div>
                                 <div><button
-                                onClick={() => handleClickPlusQuantityAppetizer(appettizer.item.id)}
+                                    onClick={() => handleClickPlusQuantityAppetizer(appettizer.item.id)}
                                 ><FaPlus /></button></div>
                             </div>
                         </div>
@@ -306,9 +311,9 @@ const Order = () => {
                             <div className={cx("item-restaurant-more")}>
                                 <div><button
                                     onClick={() => handleClickMinusQuantityDish(dish.item.id)}
-                                    ><FaMinusCircle /></button></div>
+                                ><FaMinusCircle /></button></div>
                                 <div><button
-                                onClick={() => handleClickPlusQuantityDish(dish.item.id)}
+                                    onClick={() => handleClickPlusQuantityDish(dish.item.id)}
                                 ><FaPlus /></button></div>
                             </div>
                         </div>
@@ -363,8 +368,12 @@ const Order = () => {
                             setComboid={setComboid}
                             setLobbyId={setLobbyId}
                             table
-
                             
+                            bookingTime={bookingTime}
+                            bookingDate={bookingDate}
+                            quantityTable={quantityTable}
+                            lobbyPrice={lobbyPrice}
+
                             showFormOrderStatus={showFormOrderStatus}
                             handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
                     </div>
