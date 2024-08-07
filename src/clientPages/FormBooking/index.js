@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import icons from '../../ultil/icons';
 import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
-import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
+// import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
 import { useParams } from 'react-router-dom';
 import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
@@ -31,7 +31,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 }) => {
     const [lobby, setLobby] = useState(null)
-    const [combos, setCombos] = useState([])
+    // const [combos, setCombos] = useState([])
 
     // chua xong
     const { success } = useParams()
@@ -43,7 +43,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
     // ---------------
     const [lobbySelect, setLobbySelect] = useState(null)
-    const [selectTable, setSelectTable] = useState(null)
+    // const [selectTable, setSelectTable] = useState(null)
 
     const { isLoggedIn } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
@@ -79,25 +79,25 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
         if (setLobbyId) setLobbyId(selectedId)
     }
 
-    const handleChangeTable = (e) => {
-        const selectedId = e.target.value;
-        if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
-        if (setComboid) setComboid(selectedId)
+    // const handleChangeTable = (e) => {
+    //     const selectedId = e.target.value;
+    //     if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
+    //     if (setComboid) setComboid(selectedId)
 
-    }
-    const getOneCombo = async () => {
-        if (selectTable == null) {
-            return
-        } else {
-            const responseComboOne = await apiGetComboById(selectTable)
-            if (responseComboOne.status === 0) {
-                setComboPrice(responseComboOne.data.price)
-            }
-        }
-    }
-    useEffect(() => {
-        getOneCombo()
-    }, [selectTable])
+    // }
+    // const getOneCombo = async () => {
+    //     if (selectTable == null) {
+    //         return
+    //     } else {
+    //         const responseComboOne = await apiGetComboById(selectTable)
+    //         if (responseComboOne.status === 0) {
+    //             setComboPrice(responseComboOne.data.price)
+    //         }
+    //     }
+    // }
+    // useEffect(() => {
+    //     getOneCombo()
+    // }, [selectTable])
 
 
     const getOneLobby = async () => {
@@ -118,15 +118,15 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     //combo list
-    const getAllCombo = async () => {
-        const response = await apiGetAllCombo()
-        if (response.status === 0) {
-            setCombos(response.data.$values)
-        }
-    }
-    useEffect(() => {
-        getAllCombo()
-    }, [])
+    // const getAllCombo = async () => {
+    //     const response = await apiGetAllCombo()
+    //     if (response.status === 0) {
+    //         setCombos(response.data.$values)
+    //     }
+    // }
+    // useEffect(() => {
+    //     getAllCombo()
+    // }, [])
 
 
     const handleClickCreateOrder = async () => {
@@ -152,11 +152,6 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
             }
 
         }
-
-        // const response = await apiAddOrder(cartAppet)
-        // console.log(order);
-
-
     }
 
     return (
@@ -171,7 +166,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
             <div>
                 <div className={cx("order-form")}>
                     <div className={cx("form")}>
-                        {
+                        {/* {
                             table &&
                             <div className={cx("older")}>
                                 <p><IoTabletLandscapeOutline /><span>Combo:</span></p>
@@ -186,9 +181,9 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                                     }
                                 </select>
                             </div>
-                        }
+                        } */}
                         <div className={cx("older")}>
-                            <p><FaTable /><span>Quantity:</span></p>
+                            <p><FaTable /><span>Quantity(10 peoples/1 table):</span></p>
                             <select
                                 onChange={handleSelectTable}
                                 className={cx(!showFormOrderStatus ? "bg" : "")}
