@@ -1,85 +1,87 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
-import { fetchNewsData } from "../../redux/Information/newsSlice";
-import { RiArrowGoBackLine } from "react-icons/ri";
-import styles from "./NewsDetail.module.scss";
-import clsx from "clsx";
-import classNames from "classnames/bind";
+import React, { useEffect } from 'react';
+import { fetchNewsData } from '../../redux/Information/newsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import styles from './News.module.scss';
+import clsx from 'clsx';
 
-const cx = classNames.bind(styles);
+const News = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate(); // Initialize navigate
 
-export default function NewsDetail() {
-  const { id } = useParams(); // Get news ID from route params
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const newsData = useSelector((state) => state.news.items);
-  const [newsItem, setNewsItem] = useState(null);
+    // Selecting state from Redux store
+    const newsData = useSelector((state) => state.news.items);
+    const status = useSelector((state) => state.news.status);
+    const error = useSelector((state) => state.news.error);
 
-  useEffect(() => {
-    dispatch(fetchNewsData()); // Fetch all news data
-  }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchNewsData());
+    }, [dispatch]);
 
-  useEffect(() => {
-    // Find the news item with the given ID
-    const item = newsData.find((news) => news.id === id);
-    setNewsItem(item);
-  }, [newsData, id]);
+    // Handling initial loading state
+    if (status === 'loading') {
+        return <div className={clsx(styles.loading)}>Loading...</div>;
+    }
 
-  const handleGoBack = () => {
-    navigate('/news'); // Go back to the previous page
-  };
+    // Handling fetch error state
+    if (status === 'failed') {
+        return <div className={clsx(styles.error)}>Error: {error}</div>;
+    }
 
-  const handleNext = () => {
-    const currentIndex = newsData.findIndex((news) => news.id === id);
-    const nextIndex = (currentIndex + 1) % newsData.length; // Wrap around if at the end
-    navigate(`/news/${newsData[nextIndex].id}`);
-  };
+    // Ensure newsData is always an array before mapping over it
+    if (!Array.isArray(newsData)) {
+        return null; // or handle the case where newsData is not an array
+    }
 
-  const handlePrevious = () => {
-    const currentIndex = newsData.findIndex((news) => news.id === id);
-    const prevIndex = (currentIndex - 1 + newsData.length) % newsData.length; // Wrap around if at the start
-    navigate(`/news/${newsData[prevIndex].id}`);
-  };
+    const truncateWords = (text, limit) => {
+        const words = text.split(' ');
+        if (words.length > limit) {
+            return words.slice(0, limit).join(' ') + '...';
+        }
+        return text;
+    };
 
-  if (!newsItem) {
-    return <div className={styles.loading}>Loading...</div>; // Display loading message while fetching
-  }
+    const handleLearnMore = (id) => {
+        navigate(`/news/${id}`); // Navigate to NewsDetail page
+    };
 
-  return (
-    <div className={clsx(styles.news_container, "app__bg")}>
-      <div className="mt-3">
-        <button className="btn btn-secondary" onClick={handleGoBack}>
-          <RiArrowGoBackLine /> Go Back
-        </button>
-      </div>
-      <div className={cx("news_detail_container")}>
-        <h1 className={cx("news_detail_title")}>{newsItem.title}</h1>
-        <div className={cx("news_image_container")}>
-          {newsItem.imagePaths && newsItem.imagePaths.length > 0 && (
-            <img
-              src={newsItem.imagePaths[0]} // Assuming you want to display only the first image
-              alt={`News ${newsItem.id}`}
-              className={cx("news_image")}
-            />
-          )}
+    return (
+        <div className={clsx(styles.news_container, 'app__bg')}>
+            <div className={clsx(styles.news_header_title)}>
+                <h1>News & Blog</h1>
+            </div>
+            <div className={clsx(styles.news_row)}>
+                {newsData.map((news) => (
+                    <div className={clsx(styles.news_card)} key={news.id}>
+                        {news.imagePaths && news.imagePaths.length > 0 && (
+                            <img
+                                src={news.imagePaths[0]} // Assuming you want to display only the first image
+                                alt={`News ${news.id}`}
+                                className={clsx(styles.news_image)}
+                            />
+                        )}
+                        <div className={clsx(styles.news_content)}>
+                            <h4 className={clsx(styles.news_title)}>{news.title}</h4>
+                            <p className={clsx(styles.news_text)}>
+                                {truncateWords(news.content, 10)}
+                                {news.content.split(' ').length > 10 && (
+                                    <span>
+                                        {' '}
+                                        <button
+                                            className={clsx(styles.learn_more_btn)}
+                                            onClick={() => handleLearnMore(news.id)}
+                                        >
+                                            Learn More
+                                        </button>
+                                    </span>
+                                )}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-        <div className={cx("news_detail_text")}>{newsItem.content}</div>
-        <div className={cx("news_detail_controls")}>
-          <button
-            className={cx("news_detail_control_button")}
-            onClick={handlePrevious}
-          >
-            {"<---- Previous"}
-          </button>
-          <button
-            className={cx("news_detail_control_button")}
-            onClick={handleNext}
-          >
-            {"Next --->"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+    );
+};
+
+export default News;
