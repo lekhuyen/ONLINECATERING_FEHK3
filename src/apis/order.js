@@ -23,3 +23,8 @@ export const apiAddOrder = (data)  => axios({
     method: 'POST',
     data
 })
+
+export const apiDeleteOrderByUser = (data)  => axios({
+    url: `/restaurant-service/order/${data.userId}/${data.orderId}`,
+    method: 'Delete',
+})
