@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
 import { fetchAccountsData, editUserStatus } from '../../redux/Accounts/accountsSlice';
+import styles from './Accounts.module.scss'; // Import your custom styles
 
 const Accounts = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     const accountsData = useSelector((state) => state.accounts.items);
     const status = useSelector((state) => state.accounts.status);
     const error = useSelector((state) => state.accounts.error);
@@ -16,6 +13,10 @@ const Accounts = () => {
     const itemsPerPage = 5;
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredAccountsData, setFilteredAccountsData] = useState([]);
+
+    // Modal state
+    const [showModal, setShowModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
         dispatch(fetchAccountsData());
@@ -45,21 +46,30 @@ const Accounts = () => {
             account.phone.toLowerCase().includes(lowerCaseSearchTerm)
         );
         setFilteredAccountsData(filteredData);
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
 
-    const toggleStatus = (id, currentStatus) => {
-        const newStatus = !currentStatus; // Toggle the current status
+    const handleStatusToggle = (id, currentStatus) => {
+        const newStatus = !currentStatus;
         const action = newStatus ? 'ban' : 'activate';
 
-        if (window.confirm(`Are you sure you want to ${action} this user?`)) {
-            console.log(`Toggling status for user with id ${id} to ${newStatus}`);
+        setSelectedUser({ id, newStatus, action });
+        setShowModal(true);
+    };
+
+    const confirmStatusToggle = () => {
+        if (selectedUser) {
+            const { id, newStatus } = selectedUser;
 
             dispatch(editUserStatus({ id, newStatus }))
                 .then(() => console.log(`User status updated successfully for user with id ${id}`))
                 .catch((error) => console.error('Error updating user status:', error));
+
+            setShowModal(false);
         }
     };
+
+    const handleCloseModal = () => setShowModal(false);
 
     if (status === 'loading') {
         return <div>Loading...</div>;
@@ -114,7 +124,7 @@ const Accounts = () => {
                                 <td>
                                     <button
                                         className={`btn btn-sm ${account.status ? 'btn-danger' : 'btn-success '}`}
-                                        onClick={() => toggleStatus(account.id, account.status)}
+                                        onClick={() => handleStatusToggle(account.id, account.status)}
                                     >
                                         {account.status ? 'Banned' : 'Active'}
                                     </button>
@@ -142,6 +152,29 @@ const Accounts = () => {
                     </li>
                 </ul>
             </nav>
+
+            {/* Modal for Confirmation */}
+            <div className={`${styles.modal} ${showModal ? styles.show : ''}`} id="statusModal" tabIndex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden={!showModal}>
+                <div className={`${styles.modalDialog}`} role="document">
+                    <div className={`${styles.modalContent}`}>
+                        <div className={`${styles.modalHeader}`}>
+                            <h5 className={`${styles.modalTitle}`} id="statusModalLabel">Confirm Account Status Change</h5>
+                            <button type="button" className={`${styles.close}`} onClick={handleCloseModal} aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className={`${styles.modalBody}`}>
+                            {selectedUser && (
+                                <p>Are you sure you want to {selectedUser.action} this account?</p>
+                            )}
+                        </div>
+                        <div className={`${styles.modalFooter}`}>
+                            <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cancel</button>
+                            <button type="button" className="btn btn-primary" onClick={confirmStatusToggle}>Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
