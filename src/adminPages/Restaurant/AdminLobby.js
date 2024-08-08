@@ -68,7 +68,7 @@ const AdminLobby = () => {
 
     return (
         <div className='container'>
-            <h2>Lobby Table</h2>
+            <h2>Lobby Management</h2>
 
             <div className="row mb-3">
                 <div>
