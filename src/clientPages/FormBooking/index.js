@@ -311,7 +311,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                                                     pointerEvents
                                                 }}>
                                                 <span >
-                                                    {item.title}
+                                                    {item.title} - {item.to}
                                                 </span>
                                             </div>
                                         )
