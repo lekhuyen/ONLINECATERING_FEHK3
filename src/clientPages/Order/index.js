@@ -7,8 +7,6 @@ import FormBooking from '../FormBooking';
 import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles)
 
-
-
 const Order = () => {
 
     const [showFormOrderStatus, setShowFormOrderStatus] = useState(false)
@@ -36,16 +34,12 @@ const Order = () => {
     const { isLoggedIn } = useSelector(state => state.user)
     const [comboid, setComboid] = useState(null)
 
-
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
             setUserCurrent(user.id);
         }
     }, [isLoggedIn])
-
-
-
 
     const handleClickBtnShowFormOrder = () => {
         setShowFormOrderStatus(true)
@@ -227,7 +221,7 @@ const Order = () => {
     }
     return (
         <div className={clsx(styles.order_container, "app__bg")}>
-            <div className={cx("order_header_title")}><h2>Order Menu</h2></div>
+            <div className={cx("order_header_title")}><h2>Order Items</h2></div>
             <div className={cx("order_row")}>
                 <h1>{cartDessert.length > 0 ? 'Dessert' : ''}</h1>
                 {

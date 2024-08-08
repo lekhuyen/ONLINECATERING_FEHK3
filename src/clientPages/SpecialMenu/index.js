@@ -7,8 +7,6 @@ import './SpecialMenu.css';
 import { fetchAppetizerData } from '../../redux/Restaurant/adminappetizersSlice';
 import { fetchDessertData } from '../../redux/Restaurant/admindessertSlice';
 
-
-
 const SpecialMenu = () => {
   const dispatch = useDispatch();
   const wines = useSelector((state) => state.adminappetizer.items.slice(0, 5) || []); // Limit to 5 items
