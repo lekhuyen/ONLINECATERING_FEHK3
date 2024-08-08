@@ -348,7 +348,7 @@ function NewsAd() {
                             <div className={styles['modal-footer']}>
                                 <button
                                     type="button"
-                                    className={`btn btn-secondary ${styles['btn-outline-secondary']}`}
+                                    className="btn btn-danger"
                                     onClick={() => setShowTypeModal(false)}
                                 >
                                     Close
