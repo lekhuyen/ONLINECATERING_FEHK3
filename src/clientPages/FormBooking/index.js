@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
 // import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
 import { useParams } from 'react-router-dom';
-import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
+import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder, apiGetOrderByLobbyId } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { statusOrder } from '../../redux/User/userSlice';
+// import moment from 'moment/moment';
+import { timeOrder } from '../../ultil/menu';
 
 
 
@@ -36,7 +38,10 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 }) => {
     const [lobby, setLobby] = useState(null)
+    const [lobbyTime, setLobbyTime] = useState(null)
+    const [timeOrderIndex, setTimeOrderIndex] = useState(null)
     // const [combos, setCombos] = useState([])
+
     const dispatch = useDispatch()
     // chua xong
     const { success } = useParams()
@@ -46,12 +51,15 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     }
     // ---------------
 
+
     // ---------------
     const [lobbySelect, setLobbySelect] = useState(null)
     // const [selectTable, setSelectTable] = useState(null)
 
     const { isLoggedIn } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
+    const [timeOrderLoby, setTimeOrderLoby] = useState(null)
+
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -81,15 +89,50 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleChangeDate = (e) => {
         setBookingDate(e.target.value);
     }
-    const handleChangeTime = (e) => {
-        setBookingTime(e.target.value);
+    // const handleChangeTime = (e) => {
+    //     setBookingTime(e.target.value);
+    // }
+    const hanldeClickTimeOrder = (value) => {
+        setBookingTime(value);
     }
-    const handleChangeLobby = (e) => {
+
+    useEffect(() => {
+        const findMatchingBookingDates = () => {
+
+            if (Array.isArray(lobbyTime)) {
+                const found = lobbyTime.filter(lobby => {
+                    const lobbyDateOnly = (lobby.oganization && typeof lobby.oganization === 'string')
+                        ? lobby?.oganization?.split(' ')[0]
+                        : '';
+
+                    return bookingDate === lobbyDateOnly;
+                });
+                return found.map(lobby => lobby.oganization.split(' ')[1]);
+            }
+            return null;
+        }
+        const matchingLobbyTimes = findMatchingBookingDates();
+        setTimeOrderLoby(matchingLobbyTimes);
+    }, [bookingDate,lobbyTime])
+
+
+    const handleChangeLobby = async (e) => {
         const selectedId = e.target.value;
-        
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
         if (setLobbyId) setLobbyId(selectedId)
     }
+    useEffect(() => {
+        let lobbyId = lobbySelect
+        const getLobbyTime = async () => {
+            const resGetTimeLobby = await apiGetOrderByLobbyId(lobbyId)
+            if (resGetTimeLobby.status === 0) {
+                setLobbyTime(resGetTimeLobby?.data?.$values)
+            }
+        }
+        if (lobbySelect !== null) {
+            getLobbyTime()
+        }
+    }, [lobbySelect, bookingDate])
 
     // const handleChangeTable = (e) => {
     //     const selectedId = e.target.value;
@@ -142,7 +185,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     const handleClickCreateOrder = async () => {
-        
+
         if (bookingTime === "" || bookingDate === "" || quantityTable === "" || lobbySelect === "") {
             Swal.fire('Oop!',
                 "Not Empty", 'error')
@@ -150,16 +193,16 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
         else if (bookingDate < `${year}-${month}-${day}`) {
             Swal.fire('Oop!',
                 "Invalid date", 'error')
-        } 
+        }
         else {
             const response = await apiAddOrder(order)
             if (response.status === 0) {
                 localStorage.removeItem('appetizer');
                 localStorage.removeItem('dish');
                 localStorage.removeItem('dessert');
-                
-                dispatch(statusOrder({stusOrder:false}))
-                
+
+                dispatch(statusOrder({ stusOrder: false }))
+
                 const data = {
                     orderType: 'ban tiec',
                     amount: response?.data?.deposit,
@@ -246,10 +289,59 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                         </div>
                         <div className={cx("time")}>
                             <p><MdAccessTime /><span>Booking Time:</span></p>
-                            <input
-                                onChange={handleChangeTime} type="time" className={cx(!showFormOrderStatus ? "bg" : "")} />
+                            <div className={cx("time_order")}>
+                                {
+                                    timeOrder.map((item) => {
+                                        const isInTimeOrderLoby = Array.isArray(timeOrderLoby) && timeOrderLoby.includes(item.title);
+                                        const backgroundColor = timeOrderIndex === item.id
+                                            ? 'green'
+                                            : isInTimeOrderLoby
+                                                ? 'red'
+                                                : '#B33771';
+                                        const pointerEvents = isInTimeOrderLoby ? 'none' : 'auto';
+                                        return (
+                                            <div
+                                                onClick={() => {
+                                                    setTimeOrderIndex(item.id)
+                                                    hanldeClickTimeOrder(item.title)
+                                                }}
+                                                key={item.id}
+                                                style={{
+                                                    backgroundColor,
+                                                    pointerEvents
+                                                }}>
+                                                <span >
+                                                    {item.title}
+                                                </span>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                            {/* <input
+                                onChange={handleChangeTime} type="time" className={cx(!showFormOrderStatus ? "bg" : "")} /> */}
                         </div>
                     </div>
+                    {/* <div className={cx("lobby_time")}>
+                        <div className={cx("")}>
+                            {lobbyTime?.length > 0 && (
+                                <div className={cx("lobby_title")}>
+                                    <p><MdAccessTime /><span>Lobby Booked:</span></p>
+                                </div>
+                            )}
+
+                            {
+                                lobbyTime?.length > 0 && lobbyTime?.map(item => (
+                                    <div key={item.id} className={cx("lobby_booked_time")}>
+                                        <span>{moment(item.oganization.split(' ')[0]).format("DD-MM-yyyy")}</span>
+                                        <span>{item.oganization.split(' ')[1]}</span>
+                                    </div>
+                                ))
+                            }
+
+                        </div>
+                        <div className={cx("time")}></div>
+                    </div> */}
                     <div className={cx("total_price")}>
                         <div>
                             Total: <span>${totalPrice}</span>
