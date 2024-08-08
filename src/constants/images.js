@@ -25,6 +25,7 @@ import SurfnTurf from '../assets/SurfnTurf.jpg';
 import dumaloo from '../assets/dumaloo.jpg';
 import applewalnut from '../assets/applewalnut.jpg';
 import cheff from '../assets/cheff.jpg';
+import dessert1 from '../assets/dessert1.png';
 
 export default {
   bg,
@@ -35,7 +36,8 @@ export default {
   gallery02,
   gallery03,
   gallery04,
-  knife,
+  // knife,
+  dessert1,
   logo,
   menu,
   overlaybg,
