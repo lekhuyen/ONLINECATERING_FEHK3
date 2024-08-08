@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchComboData } from '../../redux/Restaurant/comboSlice';
-import { fetchAdminComboAppetizerData, deleteAdminComboAppetizer, createAdminComboAppetizer } from '../../redux/Restaurant/admincomboappetizerSlice';
-import { fetchAdminComboDessertData, deleteAdminComboDessert, createAdminComboDessert } from '../../redux/Restaurant/admincombodessertSlice';
-import { fetchAdminComboDishData, deleteAdminComboDish, createAdminComboDish } from '../../redux/Restaurant/admincombodishSlice';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { fetchAdminComboAppetizerData, createAdminComboAppetizer } from '../../redux/Restaurant/admincomboappetizerSlice';
+import { fetchAdminComboDessertData, createAdminComboDessert } from '../../redux/Restaurant/admincombodessertSlice';
+import { fetchAdminComboDishData } from '../../redux/Restaurant/admincombodishSlice';
+
 import styles from './AdminComboDetail.module.scss';
 import AppetizerModal from './AppetizerModal';
 import DessertModal from './DessertModal';
@@ -81,24 +81,6 @@ export default function AdminComboDetail() {
   const handleCreateDish = () => {
     setModalType('dish');
     setIsModalOpen(true);
-  };
-
-  const handleDeleteAppetizer = (comboAppetizerId) => {
-    if (window.confirm('Are you sure you want to delete this appetizer?')) {
-      dispatch(deleteAdminComboAppetizer(comboAppetizerId));
-    }
-  };
-
-  const handleDeleteDessert = (comboDessertId) => {
-    if (window.confirm('Are you sure you want to delete this dessert?')) {
-      dispatch(deleteAdminComboDessert(comboDessertId));
-    }
-  };
-
-  const handleDeleteDish = (comboDishId) => {
-    if (window.confirm('Are you sure you want to delete this dish?')) {
-      dispatch(deleteAdminComboDish(comboDishId));
-    }
   };
 
   const handleSelectAppetizer = (appetizer) => {
@@ -202,14 +184,7 @@ export default function AdminComboDetail() {
                             <p><strong>Price:</strong> ${app.appetizerPrice}</p>
                             <p><strong>Quantity:</strong> {app.appetizerQuantity}</p>
                           </div>
-                          <div className={styles.deleteButtonContainer}>
-                            <button
-                              className={styles.deleteButton}
-                              onClick={() => handleDeleteAppetizer(app.comboAppetizerId)}
-                            >
-                              <FaRegTrashAlt />
-                            </button>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -247,14 +222,6 @@ export default function AdminComboDetail() {
                             <p><strong>Name:</strong> {dessert.dessertName}</p>
                             <p><strong>Price:</strong> ${dessert.dessertPrice}</p>
                             <p><strong>Quantity:</strong> {dessert.dessertQuantity}</p>
-                          </div>
-                          <div className={styles.deleteButtonContainer}>
-                            <button
-                              className={styles.deleteButton}
-                              onClick={() => handleDeleteDessert(dessert.comboDessertId)}
-                            >
-                              <FaRegTrashAlt />
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -294,14 +261,7 @@ export default function AdminComboDetail() {
                             <p><strong>Price:</strong> ${dish.dishPrice}</p>
                             <p><strong>Quantity:</strong> {dish.dishQuantity}</p>
                           </div>
-                          <div className={styles.deleteButtonContainer}>
-                            <button
-                              className={styles.deleteButton}
-                              onClick={() => handleDeleteDish(dish.comboDishId)}
-                            >
-                              <FaRegTrashAlt />
-                            </button>
-                          </div>
+
                         </div>
                       </div>
                     </div>
