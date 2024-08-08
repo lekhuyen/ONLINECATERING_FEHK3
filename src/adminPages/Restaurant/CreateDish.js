@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { createDishItem } from '../../redux/Restaurant/dishSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function CreateDish() {
     const [name, setName] = useState('');
@@ -35,7 +36,6 @@ export default function CreateDish() {
             setPrice('');
             setType('');
             setFormFile(null);
- 
             navigate('/dish-admin'); 
         } catch (error) {
             console.error('Error creating dish:', error);
@@ -48,9 +48,16 @@ export default function CreateDish() {
         setFormFile(e.target.files[0]); // Assuming only a single file is allowed
     };
 
+    const handleGoBack = () => {
+        navigate('/dish-admin'); // Navigate back to dessert list page
+    };
+
     return (
         <div className="container">
             <h2>Create Dish</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Name</label>
@@ -74,6 +81,7 @@ export default function CreateDish() {
                         onChange={(e) => setPrice(e.target.value)}
                         required
                         step="0.01" // Allows decimal prices
+                        min="0"
                     />
                 </div>
 
@@ -86,6 +94,7 @@ export default function CreateDish() {
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                         required
+                        min="0"
                     />
                 </div>
 

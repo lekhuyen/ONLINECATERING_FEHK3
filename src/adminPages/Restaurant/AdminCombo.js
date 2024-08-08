@@ -96,7 +96,6 @@ export default function AdminCombo() {
                             <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
-                            <th>Type</th>
                             <th>Status</th>
                             <th>Image</th>
                             <th>Actions</th>
@@ -108,7 +107,6 @@ export default function AdminCombo() {
                                 <td>{combo.id}</td>
                                 <td>{combo.name}</td>
                                 <td>{combo.price}</td>
-                                <td>{combo.type}</td>
                                 <td>{combo.status ? 'Active' : 'Inactive'}</td>
                                 <td>
                                     {combo.imagePath && combo.imagePath.length > 0 && (

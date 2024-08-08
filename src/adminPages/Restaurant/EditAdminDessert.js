@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDessertData, updateAdminDessertItem } from '../../redux/Restaurant/admindessertSlice';
 
-
 export default function EditAdminDessert() {
     const { id } = useParams(); // Get id from URL params
     const navigate = useNavigate(); // Initialize useNavigate hook
@@ -15,6 +14,11 @@ export default function EditAdminDessert() {
     const [quantity, setQuantity] = useState('');
     const [formFile, setFormFile] = useState(null); // For handling file upload
     const [dessertImage, setDessertImage] = useState(''); // Current image path
+    const [errors, setErrors] = useState({ // State for validation
+        dessertName: false,
+        price: false,
+        quantity: false,
+    });
 
     // Redux state
     const dessertStatus = useSelector((state) => state.admindessert.status);
@@ -37,6 +41,35 @@ export default function EditAdminDessert() {
     }, [dessertItem]);
 
     const handleUpdate = async () => {
+        // Reset errors
+        setErrors({
+            dessertName: false,
+            price: false,
+            quantity: false,
+        });
+
+        // Validation: Check if fields are valid
+        let hasError = false;
+
+        if (!dessertName) {
+            setErrors((prev) => ({ ...prev, dessertName: true }));
+            hasError = true;
+        }
+
+        if (!price || price < 0) {
+            setErrors((prev) => ({ ...prev, price: true }));
+            hasError = true;
+        }
+
+        if (!quantity || quantity < 0) {
+            setErrors((prev) => ({ ...prev, quantity: true }));
+            hasError = true;
+        }
+
+        if (hasError) {
+            return; 
+        }
+
         try {
             const formData = new FormData();
             formData.append('id', id);
@@ -86,31 +119,36 @@ export default function EditAdminDessert() {
                     <label>Dessert Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.dessertName ? 'is-invalid' : ''}`}
                         value={dessertName}
                         onChange={(e) => setDessertName(e.target.value)}
                         required
                     />
+                    {errors.dessertName && <div className="invalid-feedback">Dessert name is required.</div>}
                 </div>
                 <div className="form-group">
                     <label>Price</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        min="0"
                         required
                     />
+                    {errors.price && <div className="invalid-feedback">Price must be a positive number.</div>}
                 </div>
                 <div className="form-group">
                     <label>Quantity</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
+                        min="0"
                         required
                     />
+                    {errors.quantity && <div className="invalid-feedback">Quantity must be a positive number.</div>}
                 </div>
 
                 <div className="form-group">

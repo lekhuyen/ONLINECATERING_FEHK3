@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './ChangePass.module.scss';
 import Loading from '../Loading';
 import classNames from 'classnames/bind';
-import { logout, login } from '../../redux/User/userSlice';
-import axios from 'axios';
+import { logout } from '../../redux/User/userSlice';
+import Swal from 'sweetalert2';
 
 const cx = classNames.bind(styles);
 
@@ -21,41 +21,55 @@ const ChangePassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
+
     const handleSubmit = () => {
         if (otpSent) {
-            if (newPassword !== confirmNewPassword) {
-                alert("New password and confirm new password must be matched.");
+            if (newPassword !== "" && confirmNewPassword !== "" && newPassword !== confirmNewPassword) {
+                // alert("New password and confirm new password must match.");
+                Swal.fire('Oop!',
+                    "New password and confirm new password must match.", 'error')
                 return;
             }
-            if (newPassword === oldPassword) {
-                alert("New password cannot be the same as the old password.");
+            if (newPassword !== "" && confirmNewPassword !== "" && newPassword === oldPassword) {
+                // alert("New password cannot be the same as the old password.");
+                Swal.fire('Oop!',
+                    "Not EmptyNew password cannot be the same as the old password.", 'error')
                 return;
             }
-            dispatch(updatePassword({ email, password: newPassword, otp }));
-            // dispatch(logout());
+
+            if(newPassword !== "" && confirmNewPassword !== "" && oldPassword !== "") {
+                dispatch(updatePassword({ email, password: newPassword, otp,oldPassword }));
+            }else{
+                Swal.fire('Oop!',
+                "Not Empty", 'error')
+            }
+            
+        
         } else {
             dispatch(sendForgotPasswordEmail(email));
-
         }
     };
+    
     useEffect(() => {
         if (status === 0) {
-            dispatch(sendOtpMail({ isSendOtp: true }))
+            dispatch(sendOtpMail({ isSendOtp: true }));
         }
-    }, [status])
+    }, [status, dispatch]);
+
     useEffect(() => {
         if (isChangePassword === 0) {
-            dispatch(logout())
-            dispatch(isChangePasswordLogout())
-            dispatch(isChangePasswordLogoutOtp())
+            dispatch(logout());
+            dispatch(isChangePasswordLogout());
+            dispatch(isChangePasswordLogoutOtp());
         }
-    }, [isChangePassword])
+    }, [isChangePassword, dispatch]);
+
     useEffect(() => {
         if (!isLoggedIn) {
-            dispatch(sendOtpMail({ isSendOtp: false }))
+            dispatch(sendOtpMail({ isSendOtp: false }));
             navigate('/login'); 
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn, dispatch, navigate]);
 
     return (
         <div>
@@ -106,7 +120,7 @@ const ChangePassword = () => {
                 </button>
             </div>
             {loading && <Loading />}
-            {status !== 0 || isChangePassword !== 0 ? <p>{error}</p> : ""}
+            {error && <p>{error}</p>}
         </div>
     );
 };

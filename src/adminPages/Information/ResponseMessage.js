@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteContact, fetchContacts, respondToContact } from '../../redux/Information/contactSlice';
+import { fetchContacts, respondToContact } from '../../redux/Information/contactSlice';
 import { FiSend } from "react-icons/fi";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { RiArrowGoBackLine } from "react-icons/ri";
 
 export default function ResponseMessage() {
@@ -37,10 +36,7 @@ export default function ResponseMessage() {
         }
     };
 
-    const handleDelete = async () => {
-        await dispatch(deleteContact(id));
-        navigate("/contactus");
-    };
+
 
     const handleGoBack = () => {
         navigate("/contactus");
@@ -92,10 +88,6 @@ export default function ResponseMessage() {
                     </div>
                 )}
                 <br />
-                {/* Delete button */}
-                <button className="btn btn-danger" onClick={handleDelete}>
-                <FaRegTrashAlt />
-                </button>
             </div>
             <div className="mt-3">
                 <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /></button>

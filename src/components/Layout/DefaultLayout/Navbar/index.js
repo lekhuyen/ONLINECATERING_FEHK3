@@ -6,14 +6,16 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/User/userSlice";
+import { IoMdCart } from "react-icons/io";
 
 const Navbar = () => {
     const navigate = useNavigate()
     const [toggleMenu, setToggleMenu] = React.useState(false);
-    const { isLoggedIn } = useSelector(state => state.user)
+    const { isLoggedIn, orderStatus } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
     const [showLoginBtn, setShowLoginBtn] = useState(false)
     const dispatch = useDispatch()
+
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -24,7 +26,7 @@ const Navbar = () => {
     const handleOnclickAccount = () => {
         navigate("/user")
     }
-    
+
     const handleClickLogout = () => {
         dispatch(logout())
         localStorage.removeItem("userCurrent")
@@ -49,11 +51,11 @@ const Navbar = () => {
                 <li className="p__opensans">
                     <Link to="/lobby">Lobby</Link>
                 </li>
-                
+
                 <li className="p__opensans">
                     <Link to="/ordercombo">Combo</Link>
                 </li>
-                
+
                 <li className="p__opensans">
                     <Link to="/news">News & Blog</Link>
                 </li>
@@ -77,7 +79,7 @@ const Navbar = () => {
                             <p>
                                 {userCurrent}
                             </p>
-                            
+
                             {
                                 showLoginBtn && (
                                     <div className="btn__login">
@@ -88,7 +90,7 @@ const Navbar = () => {
                                         </span>
                                         <div>
                                             <span
-                                            onClick={handleClickLogout}
+                                                onClick={handleClickLogout}
                                             >Logout</span>
                                         </div>
                                     </div>
@@ -97,9 +99,15 @@ const Navbar = () => {
                         </div>
                 }
                 <div />
-                <Link to="/order" className="p__opensans">
-                    Reservation
-                </Link>
+                <div onClick={() => navigate('/order')} className="p__carticon">
+                    {
+                        orderStatus &&
+                        <div className="p__opensans">
+                            <IoMdCart size={25} />
+                        </div>
+                    }
+
+                </div>
             </div>
             <div className="app__navbar-smallscreen">
                 <GiHamburgerMenu
@@ -130,7 +138,7 @@ const Navbar = () => {
                                     Our Menu
                                 </a>
                             </li>
-                            
+
                             <li>
                                 <a href="/news" onClick={() => setToggleMenu(false)}>
                                     Our Blog

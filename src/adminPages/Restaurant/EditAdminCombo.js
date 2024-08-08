@@ -14,6 +14,11 @@ export default function EditAdminCombo() {
     const [status, setStatus] = useState(true); // Assuming status is a boolean
     const [formFile, setFormFile] = useState(null); // For handling file upload
     const [comboImage, setComboImage] = useState(''); // Initialize as a string
+    const [errors, setErrors] = useState({ // State for validation
+        name: false,
+        price: false,
+        type: false,
+    });
 
     // Rename the status from Redux state to avoid conflict
     const comboStatus = useSelector((state) => state.combo.status);
@@ -37,6 +42,35 @@ export default function EditAdminCombo() {
     }, [comboItem]);
 
     const handleUpdate = async () => {
+        // Reset errors
+        setErrors({
+            name: false,
+            price: false,
+            type: false,
+        });
+
+        // Validation: Check if fields are valid
+        let hasError = false;
+
+        if (!name) {
+            setErrors((prev) => ({ ...prev, name: true }));
+            hasError = true;
+        }
+
+        if (!price || price < 0) {
+            setErrors((prev) => ({ ...prev, price: true }));
+            hasError = true;
+        }
+
+        if (!type) {
+            setErrors((prev) => ({ ...prev, type: true }));
+            hasError = true;
+        }
+
+        if (hasError) {
+            return; 
+        }
+
         try {
             const formData = new FormData();
             formData.append('id', id);
@@ -88,31 +122,34 @@ export default function EditAdminCombo() {
                     <label>Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
+                    {errors.name && <div className="invalid-feedback">Combo name is required.</div>}
                 </div>
                 <div className="form-group">
                     <label>Price</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         required
                     />
+                    {errors.price && <div className="invalid-feedback">Price must be a positive number.</div>}
                 </div>
                 <div className="form-group">
                     <label>Type</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.type ? 'is-invalid' : ''}`}
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                         required
                     />
+                    {errors.type && <div className="invalid-feedback">Type is required.</div>}
                 </div>
                 <div className="form-group">
                     <label>Status</label>

@@ -12,6 +12,13 @@
     flex-direction: row;
     margin-top: 3rem;
   }
+
+  .app__newsletter-error {
+    color: red;
+    font-size: 0.875rem; /* Adjust size as needed */
+    margin-top: 0.5rem; /* Space between input and error message */
+    text-align: center;
+}
   
   .app__newsletter-input input {
     width: 620px;

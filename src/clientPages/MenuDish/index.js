@@ -5,6 +5,8 @@ import { menuDish } from '../../ultil/menu';
 import { useEffect, useState } from 'react';
 import { apiGetAllAppetizer, apiGetAllDessert, apiGetAllDish } from '../../apis/menu';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { statusOrder } from '../../redux/User/userSlice';
 
 
 const {
@@ -19,6 +21,7 @@ const MenuDish = () => {
     const [mainAppetizer, setAppetizer] = useState(null)
     const [menuChoose, setMenuChoose] = useState(1)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
 
     const [cartAppetizer, setCartAppetizer] = useState(() => {
@@ -33,6 +36,12 @@ const MenuDish = () => {
         const storedCart = localStorage.getItem('dessert');
         return storedCart ? JSON.parse(storedCart) : [];
     });
+
+    useEffect(() => {
+        if(cartDessert.length > 0 || cartDish.length > 0 || cartAppetizer.length > 0){
+            dispatch(statusOrder({stusOrder:true}))
+        }
+    },[cartAppetizer,cartDish,cartAppetizer])
 
     const getOneCombo = async () => {
         const responseDish = await apiGetAllDish()
@@ -218,24 +227,9 @@ const MenuDish = () => {
                             </>
                         )
                     }
-
-                    {/* Form Booking Button */}
-                    {/* <div className={styles.book_btn}>
-                        <button
-                            onClick={handleClickBtnShowFormOrder}
-                        >BOOK NOW</button>
-                    </div> */}
+                    
                 </div>
-                {/* form booking */}
-                {/* {
-                    showFormOrderStatus && (
-                        <div className={cx("form-book-container", showFormOrderStatus === true ? "showFrom" : "closeFrom")}>
-                            <FormBooking
-                                showFormOrderStatus={showFormOrderStatus}
-                                handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
-                        </div>
-                    )
-                } */}
+                
             </div>
         </div>
     );

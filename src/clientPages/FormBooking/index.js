@@ -3,12 +3,13 @@ import classNames from 'classnames/bind';
 import icons from '../../ultil/icons';
 import { useEffect, useState } from 'react';
 import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
-import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
+// import { apiGetAllCombo, apiGetComboById } from '../../apis/combo';
 import { useParams } from 'react-router-dom';
 import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { statusOrder } from '../../redux/User/userSlice';
 
 
 
@@ -28,11 +29,15 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     setBookingTime,
     order,
     setLobbyId,
+    bookingDate,
+    bookingTime,
+    quantityTable,
+    lobbyPrice
 
 }) => {
     const [lobby, setLobby] = useState(null)
-    const [combos, setCombos] = useState([])
-
+    // const [combos, setCombos] = useState([])
+    const dispatch = useDispatch()
     // chua xong
     const { success } = useParams()
     if (success) {
@@ -43,7 +48,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
     // ---------------
     const [lobbySelect, setLobbySelect] = useState(null)
-    const [selectTable, setSelectTable] = useState(null)
+    // const [selectTable, setSelectTable] = useState(null)
 
     const { isLoggedIn } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
@@ -67,6 +72,12 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     const handleSelectTable = (e) => {
         if (setQuantityTable) setQuantityTable(e.target.value);
     }
+    const now = new Date()
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear();
+
+
     const handleChangeDate = (e) => {
         setBookingDate(e.target.value);
     }
@@ -75,29 +86,30 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     }
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
+        
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
         if (setLobbyId) setLobbyId(selectedId)
     }
 
-    const handleChangeTable = (e) => {
-        const selectedId = e.target.value;
-        if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
-        if (setComboid) setComboid(selectedId)
+    // const handleChangeTable = (e) => {
+    //     const selectedId = e.target.value;
+    //     if (selectedId !== "" && selectedId !== "--Choose Table--") setSelectTable(selectedId);
+    //     if (setComboid) setComboid(selectedId)
 
-    }
-    const getOneCombo = async () => {
-        if (selectTable == null) {
-            return
-        } else {
-            const responseComboOne = await apiGetComboById(selectTable)
-            if (responseComboOne.status === 0) {
-                setComboPrice(responseComboOne.data.price)
-            }
-        }
-    }
-    useEffect(() => {
-        getOneCombo()
-    }, [selectTable])
+    // }
+    // const getOneCombo = async () => {
+    //     if (selectTable == null) {
+    //         return
+    //     } else {
+    //         const responseComboOne = await apiGetComboById(selectTable)
+    //         if (responseComboOne.status === 0) {
+    //             setComboPrice(responseComboOne.data.price)
+    //         }
+    //     }
+    // }
+    // useEffect(() => {
+    //     getOneCombo()
+    // }, [selectTable])
 
 
     const getOneLobby = async () => {
@@ -118,44 +130,51 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 
 
     //combo list
-    const getAllCombo = async () => {
-        const response = await apiGetAllCombo()
-        if (response.status === 0) {
-            setCombos(response.data.$values)
-        }
-    }
-    useEffect(() => {
-        getAllCombo()
-    }, [])
+    // const getAllCombo = async () => {
+    //     const response = await apiGetAllCombo()
+    //     if (response.status === 0) {
+    //         setCombos(response.data.$values)
+    //     }
+    // }
+    // useEffect(() => {
+    //     getAllCombo()
+    // }, [])
 
 
     const handleClickCreateOrder = async () => {
-        const response = await apiAddOrder(order)
-        if(response.status === 0) {
-            
-            localStorage.removeItem('appetizer');
-            localStorage.removeItem('dish');
-            localStorage.removeItem('dessert');
-
-            const data = {
-                orderType: 'ban tiec',
-                amount: response?.data?.deposit,
-                orderDescription: 'tiec',
-                name: userCurrent?.phone,
-                orderIdBooked: response?.data?.id
-            }            
-            const resPayment = await apiPayment(data)
-            if(resPayment.status === 0) {
-                console.log(resPayment);
-
-                window.location.href = resPayment?.url;
-            }
-
+        
+        if (bookingTime === "" || bookingDate === "" || quantityTable === "" || lobbySelect === "") {
+            Swal.fire('Oop!',
+                "Not Empty", 'error')
         }
+        else if (bookingDate < `${year}-${month}-${day}`) {
+            Swal.fire('Oop!',
+                "Invalid date", 'error')
+        } 
+        else {
+            const response = await apiAddOrder(order)
+            if (response.status === 0) {
+                localStorage.removeItem('appetizer');
+                localStorage.removeItem('dish');
+                localStorage.removeItem('dessert');
+                
+                dispatch(statusOrder({stusOrder:false}))
+                
+                const data = {
+                    orderType: 'ban tiec',
+                    amount: response?.data?.deposit,
+                    orderDescription: 'tiec',
+                    name: userCurrent?.phone,
+                    orderIdBooked: response?.data?.id
+                }
+                const resPayment = await apiPayment(data)
+                if (resPayment.status === 0) {
 
-        // const response = await apiAddOrder(cartAppet)
-        // console.log(order);
+                    window.location.href = resPayment?.url;
+                }
 
+            }
+        }
 
     }
 
@@ -171,7 +190,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
             <div>
                 <div className={cx("order-form")}>
                     <div className={cx("form")}>
-                        {
+                        {/* {
                             table &&
                             <div className={cx("older")}>
                                 <p><IoTabletLandscapeOutline /><span>Combo:</span></p>
@@ -186,9 +205,9 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                                     }
                                 </select>
                             </div>
-                        }
+                        } */}
                         <div className={cx("older")}>
-                            <p><FaTable /><span>Quantity:</span></p>
+                            <p><FaTable /><span>Quantity(10 peoples/1 table):</span></p>
                             <select
                                 onChange={handleSelectTable}
                                 className={cx(!showFormOrderStatus ? "bg" : "")}

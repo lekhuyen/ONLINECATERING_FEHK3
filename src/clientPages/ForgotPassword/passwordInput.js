@@ -26,14 +26,33 @@ const PasswordInput = () => {
     }
     payload.userEmail = mailOtp
     const handleSubmit = async () => {
-        const response = await apiUserSendPassword(payload)
-        if (response.status === 0) {
-            Swal.fire('Congratulation',
-                response.message, 'success')
-                .then(() => {
-                    navigate('/login')
-                })
+
+        let errors = [];
+
+        if (payload.password.length < 6) {
+            errors.push({ name: "password", mes: "Password must be at least 6 characters long" });
         }
+
+        if (errors.length > 0) {
+            setInvalidFields(errors);
+            return;
+        }
+
+        
+        if(payload.password !== "" && payload.userEmail !== "") {
+                const response = await apiUserSendPassword(payload)
+            if (response.status === 0) {
+                Swal.fire('Congratulation',
+                    response.message, 'success')
+                    .then(() => {
+                        navigate('/login')
+                    })
+            }
+        }else{
+            Swal.fire('Oop!',
+            "Password must not be empty", 'error')
+        }
+        
         
     }
     return (

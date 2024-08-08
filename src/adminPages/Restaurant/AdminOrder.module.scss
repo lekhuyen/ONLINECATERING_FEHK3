@@ -1,122 +1,75 @@
-// AdminOrder.module.scss
-
 .container {
-    background-color: #f8f9fa;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    border-radius: 5px;
 }
 
 .table {
     margin-top: 20px;
-    width: 100%;
     border-collapse: collapse;
-
-    thead {
-        background-color: #343a40;
-        color: white;
-
-        th {
-            padding: 12px;
-            text-align: left;
-        }
-    }
-
-    tbody {
-        tr {
-            &:hover {
-                background-color: #f1f1f1;
-            }
-
-            td {
-                padding: 12px;
-                border-bottom: 1px solid #ddd;
-            }
-        }
-    }
-
-    .btn-outline-primary {
-        color: #007bff;
-        border-color: #007bff;
-        margin-right: 5px;
-
-        &:hover {
-            background-color: #007bff;
-            color: white;
-        }
-    }
-
-    .btn-outline-danger {
-        color: #dc3545;
-        border-color: #dc3545;
-
-        &:hover {
-            background-color: #dc3545;
-            color: white;
-        }
-    }
+    width: 100%;
 }
 
+
 .modal {
-    .modal-dialog {
-        max-width: 800px;
-    }
+    display: none; // Hide modal by default
+    position: fixed; // Stay in place
+    z-index: 1050; // Sit on top
+    left: 0;
+    top: 0;
+    width: 100%; // Full width
+    height: 100%; // Full height
+    overflow: auto; // Enable scroll if needed
+    background-color: rgba(0, 0, 0, 0.5); // Black background with transparency
+}
 
-    .modal-content {
-        border-radius: 8px;
+.show {
+    display: block; // Show modal when active
+}
 
-        .modal-header {
-            background-color: #343a40;
-            color: white;
-            border-bottom: none;
+.modalDialog {
+    margin: 100px auto; // Center the modal
+    max-width: 600px; // Max width for the modal
+}
 
-            .btn-close {
-                background: none;
-                border: none;
-                color: white;
-                font-size: 1.5rem;
+.modalContent {
+    background-color: #ffffff; // White background
+    border-radius: 5px; // Rounded corners
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); // Soft shadow
+}
 
-                &:hover {
-                    color: #dc3545;
-                }
-            }
-        }
+.modalHeader {
+    display: flex; // Flex layout for header
+    justify-content: space-between; // Space between items
+    align-items: center; // Align vertically
+    padding: 15px; // Padding for the header
+    border-bottom: 1px solid #dee2e6; // Bottom border
+}
 
-        .modal-body {
-            padding: 20px;
+.modalTitle {
+    margin: 0; // No margin for title
+    font-size: 1.25rem; // Font size for title
+}
 
-            h5 {
-                margin-top: 20px;
-                color: #007bff;
-            }
+.close {
+    background: none; // No background
+    border: none; // No border
+    font-size: 1.5rem; // Font size for close button
+    cursor: pointer; // Pointer cursor
+}
 
-            div {
-                margin-bottom: 10px;
-                p {
-                    margin: 0;
-                }
+.modalBody {
+    padding: 15px; // Padding for the body
+}
 
-                img {
-                    max-width: 100px;
-                    margin-top: 5px;
-                    border-radius: 4px;
-                }
-            }
-        }
+.modalFooter {
+    display: flex; // Flex layout for footer
+    justify-content: flex-end; // Align to the right
+    padding: 10px 15px; // Padding for footer
+}
 
-        .modal-footer {
-            border-top: none;
-            padding: 15px;
-
-            .btn-danger {
-                background-color: #dc3545;
-                border-color: #dc3545;
-
-                &:hover {
-                    background-color: #c82333;
-                    border-color: #bd2130;
-                }
-            }
-        }
-    }
+.itemImage {
+    max-width: 100px; // Max width for images
+    margin: 5px 0; // Space above and below images
+    border-radius: 5px; // Rounded corners for images
 }

@@ -6,25 +6,28 @@ import SubHeading from "../../components/Layout/DefaultLayout/SubHeading/Index";
 const Newsletter = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
+        setError(""); // Clear error message when email input changes
     };
 
     const handleSubscribe = async () => {
-        if (!email) {
-            setMessage("Please enter a valid email address.");
+        // Check if email field is empty
+        if (!email.trim()) {
+            setError("Email address cannot be empty.");
             return;
         }
 
         setLoading(true);
+        setError(""); // Clear previous error
 
         try {
-            // Send email as part of JSON object with 'email' key
             const response = await axios.post(
                 "http://localhost:5034/api/Contact/subscribe",
-                { email }, // Sending email in the expected format
+                { email },
                 {
                     headers: {
                         "Content-Type": "application/json"
@@ -33,16 +36,16 @@ const Newsletter = () => {
             );
 
             if (response.status === 200) {
-                setMessage("Thank you for subscribing! We will be in touch with you shortly and ensure that you receive all the latest updates and news as soon as they're available. We appreciate your interest and look forward to keeping you informed with the most current information and exciting updates. Stay tuned!");
+                setMessage("");
                 setEmail("");
             } else {
-                setMessage("Something went wrong. Please try again later.");
+                setError("Something went wrong. Please try again later.");
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                setMessage(error.response.data.message || "An error occurred while subscribing. Please try again.");
+                setError(error.response.data.message || "An error occurred while subscribing. Please try again.");
             } else {
-                setMessage("An error occurred while subscribing. Please try again.");
+                setError("An error occurred while subscribing. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -67,6 +70,8 @@ const Newsletter = () => {
                     {loading ? "Subscribing..." : "Subscribe"}
                 </button>
             </div>
+            {error && <p className="app__newsletter-error">{error}</p>}
+            {message && <p className="app__newsletter-message">{message}</p>}
         </div>
     );
 };

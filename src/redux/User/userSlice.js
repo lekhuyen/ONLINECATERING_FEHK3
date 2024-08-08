@@ -12,7 +12,9 @@ export const userSlice = createSlice({
         isSendMailLoading: false,
         mailOtp: null,
         status: null,
-        message: ""
+        message: "",
+
+        orderStatus: false,
     },
     reducers: {
         login: (state, action) => {
@@ -31,6 +33,9 @@ export const userSlice = createSlice({
         resetStatusMessage: (state) => {
             state.status = null;
             state.message = "";
+        },
+        statusOrder: (state, action) => {
+            state.orderStatus = action.payload.stusOrder;
         }
     },
     extraReducers: (builder) => {
@@ -62,5 +67,5 @@ export const userSlice = createSlice({
     }
 });
 
-export const { login, resetStatusMessage, logout } = userSlice.actions;
+export const { login, resetStatusMessage, logout, statusOrder } = userSlice.actions;
 export default userSlice.reducer;

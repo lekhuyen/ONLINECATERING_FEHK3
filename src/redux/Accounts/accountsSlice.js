@@ -56,19 +56,18 @@ export const fetchAccountsData = createAsyncThunk(
     }
     );
 
-    export const editUserStatus = createAsyncThunk(
-        "accounts/editUserStatus",
-        async ({ id, newStatus }) => {
-            try {
-                const response = await axios.put(`${apiEndpoint}/admin-edit/${id}?userId=${id}&newStatus=${newStatus}`);
-                console.log('API Response:', response.data); // Log the response for debugging
-                return response.data; // Assuming response.data contains the updated user object
-            } catch (error) {
-                console.error('Error editing user status:', error);
-                throw new Error('Error editing user status:', error.response.data);
-            }
+    // Async thunk to edit user status (ban/unban)
+export const editUserStatus = createAsyncThunk(
+    "accounts/editUserStatus",
+    async ({ id, newStatus }) => {
+        try {
+            const response = await axios.put(`${apiEndpoint}/admin-edit/${id}?userId=${id}&newStatus=${newStatus}`);
+            return response.data; // Assuming response.data contains the updated user object
+        } catch (error) {
+            throw new Error('Error editing user status: ' + (error.response?.data || error.message));
         }
-    );
+    }
+);
 
     const accountsSlice = createSlice({
     name: 'accounts',

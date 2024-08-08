@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteContact, fetchContacts } from "../../redux/Information/contactSlice";
+import { fetchContacts } from "../../redux/Information/contactSlice";
 import { FaCheckSquare, FaRegTimesCircle, FaRegTrashAlt } from "react-icons/fa";
 import { TbMessageReply } from "react-icons/tb";
 
@@ -28,9 +28,7 @@ const ContactAd = () => {
     navigate(`/contactus/responsemessage/${id}`);
   };
 
-  const handleDeleteClick = (id) => {
-    dispatch(deleteContact(id));
-  };
+
 
   const handleDateChange = (e) => {
     const selectedMonthYear = e.target.value;
@@ -145,7 +143,6 @@ const ContactAd = () => {
                 <th>Content</th>
                 <th>IsAdminResponse</th>
                 <th>ResponseDate</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -172,14 +169,17 @@ const ContactAd = () => {
                       )}
                     </span>
                   </td>
-                  <td>{contact.responseDate}</td>
                   <td>
-                    <button
-                      className="btn btn-outline-danger"
-                      onClick={() => handleDeleteClick(contact.id)}
-                    >
-                      <FaRegTrashAlt />
-                    </button>
+                  {contact.responseDate ? 
+                    new Date(contact.responseDate).toLocaleDateString(undefined, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    }) 
+                    : 'N/A'}
+                  </td>
+                  <td>
+
                   </td>
                 </tr>
               ))}

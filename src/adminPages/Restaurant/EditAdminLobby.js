@@ -9,6 +9,7 @@ export default function EditLobby() {
     const navigate = useNavigate(); // Initialize useNavigate hook
     const dispatch = useDispatch(); // Initialize useDispatch hook
 
+    // State for form fields and file upload
     const [lobbyName, setLobbyName] = useState('');
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
@@ -16,6 +17,13 @@ export default function EditLobby() {
     const [price, setPrice] = useState('');
     const [currentImages, setCurrentImages] = useState([]); // Array for images
     const [newImages, setNewImages] = useState([]); // Array for new images
+    const [errors, setErrors] = useState({ // State for validation
+        lobbyName: false,
+        description: false,
+        area: false,
+        type: false,
+        price: false,
+    });
 
     const lobby = useSelector((state) =>
         state.adminLobby.lobbies.find(lobby => lobby.id === Number(id))
@@ -59,13 +67,54 @@ export default function EditLobby() {
         }
     }, [id, dispatch]);
     
-
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         setNewImages(files);
     };
 
     const handleUpdate = async () => {
+        // Reset errors
+        setErrors({
+            lobbyName: false,
+            description: false,
+            area: false,
+            type: false,
+            price: false,
+        });
+
+        // Validation: Check if fields are valid
+        let hasError = false;
+
+        if (!lobbyName) {
+            setErrors(prev => ({ ...prev, lobbyName: true }));
+            hasError = true;
+        }
+
+        if (!description) {
+            setErrors(prev => ({ ...prev, description: true }));
+            hasError = true;
+        }
+
+        if (!area) {
+            setErrors(prev => ({ ...prev, area: true }));
+            hasError = true;
+        }
+
+        if (!type) {
+            setErrors(prev => ({ ...prev, type: true }));
+            hasError = true;
+        }
+
+        if (!price || price < 0) {
+            setErrors(prev => ({ ...prev, price: true }));
+            hasError = true;
+        }
+
+        if (hasError) {
+
+            return; 
+        }
+
         try {
             const formData = new FormData();
             formData.append('id', id); // Ensure ID is included
@@ -89,7 +138,6 @@ export default function EditLobby() {
         }
     };
     
-
     if (status === 'loading') {
         return <p>Loading...</p>;
     }
@@ -106,52 +154,58 @@ export default function EditLobby() {
                     <label htmlFor="lobbyName">Lobby Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.lobbyName ? 'is-invalid' : ''}`}
                         id="lobbyName"
                         value={lobbyName}
                         onChange={(e) => setLobbyName(e.target.value)}
                         required
                     />
+                    {errors.lobbyName && <div className="invalid-feedback">Lobby name is required.</div>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="description">Description</label>
                     <textarea
-                        className="form-control"
+                        className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                         id="description"
                         rows="3"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                    {errors.description && <div className="invalid-feedback">Description is required.</div>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="area">Area</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.area ? 'is-invalid' : ''}`}
                         id="area"
                         value={area}
                         onChange={(e) => setArea(e.target.value)}
                     />
+                    {errors.area && <div className="invalid-feedback">Area is required.</div>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="type">Type</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.type ? 'is-invalid' : ''}`}
                         id="type"
                         value={type}
                         onChange={(e) => setType(e.target.value)}
                     />
+                    {errors.type && <div className="invalid-feedback">Type is required.</div>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="price">Price</label>
                     <input
                         type="number"
-                        className="form-control"
+                        className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                         id="price"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        min="0"
                     />
+                    {errors.price && <div className="invalid-feedback">Price must be a positive number.</div>}
                 </div>
                 <div className="form-group">
                     <label htmlFor="currentImages">Current Images</label>

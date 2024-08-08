@@ -28,14 +28,19 @@ const OtpInput = () => {
 
     const handleSubmit = async () => {
         payload.userEmail = mailOtp
-        const response = await apiUserSendOtp(payload)
-        console.log(response);
-        if (response.status === 0) {
-            setIsOtpOk(true)
+        if(payload.otp !== "" && payload.userEmail != "") {
+                const response = await apiUserSendOtp(payload)
+            if (response.status === 0) {
+                setIsOtpOk(true)
+            }
+            else{
+                Swal.fire('Oops!', response.message ? response.message : "OTP is incorrect", 'error');
+            }
+        }else{
+            Swal.fire('Oop!',
+            "Not Empty", 'error')
         }
-        else{
-            Swal.fire('Oops!', response.message ? response.message : "OTP is incorrect", 'error');
-        }
+        
     }
     return (
         <>
