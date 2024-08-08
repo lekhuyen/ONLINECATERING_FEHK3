@@ -165,3 +165,18 @@ export const voteOption = [
   },
   
 ]
+
+export const timeOrder = [
+  {
+    id: 1,
+    title: '08:00'
+  },
+  {
+    id: 2,
+    title: '13:00'
+  },
+  {
+    id: 3,
+    title: '18:00'
+  },
+]
