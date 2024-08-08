@@ -1,4 +1,3 @@
-// src/clientPages/AboutUs/About.js
 import React, { useEffect } from 'react';
 import styles from './About.module.scss';
 import clsx from 'clsx';
@@ -8,7 +7,6 @@ import { fetchAboutData } from '../../redux/Information/aboutSlice';
 import { fetchAboutTypes } from '../../redux/Information/aboutTypeSlice';
 
 const About = () => {
-    // Define AboutSection as a nested component
     const AboutSection = ({ aboutData, aboutTypeName }) => {
         return (
             <div className={styles.aboutSection}>
@@ -47,7 +45,6 @@ const About = () => {
         aboutTypeName: PropTypes.string.isRequired,
     };
 
-    // Redux setup within About component
     const dispatch = useDispatch();
 
     useEffect(() => {
