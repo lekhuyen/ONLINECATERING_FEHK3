@@ -49,7 +49,7 @@ function AboutUs() {
     };
 
     const handleDeleteType = (id) => {
-        if (window.confirm("Are you sure you want to delete this About Type?")) {
+         {
             dispatch(deleteAboutType(id));
         }
     };
@@ -229,7 +229,7 @@ function AboutUs() {
                         <div className={styles['modal-content']}>
                             <div className={styles['modal-header']}>
                                 <h4 className="modal-title float-start">
-                                    News Title: {selectedAboutUs && selectedAboutUs.title}
+                                    About Us Title: {selectedAboutUs && selectedAboutUs.title}
                                 </h4>
                                 <button
                                     type="button"
@@ -242,9 +242,9 @@ function AboutUs() {
                             <div className={styles['modal-body']}>
                                 {selectedAboutUs && (
                                     <div>
-                                        <h5>News Content:</h5>
+                                        <h5>About Us Content:</h5>
                                         <p>{selectedAboutUs.content}</p>
-                                        <h5>News Image(s):</h5>
+                                        <h5>About Us Image(s):</h5>
                                         {selectedAboutUs.imagePaths && selectedAboutUs.imagePaths.length > 0 ? (
                                             selectedAboutUs.imagePaths.map((imagePath, index) => (
                                                 <img
@@ -312,19 +312,14 @@ function AboutUs() {
                                                         <button className="btn btn-outline-danger" disabled>
                                                             <FaRegTrashAlt />
                                                         </button>
-                                                        <div className="popover d-none" role="tooltip">
-                                                            <div className="popover-body">
-                                                                This type is currently in use and cannot be deleted.
-                                                            </div>
-                                                        </div>
+                                                        <span className="text-muted ms-2" style={{ fontSize: '0.875rem' }}>
+                                                            (Currently in use)
+                                                        </span>
                                                     </span>
                                                 ) : (
                                                     <button
                                                         className="btn btn-outline-danger"
                                                         onClick={() => handleDeleteType(type.id)}
-                                                        data-bs-toggle="popover"
-                                                        data-bs-trigger="hover focus"
-                                                        data-bs-content="Click to delete this type"
                                                     >
                                                         <FaRegTrashAlt />
                                                     </button>

@@ -103,7 +103,7 @@ const ContactAd = () => {
 
       <div className="col-sm-9">
           <label htmlFor="searchTerm" className="form-label">
-            Search:
+            Search Name/Email/Phone:
           </label>
           <input
             type="text"

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDessertData, updateAdminDessertItem } from '../../redux/Restaurant/admindessertSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function EditAdminDessert() {
     const { id } = useParams(); // Get id from URL params
@@ -111,9 +112,16 @@ export default function EditAdminDessert() {
         return <p>Error: {dessertError}</p>;
     }
 
+    const handleGoBack = () => {
+        navigate('/dessert-admin'); // Navigate back to dessert list page
+    };
+
     return (
         <div className='container'>
             <h2>Edit Dessert</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form>
                 <div className="form-group">
                     <label>Dessert Name</label>

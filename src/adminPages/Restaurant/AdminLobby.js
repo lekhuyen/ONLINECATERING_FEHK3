@@ -195,7 +195,7 @@ const AdminLobby = () => {
                                     </div>
                                 )}
                             </div>
-                            <div className={styles['modal-footer']}>
+                            <div className={styles['modal-footer'] + ' d-flex justify-content-end'}>
                                 <button
                                     type="button"
                                     className="btn btn-danger"

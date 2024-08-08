@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiSend } from 'react-icons/fi';
 import { fetchLobbies, updateLobby, fetchLobbyById } from '../../redux/Restaurant/adminlobbySlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function EditLobby() {
     const { id } = useParams(); // Get id from URL params
@@ -146,9 +147,17 @@ export default function EditLobby() {
         return <p>Error: {error}</p>;
     }
 
+    const handleGoBack = () => {
+        navigate("/lobby-admin");
+    };
+
+
     return (
         <div className='container'>
             <h2>Edit Lobby</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form>
                 <div className="form-group">
                     <label htmlFor="lobbyName">Lobby Name</label>

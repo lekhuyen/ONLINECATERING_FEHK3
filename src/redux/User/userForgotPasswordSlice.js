@@ -30,9 +30,9 @@ export const sendForgotPasswordEmail = createAsyncThunk(
 
 export const updatePassword = createAsyncThunk(
     'userForgotPassword/updatePassword',
-    async ({ email, password, otp,oldPassword }, { rejectWithValue }) => {
+    async ({ email, oldPassword, newPassword }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${apiEndpoint}/update-password-otp`, { UserEmail: email, Password: password, Otp: otp ,oldPassword});
+            const response = await axios.post(`${apiEndpoint}/update-password-change`, { UserEmail: email, Password: newPassword, OldPassword: oldPassword });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
