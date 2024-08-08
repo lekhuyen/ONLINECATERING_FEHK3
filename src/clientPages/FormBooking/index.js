@@ -113,7 +113,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
         }
         const matchingLobbyTimes = findMatchingBookingDates();
         setTimeOrderLoby(matchingLobbyTimes);
-    }, [bookingDate])
+    }, [bookingDate,lobbyTime])
 
 
     const handleChangeLobby = async (e) => {
