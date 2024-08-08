@@ -5,6 +5,9 @@ import classNames from "classnames/bind";
 import { FaMinusCircle, FaPlus } from 'react-icons/fa';
 import FormBooking from '../FormBooking';
 import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 const cx = classNames.bind(styles)
 
 const Order = () => {
@@ -34,6 +37,8 @@ const Order = () => {
     const { isLoggedIn } = useSelector(state => state.user)
     const [comboid, setComboid] = useState(null)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (isLoggedIn) {
             var user = JSON.parse(localStorage.getItem("userCurrent"))
@@ -42,7 +47,24 @@ const Order = () => {
     }, [isLoggedIn])
 
     const handleClickBtnShowFormOrder = () => {
-        setShowFormOrderStatus(true)
+        if(isLoggedIn) {
+            setShowFormOrderStatus(true)
+        }
+        else {
+            Swal.fire({
+                title: "You are not logged in",
+                text: "Please Login to comment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login')
+                }
+            });
+        }
     }
     const handleClickBtnCloseFormOrder = () => {
         setShowFormOrderStatus(false)

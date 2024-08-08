@@ -85,3 +85,29 @@
     font-size: 25px;
     color: #d02028;
 }
+
+.lobby_time {
+    margin-left: 130px;
+}
+.lobby_title {
+    color: red;
+}
+.lobby_booked_time {
+    display: flex;
+    gap: 50px;
+    color: red;
+}
+.time_order {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    gap: 30px;
+}
+.time_order div {
+    width: 150px;
+    // background-color: #B33771;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+}
