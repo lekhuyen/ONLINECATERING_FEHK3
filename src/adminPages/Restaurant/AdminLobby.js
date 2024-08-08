@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from 'react-icons/bs';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { fetchLobbies, deleteLobby } from '../../redux/Restaurant/adminlobbySlice';
@@ -24,14 +23,6 @@ const AdminLobby = () => {
     useEffect(() => {
         dispatch(fetchLobbies());
     }, [dispatch]);
-
-    const handleDelete = async (id) => {
-        try {
-            await dispatch(deleteLobby(id)).unwrap();
-        } catch (error) {
-            console.error("Error deleting lobby:", error);
-        }
-    };
 
     const handleEdit = (id) => {
         navigate(`/lobby-admin/edit-lobby-admin/${id}`);
@@ -157,12 +148,6 @@ const AdminLobby = () => {
                                             onClick={() => handleEdit(lobby.id)}
                                         >
                                             <HiOutlinePencilSquare />
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-danger"
-                                            onClick={() => handleDelete(lobby.id)}
-                                        >
-                                            <FaRegTrashAlt />
                                         </button>
                                     </td>
                                 </tr>

@@ -5,7 +5,7 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 
 import { deleteMenuItem, fetchMenuData } from '../../redux/Restaurant/adminmenuSlice';
-import { fetchMenuImages } from '../../redux/Restaurant/adminmenuimageSlice';
+
 
 
 const AdminTable = () => {
@@ -23,10 +23,6 @@ const AdminTable = () => {
     useEffect(() => {
         dispatch(fetchMenuData());
     }, [dispatch]);
-
-    const handleDelete = (id) => {
-        dispatch(deleteMenuItem(id));
-    };
 
     const handleEdit = (id) => {
         navigate(`/menu-admin/edit-menu-admin/${id}`);
@@ -121,9 +117,6 @@ const AdminTable = () => {
 
                                     <button className='btn btn-outline-warning' onClick={() => handleEdit(menu.id)}>
                                         <HiOutlinePencilSquare />
-                                    </button>
-                                    <button className='btn btn-outline-danger' onClick={() => handleDelete(menu.id)}>
-                                        <FaRegTrashAlt />
                                     </button>
                                 </td>
                             </tr>

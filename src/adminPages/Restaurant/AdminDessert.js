@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt } from 'react-icons/fa';
+
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { deleteAdminDessertItem, fetchDessertData } from '../../redux/Restaurant/admindessertSlice';
 
@@ -19,10 +19,6 @@ export default function AdminDessert() {
     useEffect(() => {
         dispatch(fetchDessertData());
     }, [dispatch]);
-
-    const handleDelete = (id) => {
-        dispatch(deleteAdminDessertItem(id));
-    };
 
     const handleEdit = (id) => {
         navigate(`/dessert-admin/edit-dessert-admin/${id}`);
@@ -123,12 +119,6 @@ export default function AdminDessert() {
                                     onClick={() => handleEdit(dessert.id)}
                                 >
                                     <HiOutlinePencilSquare />
-                                </button>
-                                <button
-                                    className="btn btn-outline-danger"
-                                    onClick={() => handleDelete(dessert.id)}
-                                >
-                                    <FaRegTrashAlt />
                                 </button>
                             </td>
                         </tr>

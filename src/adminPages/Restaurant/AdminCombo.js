@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { deleteComboItem, fetchComboData } from '../../redux/Restaurant/comboSlice';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import {  fetchComboData } from '../../redux/Restaurant/comboSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { BsInfoCircle } from 'react-icons/bs';
 
@@ -22,11 +21,7 @@ export default function AdminCombo() {
         dispatch(fetchComboData());
     }, [dispatch]);
 
-    const handleDelete = (id) => {
-        if (window.confirm('Are you sure you want to delete this combo item?')) {
-            dispatch(deleteComboItem(id));
-        }
-    };
+
 
     const handleEdit = (id) => {
         navigate(`/combo-admin/edit-combo-admin/${id}`);
@@ -134,12 +129,7 @@ export default function AdminCombo() {
                                     >
                                         <HiOutlinePencilSquare />
                                     </button>
-                                    <button
-                                        className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(combo.id)}
-                                    >
-                                        <FaRegTrashAlt />
-                                    </button>
+
                                 </td>
                             </tr>
                         ))}

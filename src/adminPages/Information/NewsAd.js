@@ -292,7 +292,7 @@ function NewsAd() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {newsTypeData.map((type) => (
+                                        {newsTypeData.map((type) => (
                                             <tr key={type.id}>
                                                 <td>{type.newsTypeName}</td>
                                                 <td>
@@ -314,6 +314,11 @@ function NewsAd() {
                                                     >
                                                         <FaRegTrashAlt />
                                                     </button>
+                                                    {newsData.some(news => news.newsTypeName === type.newsTypeName) && (
+                                                        <span className="text-muted ms-2" style={{ fontSize: '0.875rem' }}>
+                                                            (Currently in use)
+                                                        </span>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}

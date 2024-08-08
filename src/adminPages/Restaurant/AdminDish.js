@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt } from 'react-icons/fa';
+
 import { deleteDishItem, fetchDishData } from '../../redux/Restaurant/dishSlice';
 import { fetchCustomComboData } from '../../redux/Restaurant/customComboSlice';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
@@ -23,10 +23,6 @@ export default function AdminDish() {
         dispatch(fetchDishData());
         dispatch(fetchCustomComboData());
     }, [dispatch]);
-
-    const handleDelete = (id) => {
-        dispatch(deleteDishItem(id));
-    };
 
     const handleEdit = (id) => {
         navigate(`/dish-admin/edit-dish-admin/${id}`);
@@ -134,12 +130,6 @@ export default function AdminDish() {
                                             onClick={() => handleEdit(dish.id)}
                                         >
                                             <HiOutlinePencilSquare />
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-danger"
-                                            onClick={() => handleDelete(dish.id)}
-                                        >
-                                            <FaRegTrashAlt />
                                         </button>
                                     </td>
                                 </tr>
