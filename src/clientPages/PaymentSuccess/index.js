@@ -8,7 +8,7 @@ const PaymentSuccess = () => {
     return (
         <div className={styles.payment_success}>
             <h1>You have successfully paid, we will contact you as soon as possible</h1>
-            <Link to='/'>Go Home</Link>
+            <Link to='/'>Go Back to Home</Link>
         </div>
     );
 };
