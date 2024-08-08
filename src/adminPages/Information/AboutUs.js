@@ -34,6 +34,7 @@ function AboutUs() {
         dispatch(fetchAboutTypes());
     }, [dispatch]);
 
+
     const handleDelete = (id) => {
         dispatch(deleteAboutItem(id));
     };
@@ -169,6 +170,7 @@ function AboutUs() {
 
             <div className="container mt-5">
                 <table className={styles.table}>
+                    
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -295,25 +297,42 @@ function AboutUs() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {aboutTypeData.map((type) => (
-                                            <tr key={type.id}>
-                                                <td>{type.aboutTypeName}</td>
-                                                <td>
-                                                    <button
-                                                        className="btn btn-outline-warning"
-                                                        onClick={() => handleEditType(type.id, prompt("Enter new name"))}
-                                                    >
-                                                        <HiOutlinePencilSquare />
-                                                    </button>
+                                    {aboutTypeData.map((type) => (
+                                        <tr key={type.id}>
+                                            <td>{type.aboutTypeName}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-outline-warning"
+                                                    onClick={() => handleEditType(type.id, prompt("Enter new name"))}
+                                                >
+                                                    <HiOutlinePencilSquare />
+                                                </button>
+                                                {aboutData.some(about => about.aboutTypeName === type.aboutTypeName) ? (
+                                                    <span className="d-inline-block">
+                                                        <button className="btn btn-outline-danger" disabled>
+                                                            <FaRegTrashAlt />
+                                                        </button>
+                                                        <div className="popover d-none" role="tooltip">
+                                                            <div className="popover-body">
+                                                                This type is currently in use and cannot be deleted.
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                ) : (
                                                     <button
                                                         className="btn btn-outline-danger"
                                                         onClick={() => handleDeleteType(type.id)}
+                                                        data-bs-toggle="popover"
+                                                        data-bs-trigger="hover focus"
+                                                        data-bs-content="Click to delete this type"
                                                     >
                                                         <FaRegTrashAlt />
                                                     </button>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+
                                     </tbody>
                                 </table>
 
