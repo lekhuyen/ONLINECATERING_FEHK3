@@ -45,9 +45,9 @@
   }
   
   .news_detail_control_button {
-    background: transparent;
+    background: #B33771;;
     border: 1px solid #B33771; // Border color for buttons
-    color: #B33771; // Text color for buttons
+    color: #fff; // Text color for buttons
     padding: 0.5rem 1rem;
     font-size: 1rem;
     cursor: pointer;
@@ -55,8 +55,8 @@
     transition: background-color 0.3s, color 0.3s;
   
     &:hover {
-      background-color: #B33771; // Background color on hover
-      color: #ffffff; // Text color on hover
+      background-color: #ffffff; // Background color on hover
+      color: #B33771; // Text color on hover
     }
   }
   
