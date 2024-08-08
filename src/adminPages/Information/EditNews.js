@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNewsData, updateNewsItem } from '../../redux/Information/newsSlice';
 import { fetchNewsTypes } from '../../redux/Information/newsTypeSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function EditNews() {
     const { id } = useParams();
@@ -82,9 +83,16 @@ export default function EditNews() {
         return <p>Error: {error}</p>;
     }
 
+    const handleGoBack = () => {
+        navigate("/newsadmin");
+    };
+
     return (
         <div className='container'>
             <h2>Edit News Data</h2>
+            <div className="mt-3">
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /> Go Back</button>
+            </div>
             <form>
                 <div className="form-group">
                     <label>Title</label>

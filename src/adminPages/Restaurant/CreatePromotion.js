@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FiSend } from 'react-icons/fi';
 import { createPromotionItem } from '../../redux/Restaurant/promotionSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 
 
@@ -51,9 +52,16 @@ export default function CreateAdminPromotion() {
         setFormFile(e.target.files[0]); // Assuming only a single file is allowed
     };
 
+    const handleGoBack = () => {
+        navigate('/promotion'); // Navigate back to dessert list page
+    };
+
     return (
         <div className="container">
             <h2>Create Admin Promotion</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">Name</label>

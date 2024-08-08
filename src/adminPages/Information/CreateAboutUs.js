@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createAboutUsItem } from '../../redux/Information/aboutSlice';
 import { FiSend } from 'react-icons/fi';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 const apiEndpoint = "http://localhost:5034/api/About";
 
@@ -81,9 +82,16 @@ export default function CreateAboutUs() {
         setImageFiles(e.target.files);
     };
 
+    const handleGoBack = () => {
+        navigate("/AboutUs");
+    };
+
     return (
         <div className="container">
             <h2>Create About Us</h2>
+            <div className="mt-3">
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /> Go Back</button>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="title">Title</label>

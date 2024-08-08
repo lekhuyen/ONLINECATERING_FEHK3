@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsInfoCircle } from 'react-icons/bs';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import { fetchLobbies, deleteLobby } from '../../redux/Restaurant/adminlobbySlice';
+import styles from './AdminLobby.module.scss'; // Ensure to have your SCSS file
 
 const AdminLobby = () => {
     const dispatch = useDispatch();
@@ -18,35 +18,19 @@ const AdminLobby = () => {
     const itemsPerPage = 3;
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedLobby, setSelectedLobby] = useState(null);
+    const [showDetailModal, setShowDetailModal] = useState(false);
 
     useEffect(() => {
         dispatch(fetchLobbies());
-        
     }, [dispatch]);
-
-    const handleDelete = async (id) => {
-        try {
-            await dispatch(deleteLobby(id)).unwrap();
-        } catch (error) {
-            console.error("Error deleting lobby:", error);
-        }
-    };
 
     const handleEdit = (id) => {
         navigate(`/lobby-admin/edit-lobby-admin/${id}`);
     };
 
     const handleInfoClick = (lobby) => {
-        console.log(`Viewing info for lobby:`, lobby);
         setSelectedLobby(lobby);
-        const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
-        modal.show();
-    };
-
-    const closeModal = () => {
-        const modal = new window.bootstrap.Modal(document.getElementById('lobbyModal'));
-        modal.hide();
-        setSelectedLobby(null);
+        setShowDetailModal(true);
     };
 
     const limitContent = (content, maxLength = 100) => {
@@ -56,7 +40,6 @@ const AdminLobby = () => {
     const filteredLobbies = Array.isArray(lobbies) ? lobbies.filter((lobby) => {
         const searchTermLowerCase = searchTerm.toLowerCase();
         
-        // Ensure properties are strings and not undefined
         const lobbyName = lobby.lobbyName?.toLowerCase() || '';
         const description = lobby.description?.toLowerCase() || '';
         const area = lobby.area?.toLowerCase() || '';
@@ -127,134 +110,104 @@ const AdminLobby = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {currentLobbies.map((lobby) => {
-                                console.log('Rendering lobby:', lobby); // Log information for each lobby
+                        {currentLobbies.map((lobby) => {
+                            const images = (lobby.lobbyImages && lobby.lobbyImages.$values) || [];
 
-                                // Accessing images array inside `$values` if available
-                                const images = (lobby.lobbyImages && lobby.lobbyImages.$values) || [];
-
-                                return (
-                                    <tr key={lobby.id}>
-                                        <td>{lobby.id}</td>
-                                        <td>{lobby.lobbyName || 'N/A'}</td>
-                                        <td>{limitContent(lobby.description || '')}</td>
-                                        <td>{lobby.area || 'N/A'}</td>
-                                        <td>{lobby.type || 'N/A'}</td>
-                                        <td>{lobby.price || 'N/A'}</td>
-                                        <td>
-    {lobby.lobbyImages && lobby.lobbyImages.$values && lobby.lobbyImages.$values.length > 0 ? (
-        <img
-            src={lobby.lobbyImages.$values[0]?.imagesUrl || ''}
-            alt={`Lobby ${lobby.id}`}
-            style={{
-                width: "100px",
-                height: "100px",
-                objectFit: "cover",
-            }}
-        />
-    ) : (
-        <p>No image available</p>
-    )}
-</td>
-
-
-                                        <td>
-                                            <button
-                                                className="btn btn-outline-primary"
-                                                onClick={() => handleInfoClick(lobby)}
-                                            >
-                                                <BsInfoCircle />
-                                            </button>
-                                            <button
-                                                className="btn btn-outline-warning"
-                                                onClick={() => handleEdit(lobby.id)}
-                                            >
-                                                <HiOutlinePencilSquare />
-                                            </button>
-                                            <button
-                                                className="btn btn-outline-danger"
-                                                onClick={() => handleDelete(lobby.id)}
-                                            >
-                                                <FaRegTrashAlt />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            return (
+                                <tr key={lobby.id}>
+                                    <td>{lobby.id}</td>
+                                    <td>{lobby.lobbyName || 'N/A'}</td>
+                                    <td>{limitContent(lobby.description || '')}</td>
+                                    <td>{lobby.area || 'N/A'}</td>
+                                    <td>{lobby.type || 'N/A'}</td>
+                                    <td>{lobby.price || 'N/A'}</td>
+                                    <td>
+                                        {images.length > 0 ? (
+                                            <img
+                                                src={images[0]?.imagesUrl || ''}
+                                                alt={`Lobby ${lobby.id}`}
+                                                style={{
+                                                    width: "100px",
+                                                    height: "100px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        ) : (
+                                            <p>No image available</p>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-outline-primary"
+                                            onClick={() => handleInfoClick(lobby)}
+                                        >
+                                            <BsInfoCircle />
+                                        </button>
+                                        <button
+                                            className="btn btn-outline-warning"
+                                            onClick={() => handleEdit(lobby.id)}
+                                        >
+                                            <HiOutlinePencilSquare />
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
 
-            <div className="modal fade" id="lobbyModal" tabIndex="-1" role="dialog" aria-labelledby="lobbyModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title" id="lobbyModalLabel">
-                                Lobby Details: {selectedLobby ? selectedLobby.lobbyName : ''}
-                            </h4>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                                onClick={() => {
-                                    console.log('Modal close button clicked');
-                                    closeModal();
-                                }}
-                            ></button>
-                        </div>
-                        <div className="modal-body">
-                            {selectedLobby ? (
-                                <div>
-                                    <h5>Description:</h5>
-                                    <p>{selectedLobby.description}</p>
-                                    <h5>Images:</h5>
-                                    {selectedLobby.lobbyImages && selectedLobby.lobbyImages.$values && selectedLobby.lobbyImages.$values.length > 0 ? (
-                                        <div>
-                                            {selectedLobby.lobbyImages.$values.map((image, index) => {
-                                                console.log(`Rendering image ${index}:`, image.imagesUrl);
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="position-relative"
-                                                        style={{ width: '20%', marginRight: '10px', marginBottom: '10px' }}
-                                                    >
-                                                        <img
-                                                            src={image.imagesUrl}
-                                                            alt={`Lobby ${selectedLobby.id}`}
-                                                            style={{
-                                                                width: '100%',
-                                                                height: 'auto',
-                                                                objectFit: 'cover',
-                                                            }}
-                                                        />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ) : (
-                                        <p>No images available</p>
-                                    )}
-                                </div>
-                            ) : (
-                                <p>No lobby data available</p>
-                            )}
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                data-bs-dismiss="modal"
-                                onClick={() => console.log('Modal close button clicked from footer')}
-                            >
-                                Close
-                            </button>
+            {/* Custom Modal for Lobby Details */}
+            {showDetailModal && (
+                <div className={styles['modal-overlay']} role="dialog">
+                    <div className={styles['modal-dialog']} role="document">
+                        <div className={styles['modal-content']}>
+                            <div className={styles['modal-header']}>
+                                <h4 className="modal-title">
+                                    Lobby Details: {selectedLobby && selectedLobby.lobbyName}
+                                </h4>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className={styles['modal-body']}>
+                                {selectedLobby && (
+                                    <div>
+                                        <h5>Description:</h5>
+                                        <p>{selectedLobby.description}</p>
+                                        <h5>Images:</h5>
+                                        {selectedLobby.lobbyImages && selectedLobby.lobbyImages.$values && selectedLobby.lobbyImages.$values.length > 0 ? (
+                                            selectedLobby.lobbyImages.$values.map((image, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={image.imagesUrl}
+                                                    alt={`Lobby ${selectedLobby.id}`}
+                                                    className={styles.image} // Apply custom image style
+                                                />
+                                            ))
+                                        ) : (
+                                            <p>No images available</p>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className={styles['modal-footer']}>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => setShowDetailModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-
+            )}
 
             <nav>
                 <ul className="pagination">

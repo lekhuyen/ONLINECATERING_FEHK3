@@ -83,6 +83,13 @@ function NewsAd() {
     };
 
     const handleDeleteType = async (id) => {
+        // Check if any news item uses this news type
+        const usedByNews = newsData.some(news => news.newsTypeName === newsTypeData.find(type => type.id === id).newsTypeName);
+        console.log("Cannot delete. News type is in use.");
+        if (usedByNews) {
+            return;
+        }
+    
         try {
             await dispatch(deleteNewsType(id));
         } catch (error) {
@@ -121,7 +128,7 @@ function NewsAd() {
 
     return (
         <div className={styles.container}>
-            <h2>News Data</h2>
+            <h2>News Data Management</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">
@@ -303,9 +310,15 @@ function NewsAd() {
                                                     <button
                                                         className="btn btn-outline-danger"
                                                         onClick={() => handleDeleteType(type.id)}
+                                                        disabled={newsData.some(news => news.newsTypeName === type.newsTypeName)}
                                                     >
                                                         <FaRegTrashAlt />
                                                     </button>
+                                                    {newsData.some(news => news.newsTypeName === type.newsTypeName) && (
+                                                        <span className="text-muted ms-2" style={{ fontSize: '0.875rem' }}>
+                                                            (Currently in use)
+                                                        </span>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}
