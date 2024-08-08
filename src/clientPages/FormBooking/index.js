@@ -113,7 +113,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
         }
         const matchingLobbyTimes = findMatchingBookingDates();
         setTimeOrderLoby(matchingLobbyTimes);
-    }, [bookingDate])
+    }, [bookingDate,lobbyTime])
 
 
     const handleChangeLobby = async (e) => {
@@ -311,7 +311,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                                                     pointerEvents
                                                 }}>
                                                 <span >
-                                                    {item.title}
+                                                    {item.title} - {item.to}
                                                 </span>
                                             </div>
                                         )
