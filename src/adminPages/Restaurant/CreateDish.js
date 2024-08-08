@@ -49,7 +49,7 @@ export default function CreateDish() {
     };
 
     const handleGoBack = () => {
-        navigate('/appetizer-admin'); // Navigate back to dessert list page
+        navigate('/dish-admin'); // Navigate back to dessert list page
     };
 
     return (

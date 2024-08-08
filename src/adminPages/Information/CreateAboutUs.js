@@ -33,33 +33,33 @@ export default function CreateAboutUs() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         
         formData.append('title', title);
         formData.append('content', content);
         formData.append('aboutTypeId', aboutTypeId); // Append aboutTypeId to formData
         
-
-        // Append each image file to formData
-        Array.from(imageFiles).forEach(file => {
-            formData.append('imageFiles', file);
-        });
+        // Append image files to formData if they exist
+        if (imageFiles) {
+            Array.from(imageFiles).forEach(file => {
+                formData.append('imageFiles', file);
+            });
+        }
     
-
         try {
             const response = await axios.post(apiEndpoint, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
+    
             // Dispatch the created item to the store
             dispatch(createAboutUsItem({
                 title,
                 content,
                 aboutTypeId,
-                imageFiles
+                imageFiles: imageFiles || []  // Ensure imageFiles is an array
             }));
             
             // Clear form fields and imageFiles state
@@ -67,7 +67,7 @@ export default function CreateAboutUs() {
             setContent('');
             setImageFiles(null);
             setAboutTypeId('');
-
+    
             // Navigate back to AboutUs component
             navigate('/aboutus');
         } catch (error) {
