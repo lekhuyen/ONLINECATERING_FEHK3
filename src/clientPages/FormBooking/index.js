@@ -7,8 +7,9 @@ import { apiGetAllLobby, apiGetOneLobby } from '../../apis/lobby';
 import { useParams } from 'react-router-dom';
 import { apiAddOrder, apiAddOrderAppetizer, apiCreateOrder } from '../../apis/order';
 import { apiPayment } from '../../apis/payment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { statusOrder } from '../../redux/User/userSlice';
 
 
 
@@ -36,7 +37,7 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
 }) => {
     const [lobby, setLobby] = useState(null)
     // const [combos, setCombos] = useState([])
-
+    const dispatch = useDispatch()
     // chua xong
     const { success } = useParams()
     if (success) {
@@ -85,7 +86,6 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
     }
     const handleChangeLobby = (e) => {
         const selectedId = e.target.value;
-        console.log(selectedId);
         
         if (selectedId !== "" && selectedId !== "--Choose Lobby--") setLobbySelect(selectedId);
         if (setLobbyId) setLobbyId(selectedId)
@@ -157,7 +157,9 @@ const FormBooking = ({ handleClickBtnCloseFormOrder,
                 localStorage.removeItem('appetizer');
                 localStorage.removeItem('dish');
                 localStorage.removeItem('dessert');
-
+                
+                dispatch(statusOrder({stusOrder:false}))
+                
                 const data = {
                     orderType: 'ban tiec',
                     amount: response?.data?.deposit,
