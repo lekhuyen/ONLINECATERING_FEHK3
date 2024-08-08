@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDishData, updateDishItem } from '../../redux/Restaurant/dishSlice';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 export default function EditDish() {
     const { id } = useParams(); // Get id from URL params
@@ -78,9 +79,17 @@ export default function EditDish() {
         return <p>Error: {dishError}</p>;
     }
 
+    const handleGoBack = () => {
+        navigate("/dish-admin");
+    };
+
+
     return (
         <div className='container'>
             <h2>Edit Dish</h2>
+            <button className="btn btn-secondary" onClick={handleGoBack}>
+                <RiArrowGoBackLine /> Go Back
+            </button>
             <form>
                 <div className="form-group">
                     <label>Name</label>

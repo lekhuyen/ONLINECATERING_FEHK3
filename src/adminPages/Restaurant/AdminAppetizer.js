@@ -131,12 +131,6 @@ export default function AdminAppetizer() {
                                     >
                                         <HiOutlinePencilSquare />
                                     </button>
-                                    <button
-                                        className="btn btn-outline-danger"
-                                        onClick={() => handleDelete(appetizer.id)}
-                                    >
-                                        <FaRegTrashAlt />
-                                    </button>
                                 </td>
                             </tr>
                         ))}
