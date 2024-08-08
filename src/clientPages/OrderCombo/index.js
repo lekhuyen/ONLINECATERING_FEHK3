@@ -38,7 +38,7 @@ const OrderCombo = () => {
                                     <div><img alt="" src={item.imagePath} /></div>
                                 </div>
                                 <div className={styles.table_description}>
-                                    <span>Tender calamari rings lightly breaded and fried to perfection, served with a zesty marinara dipping sauce</span>
+                                    <span>"Let food be thy medicine and medicine be thy food." - Hippocrates</span>
                                 </div>
                                 <div className={styles.menu_price}>
                                     <p><RiMoneyDollarCircleLine />{item.price}</p>

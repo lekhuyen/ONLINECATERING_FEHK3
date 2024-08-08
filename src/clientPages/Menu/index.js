@@ -170,7 +170,7 @@ const Menu = () => {
                                                 </div> */}
                                             </div>
                                             <div className={styles.menu_price}>
-                                                <span>{item?.dessertName}</span>
+                                                <span>{item?.name}</span>
                                                 <p><RiMoneyDollarCircleLine color='red' />{item?.price}</p>
                                             </div>
                                         </div>
