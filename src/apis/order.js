@@ -28,3 +28,7 @@ export const apiDeleteOrderByUser = (data)  => axios({
     url: `/restaurant-service/order/${data.userId}/${data.orderId}`,
     method: 'Delete',
 })
+export const apiGetOrderByLobbyId = (lobbyId)  => axios({
+    url: `/restaurant-service/order/lobby/${lobbyId}`,
+    method: 'Get',
+})

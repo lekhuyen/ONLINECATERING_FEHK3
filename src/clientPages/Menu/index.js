@@ -5,9 +5,10 @@ import { menu } from '../../ultil/menu';
 import { useEffect, useState } from 'react';
 import FormBooking from '../FormBooking';
 import classNames from 'classnames/bind';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiGetAppetizerComboId, apiGetComboById, apiGetDessertComboId, apiGetDishByComboId, apiGetPromotionByComboId } from '../../apis/combo';
 import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
 const cx = classNames.bind(styles)
 
@@ -36,6 +37,7 @@ const Menu = () => {
         
     const totalPrice = (quantityTable * comboPrice) + lobbyPrice
     const deposit = parseFloat(((quantityTable * comboPrice) + lobbyPrice) * 0.3).toFixed(2)
+    const navigate = useNavigate()
     
     const { comboid } = useParams()
     const order = {
@@ -82,7 +84,24 @@ const Menu = () => {
         getOneCombo()
     }, [comboid])
     const handleClickBtnShowFormOrder = () => {
-        setShowFormOrderStatus(true)
+        if(isLoggedIn) {
+            setShowFormOrderStatus(true)
+        }
+        else {
+            Swal.fire({
+                title: "You are not logged in",
+                text: "Please Login to comment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login')
+                }
+            });
+        }
     }
     const handleClickBtnCloseFormOrder = () => {
         setShowFormOrderStatus(false)
@@ -239,6 +258,7 @@ const Menu = () => {
 
                                 bookingTime={bookingTime}
                                 bookingDate={bookingDate}
+                                
                                 
                                 showFormOrderStatus={showFormOrderStatus}
                                 handleClickBtnCloseFormOrder={handleClickBtnCloseFormOrder} />
