@@ -41,7 +41,6 @@ export const menuItems = [
   { icon: <GiChickenOven />, title: "Dish", path: "/dish-admin" },
   { icon: <GiCupcake />, title: "Dessert", path: "/dessert-admin" },
   { icon: <CiForkAndKnife />, title: "Combo", path: "/combo-admin" },
-  { icon: <TfiLayersAlt />, title: "Promotion", path: "/promotion" },
   { icon: <RiContactsBook3Line />, title: "Contact", path: "/contactus" },
   { icon: <FaRegNewspaper />, title: "News", path: "/newsadmin" },
   { icon: <TiImage />, title: "Lobby", path: "/lobby-admin" },

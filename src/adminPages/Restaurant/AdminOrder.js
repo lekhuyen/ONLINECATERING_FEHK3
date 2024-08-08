@@ -16,6 +16,8 @@ export default function AdminOrder() {
 
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ordersPerPage = 5; // Number of orders per page
 
     useEffect(() => {
         dispatch(fetchAdminOrderData());
@@ -27,6 +29,10 @@ export default function AdminOrder() {
         setShowDetailModal(true);
     };
 
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     if (adminOrderStatus === 'loading' || userStatus === 'loading') {
         return <div>Loading...</div>;
     }
@@ -35,9 +41,17 @@ export default function AdminOrder() {
         return <div>Error: {adminOrderError || userError}</div>;
     }
 
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = adminOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+    const pageNumbers = Math.ceil(adminOrders.length / ordersPerPage);
+
+    // Calculate total deposit received
+    const totalDepositReceived = adminOrders.reduce((total, order) => total + order.deposit, 0);
+
     return (
         <div className={`container mt-5 ${styles.container}`}>
-            <h2>Admin Order Table</h2>
+            <h2>User Order Management</h2>
             <table className={`table table-hover ${styles.table}`}>
                 <thead>
                     <tr>
@@ -51,7 +65,7 @@ export default function AdminOrder() {
                     </tr>
                 </thead>
                 <tbody>
-                    {adminOrders.map(order => (
+                    {currentOrders.map(order => (
                         <tr key={order.id}>
                             <td>{order.id}</td>
                             <td>{order.user.userName || 'Unknown'}</td>
@@ -66,7 +80,6 @@ export default function AdminOrder() {
                                 >
                                     <BsInfoCircle />
                                 </button>
-
                             </td>
                         </tr>
                     ))}
@@ -153,6 +166,30 @@ export default function AdminOrder() {
                     </div>
                 </div>
             )}
+
+            {/* Pagination */}
+            <nav>
+                <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => paginate(currentPage - 1)}>Previous</button>
+                    </li>
+                    {Array.from({ length: pageNumbers }, (_, index) => (
+                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                            <button className="page-link" onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        </li>
+                    ))}
+                    <li className={`page-item ${currentPage === pageNumbers ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => paginate(currentPage + 1)}>Next</button>
+                    </li>
+                </ul>
+            </nav>
+
+            {/* Total Deposit Received */}
+            <div className="mt-3">
+                <strong>Total Deposit Received:</strong> {totalDepositReceived}
+            </div>
 
         </div>
     );
