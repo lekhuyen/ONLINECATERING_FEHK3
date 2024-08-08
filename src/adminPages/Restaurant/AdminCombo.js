@@ -60,7 +60,7 @@ export default function AdminCombo() {
 
     return (
         <div className="container mt-5">
-            <h2>Combo Table</h2>
+            <h2>Combo Management</h2>
 
             <div className="row mb-3">
                 <div>

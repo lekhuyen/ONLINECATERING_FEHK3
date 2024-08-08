@@ -128,7 +128,7 @@ function AboutUs() {
 
     return (
         <div className={styles.container}>
-            <h2>About Us Content</h2>
+            <h2>About Us Content Management</h2>
 
             <div className="row mb-3">
                 <div className="col-sm-9">

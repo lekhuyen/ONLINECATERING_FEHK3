@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiSend } from 'react-icons/fi';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 
 const apiEndpoint = "http://localhost:5034/api/News";
 
@@ -71,9 +72,16 @@ export default function CreateNews() {
         setImageFiles(e.target.files);
     };
 
+    const handleGoBack = () => {
+        navigate("/newsadmin");
+    };
+
     return (
         <div className="container">
             <h2>Create News</h2>
+            <div className="mt-3">
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /> Go Back</button>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="title">Title</label>

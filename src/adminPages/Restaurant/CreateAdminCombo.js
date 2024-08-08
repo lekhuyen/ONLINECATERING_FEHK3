@@ -55,7 +55,7 @@ export default function CreateAdminCombo() {
         <div className="container">
             <h2>Create Admin Combo</h2>
             <div className="mt-3">
-                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /></button>
+                <button className="btn btn-secondary" onClick={handleGoBack}><RiArrowGoBackLine /> Go Back</button>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
