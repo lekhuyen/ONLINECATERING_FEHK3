@@ -227,7 +227,7 @@ const Login = () => {
                                 onClick={() => {
                                     navigate('/')
                                 }}
-                                className={cx('forget')}>Go Home</p>
+                                className={cx('forget')}>Go Back to Home</p>
                         </>
                     </div>
                 </div>
