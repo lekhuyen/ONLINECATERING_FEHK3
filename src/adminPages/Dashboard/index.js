@@ -7,6 +7,8 @@ import styles from './Dashboard.module.scss';
 import { fetchAdminOrderData } from '../../redux/Restaurant/adminorderSlice';
 import { fetchUserData } from '../../redux/Restaurant/adminuserSlice';
 import icons from '../../ultil/icons';
+import { fetchCommentData } from '../../redux/Restaurant/admincommentSlice';
+import { fetchAccountsData } from '../../redux/Accounts/accountsSlice';
 
 const cx = classNames.bind(styles);
 
@@ -18,19 +20,27 @@ const Dashboard = () => {
 
     // Fetch orders and users from Redux state
     const orders = useSelector((state) => state.adminorder.adminOrders);
-    const accounts = useSelector((state) => state.adminuser.users);
+    const users = useSelector((state) => state.adminuser.users);
     const ordersStatus = useSelector((state) => state.adminorder.status);
     const usersStatus = useSelector((state) => state.adminuser.status);
     const ordersError = useSelector((state) => state.adminorder.error);
     const usersError = useSelector((state) => state.adminuser.error);
+    const accountsStatus = useSelector((state) => state.accounts.status);
+    const accountsError = useSelector((state) => state.accounts.error);
+    const accounts = useSelector((state) => state.accounts.items);
+    const comments = useSelector((state) => state.admincomment.items);
+    const commentsStatus = useSelector((state) => state.admincomment.status);
+    const commentsError = useSelector((state) => state.admincomment.error);
 
     useEffect(() => {
         dispatch(fetchAdminOrderData());
         dispatch(fetchUserData());
+        dispatch(fetchCommentData());
+        dispatch(fetchAccountsData());
     }, [dispatch]);
 
     // Create a map of user IDs to user names
-    const userMap = accounts.reduce((map, user) => {
+    const userMap = users.reduce((map, user) => {
         map[user.id] = user.userName;
         return map;
     }, {});
@@ -42,13 +52,18 @@ const Dashboard = () => {
     // Limit the number of users displayed to 5
     const displayedUsers = accounts.slice(0, 5);
 
+    // Limit the number of orders displayed to 5
+    const recentOrders = orders.slice(0, 5);
+
     return (
         <div className={cx('dashboard-container')}>
             <div className={cx('card-box')}>
                 <div className={cx('card')}>
                     <div>
-                        <div className={cx('numbers')}>1,455</div>
-                        <div className={cx('card-name')}>Daily Views</div>
+                        <div className={cx('numbers')}>
+                            {accountsStatus === 'loading' ? 'Loading...' : accountsStatus === 'failed' ? `Error: ${accountsError}` : accounts.length}
+                        </div>
+                        <div className={cx('card-name')}>Total Users</div>
                     </div>
                     <div className={cx('icon')}>
                         <FaRegEye />
@@ -56,8 +71,10 @@ const Dashboard = () => {
                 </div>
                 <div className={cx('card')}>
                     <div>
-                        <div className={cx('numbers')}>65</div>
-                        <div className={cx('card-name')}>Sales</div>
+                        <div className={cx('numbers')}>
+                            {ordersStatus === 'loading' ? 'Loading...' : ordersStatus === 'failed' ? `Error: ${ordersError}` : orders.length}
+                        </div>
+                        <div className={cx('card-name')}>Total Orders</div>
                     </div>
                     <div className={cx('icon')}>
                         <IoCartOutline />
@@ -65,8 +82,10 @@ const Dashboard = () => {
                 </div>
                 <div className={cx('card')}>
                     <div>
-                        <div className={cx('numbers')}>67</div>
-                        <div className={cx('card-name')}>Comments</div>
+                        <div className={cx('numbers')}>
+                            {commentsStatus === 'loading' ? 'Loading...' : commentsStatus === 'failed' ? `Error: ${commentsError}` : comments.length}
+                        </div>
+                        <div className={cx('card-name')}>Total Comments</div>
                     </div>
                     <div className={cx('icon')}>
                         <IoChatboxOutline />
@@ -74,8 +93,8 @@ const Dashboard = () => {
                 </div>
                 <div className={cx('card')}>
                     <div>
-                        <div className={cx('numbers')}>67</div>
-                        <div className={cx('card-name')}>Earning</div>
+                        <div className={cx('numbers')}>{orders.reduce((total, order) => total + order.deposit, 0)}</div>
+                        <div className={cx('card-name')}>Total Deposit Received</div>
                     </div>
                     <div className={cx('icon')}>
                         <BsCurrencyDollar />
@@ -87,7 +106,7 @@ const Dashboard = () => {
                 <div className={cx('recent-order')}>
                     <div className={cx('card-header')}>
                         <h2>Recent Orders</h2>
-                        <button className={cx('btn')}  onClick={() => navigate('/order-admin')}>View All</button>
+                        <button className={cx('btn')} onClick={() => navigate('/order-admin')}>View All</button>
                     </div>
                     {ordersStatus === 'loading' && <p>Loading...</p>}
                     {ordersStatus === 'failed' && <p>Error: {ordersError}</p>}
@@ -101,9 +120,9 @@ const Dashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {recentOrders.map((order) => (
                                 <tr key={order.id}>
-                                    <td>{userMap[order.userId] || 'Unknown'}</td> {/* Display the user name */}
+                                    <td>{userMap[order.userId] || 'Unknown'}</td>
                                     <td>{order.totalPrice}</td>
                                     <td>{order.deposit}</td>
                                     <td>{order.statusPayment ? 'Paid' : 'Pending'}</td>

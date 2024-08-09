@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAccountsData, editUserStatus } from '../../redux/Accounts/accountsSlice';
 import styles from './Accounts.module.scss'; // Import your custom styles
+import { useNavigate } from 'react-router-dom';
 
 const Accounts = () => {
     const dispatch = useDispatch();
-    const accountsData = useSelector((state) => state.accounts.items);
+    const navigate = useNavigate();
+    const accountsData = useSelector((state) => state.accounts.items || []);
     const status = useSelector((state) => state.accounts.status);
     const error = useSelector((state) => state.accounts.error);
 
@@ -50,9 +52,11 @@ const Accounts = () => {
     };
 
     const handleStatusToggle = (id, currentStatus) => {
+        if (!id) return; // Ensure id is valid
+    
         const newStatus = !currentStatus;
         const action = newStatus ? 'ban' : 'activate';
-
+    
         setSelectedUser({ id, newStatus, action });
         setShowModal(true);
     };
@@ -103,6 +107,8 @@ const Accounts = () => {
                 </div>
             </div>
 
+            <button className="btn btn-success mb-3" onClick={() => navigate('/admin-accounts/create-admin-accounts')}>Add Account</button>
+
             <div className="container mt-5">
                 <table className="table table-hover">
                     <thead>
@@ -111,16 +117,18 @@ const Accounts = () => {
                             <th>UserName</th>
                             <th>UserEmail</th>
                             <th>Phone</th>
+                            <th>Role</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentAccountsData.map((account) => (
-                            <tr key={account.id}>
+                            <tr key={account.id || 'default-key'}>
                                 <td>{account.id}</td>
                                 <td>{account.userName}</td>
                                 <td>{account.userEmail}</td>
                                 <td>{account.phone}</td>
+                                <td>{account.role}</td>
                                 <td>
                                     <button
                                         className={`btn btn-sm ${account.status ? 'btn-danger' : 'btn-success '}`}

@@ -59,6 +59,7 @@ import CreatePromotion from "../adminPages/Restaurant/CreatePromotion"
 import EditPromotion from "../adminPages/Restaurant/EditPromotion"
 import AdminComment from "../adminPages/Restaurant/AdminComment"
 import PaymentSuccess from "../clientPages/PaymentSuccess"
+import CreateAccount from "../adminPages/Accounts/CreateAccount"
 
 
 
@@ -100,6 +101,7 @@ const privateRoutes = [
     {path: "/contactus", component: ContactAd},
     {path: "/contactus/responsemessage/:id", component: ResponseMessage},
     {path: "/admin-accounts", component: Accounts},
+    {path: "/admin-accounts/create-admin-accounts", component: CreateAccount},
     {path: "/admin-accounts/edit-admin-accounts/:id", component: EditAccount},
     {path: "/product-manager", component: ProductManager},
     {path: "/service", component: Service},
