@@ -30,3 +30,9 @@ export const apiUserRefreshToken = (tokenRefresh)  => axios({
     method: 'POST',
     tokenRefresh
 })
+
+
+export const apiUserByEmail = (roleAdmin)  => axios({
+    url: `/user-service/user/role/${roleAdmin}`,
+    method: 'Get',
+})

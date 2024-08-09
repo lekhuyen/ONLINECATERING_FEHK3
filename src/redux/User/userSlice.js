@@ -16,6 +16,12 @@ export const userSlice = createSlice({
         message: "",
 
         orderStatus: false,
+
+        messageChat: [],
+        showNotifiStatus:false,
+        showChatStatus:false,
+        roomCode: null,
+        roomCodeJoin: null,
     },
     reducers: {
         login: (state, action) => {
@@ -37,8 +43,26 @@ export const userSlice = createSlice({
             state.status = null;
             state.message = "";
         },
+        getMessageChat:(state, action) => {                        
+            state.messageChat = action.payload.messageChat
+        },
         statusOrder: (state, action) => {
             state.orderStatus = action.payload.stusOrder;
+        },
+        //thong bao tren nav
+        showNotification:(state, action) => {   
+            state.showNotifiStatus = action.payload.statusNotifi
+        },
+        //khung chat
+        showChatForm:(state, action) => {   
+            state.showChatStatus = action.payload.showChat
+        },
+        setRoomeCode:(state, action) => {   
+            state.roomCode = action.payload.roomCode
+        },
+        
+        roomCodeUserJoin:(state, action) => {   
+            state.roomCodeJoin = action.payload.roomCodeJoin
         }
     },
     extraReducers: (builder) => {
@@ -70,5 +94,9 @@ export const userSlice = createSlice({
     }
 });
 
-export const { login, resetStatusMessage, logout, statusOrder } = userSlice.actions;
+export const { login, resetStatusMessage, logout, 
+    statusOrder, getMessageChat,showNotification,showChatForm,
+    setRoomeCode,
+    roomCodeUserJoin,
+} = userSlice.actions;
 export default userSlice.reducer;
