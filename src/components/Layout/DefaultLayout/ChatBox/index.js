@@ -18,9 +18,14 @@ const ChatBox = () => {
     const [userCurrent, setUserCurrent] = useState(JSON.parse(localStorage.getItem("userCurrent")) || null);
     const [messages, setMessages] = useState([]);
     const [chatContent, setChatContent] = useState('')
+    const [roomCodeJoin, setRoomCodeJoin] = useState(() => {
+        const storedCart = localStorage.getItem('roomCodeJoin');
+        return storedCart ? JSON.parse(storedCart) : "";
+    })
+    
     // const [showChatStatus, setShowChatStatus] = useState(false)
 
-    const { isLoggedIn, showChatStatus, roomCode,roomCodeJoin } = useSelector(state => state.user)
+    const { isLoggedIn, showChatStatus, roomCode } = useSelector(state => state.user)
     const dispatch = useDispatch()
     // const { roomCode } = useParams()
     const endOfMessagesRef = useRef(null)
@@ -130,27 +135,31 @@ const ChatBox = () => {
         dispatch(showChatForm({ showChat: true }))
         if (connection?._connectionStarted && userCurrent.role === "User") {
             try {
-                const response = await axios.post("http://localhost:5044/api/Room/join", {
+                const resAddRoom = await axios.post("http://localhost:5044/api/Room/", {
                     roomCode: `${userCurrent?.id}`,
                 })
-                if (response?.data?.status === 1) {
-                    const resAddRoom = await axios.post("http://localhost:5044/api/Room/", {
-                        roomCode: `${userCurrent?.id}`,
-                    })
-                    console.log(resAddRoom);
+
+                if (resAddRoom?.data.status === 1) {
+                    console.log("dang joi");
                     
-                    if (resAddRoom?.data?.status === 0) {
-                        dispatch(roomCodeUserJoin({roomCodeJoin:response.data.data}))
+                    const response = await axios.post("http://localhost:5044/api/Room/join", {
+                        roomCode: `${roomCodeJoin}`,
+                    })                    
+                    console.log(response.data.data);
+                    if(response?.data?.status === 0) {  
+                    localStorage.setItem('roomCodeJoin', JSON.stringify(response.data.data))
                         await connection.invoke("JoinRoom", userCurrent?.userEmail, `${userCurrent?.id}`)
                     }
                 }
-                if (response?.data?.status === 0) {
-                    dispatch(roomCodeUserJoin({roomCodeJoin:response.data.data}))
-
+                if (resAddRoom?.data?.status === 0) {
+                    
+                    // dispatch(roomCodeUserJoin({ roomCodeJoin: resAddRoom.data.data }))
+                    localStorage.setItem('roomCodeJoin', JSON.stringify(resAddRoom.data.data))
                     await connection.invoke("JoinRoom", userCurrent?.userEmail, `${userCurrent?.id}`)
-                } else {
-                    alert("Invalid room name or password");
                 }
+                //  else {
+                //     alert("Invalid room name or password");
+                // }
             } catch (error) {
                 console.log("error join room: ", error);
             }
@@ -160,6 +169,8 @@ const ChatBox = () => {
     useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
+// console.log(messages);
+console.log(roomCodeJoin);
 
     return (
         <div className={styles.chatBox_wapper}>
@@ -190,7 +201,7 @@ const ChatBox = () => {
                                     );
                                 })
                             ) : (
-                                messages.filter(m => m.roomCode === roomCodeJoin).map((m, index) => {
+                                messages.filter(m => m.roomCode === `${roomCodeJoin}`).map((m, index) => {
                                     let userIdMessage = m.userId === userCurrent?.id;
                                     return (
                                         <div key={m.timestamp}>
