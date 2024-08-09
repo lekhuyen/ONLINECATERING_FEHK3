@@ -1,28 +1,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { logout } from './userSlice';
 
-// Define initial state
 const initialState = {
     loading: false,
+    password: "",
+    userEmail: "",
     error: null,
     success: null,
     otpSent: false,
     status: null,
-    isChangePassword: null
+    isChangePassword: null,
+    isLoggedIn: false,
+    userInfo: {},  // To store user information
 };
 
-// Define the API endpoint
 const apiEndpoint = "http://localhost:5044/api/User";
 
-// Thunks for async actions
-export const sendForgotPasswordEmail = createAsyncThunk(
-    'userForgotPassword/sendForgotPasswordEmail',
-    async (email, { rejectWithValue }) => {
+export const validateOldPassword = createAsyncThunk(
+    'userForgotPassword/validateOldPassword',
+    async ({ userEmail, oldPassword }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${apiEndpoint}/forgot-password`, { UserEmail: email });
+            const response = await axios.post(`${apiEndpoint}/validate-password`, { 
+                userEmail,
+                OldPassword: oldPassword // Ensure this matches the API's expected field name
+            });
+            console.log('Validation response:', response.data);
             return response.data;
         } catch (error) {
+            console.error('Validation error:', error);
             return rejectWithValue(error.response.data);
         }
     }
@@ -30,17 +35,20 @@ export const sendForgotPasswordEmail = createAsyncThunk(
 
 export const updatePassword = createAsyncThunk(
     'userForgotPassword/updatePassword',
-    async ({ email, oldPassword, newPassword }, { rejectWithValue }) => {
+    async ({ userEmail, oldPassword, newPassword }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${apiEndpoint}/update-password-change`, { UserEmail: email, Password: newPassword, OldPassword: oldPassword });
+            const response = await axios.post(`${apiEndpoint}/update-password-change`, { 
+                userEmail,
+                OldPassword: oldPassword, 
+                NewPassword: newPassword // Correct property name
+            });
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(error.response?.data || 'Update error');
         }
     }
 );
 
-// Create slice
 const userForgotPasswordSlice = createSlice({
     name: 'userForgotPassword',
     initialState,
@@ -54,42 +62,46 @@ const userForgotPasswordSlice = createSlice({
         sendOtpMail: (state, action) => {
             state.otpSent = action.payload.isSendOtp;
         },
-        isChangePasswordLogout: (state, action) => {
+        isChangePasswordLogout: (state) => {
             state.isChangePassword = null;
             state.error = null;
             state.otpSent = false;
         },
-        isChangePasswordLogoutOtp: (state, action) => {
+        isChangePasswordLogoutOtp: (state) => {
             state.status = null;
+        },
+        setUserEmail: (state, action) => {
+            state.userEmail = action.payload;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(sendForgotPasswordEmail.pending, (state, action) => {
+            .addCase(validateOldPassword.pending, (state) => {
                 state.loading = true;
-            })
-            .addCase(sendForgotPasswordEmail.fulfilled, (state, action) => {
-                state.loading = false;
-                state.error = action.payload.message;
-                state.status = action.payload.status;
-            })
-            .addCase(sendForgotPasswordEmail.rejected, (state, action) => {
-                state.loading = false;
-            })
+                state.error = null;
 
-            .addCase(updatePassword.pending, (state, action) => {
+            })
+            .addCase(validateOldPassword.fulfilled, (state, action) => {
+                state.loading = false;
+            })
+            .addCase(validateOldPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || action.error.message;
+            })
+            .addCase(updatePassword.pending, (state) => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(updatePassword.fulfilled, (state, action) => {
                 state.loading = false;
-                state.error = action.payload.message;
-                state.isChangePassword = action.payload.status;
+                
             })
             .addCase(updatePassword.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload || action.error.message;
             });
     },
 });
 
-export const { resetState, sendOtpMail, isChangePasswordLogout, isChangePasswordLogoutOtp } = userForgotPasswordSlice.actions;
+export const { resetState, sendOtpMail, isChangePasswordLogout, isChangePasswordLogoutOtp, setUserEmail } = userForgotPasswordSlice.actions;
 export default userForgotPasswordSlice.reducer;

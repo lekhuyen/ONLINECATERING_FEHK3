@@ -7,6 +7,7 @@ export const userSlice = createSlice({
         isLoggedIn: false,
         userCurrent: null,
         token: null,
+        userEmail: "",
 
         // OTP
         isSendMailLoading: false,
@@ -21,6 +22,7 @@ export const userSlice = createSlice({
             state.isLoggedIn = true;
             state.userCurrent = action.payload.userCurrent;
             state.token = action.payload.token;
+            state.userEmail = action.payload.userEmail; // Ensure this is set
             localStorage.setItem('token', action.payload.token); 
         },
         logout: (state) => {
@@ -29,6 +31,7 @@ export const userSlice = createSlice({
             state.token = null;
             localStorage.removeItem('token');
             localStorage.removeItem('userCurrent');
+            state.userEmail = '';
         },
         resetStatusMessage: (state) => {
             state.status = null;
