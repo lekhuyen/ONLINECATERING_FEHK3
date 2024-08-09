@@ -62,7 +62,11 @@ const Login = () => {
             if (register) {
                 dispath(registerLogin(true))
                 const response = await apiUserRegister(payload)
+                
                 if (response.status === 0) {
+                    if(response.data.role === 'User') {
+                        localStorage.setItem('roomCodeJoin', JSON.stringify(response.data.id))
+                    }
                     dispath(registerLogin(false))
                     Swal.fire('Congratulation',
                         response.message, 'success')
@@ -80,8 +84,11 @@ const Login = () => {
             }
             else {
                 const rs = await apiUserLogin(token ? loginToken : data)
+            
                 if (rs.status === 0) {
-
+                    if(rs.data.role === 'User') {
+                        localStorage.setItem('roomCodeJoin', JSON.stringify(rs.data.id))
+                    }
                     localStorage.setItem('userCurrent', JSON.stringify(rs.data))
                     dispath(login({
                         isLoggedIn: true,
