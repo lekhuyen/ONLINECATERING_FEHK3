@@ -1,4 +1,5 @@
 // import Sidebar from './Sidebar';
+import ChatBox from './ChatBox';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
@@ -13,6 +14,7 @@ const DefaultLayout = ({children}) => {
                 </div>
             </div>
             <Footer />
+            <ChatBox />
         </div>
     );
 };

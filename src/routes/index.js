@@ -60,6 +60,7 @@ import EditPromotion from "../adminPages/Restaurant/EditPromotion"
 import AdminComment from "../adminPages/Restaurant/AdminComment"
 import PaymentSuccess from "../clientPages/PaymentSuccess"
 import CreateAccount from "../adminPages/Accounts/CreateAccount"
+import ChatBox from "../components/Layout/DefaultLayout/ChatBox"
 
 
 
@@ -88,6 +89,7 @@ const publicRoutes = [
     {path: "/comment/:appetizerId", component: Comment},
     {path: "/comment/:appetizerId/:dishId", component: Comment},
     {path: "/payment-success", component: PaymentSuccess, layout: null},
+    {path: "/chat-box/:roomCode", component: ChatBox},
 ]
 
 const privateRoutes = [
