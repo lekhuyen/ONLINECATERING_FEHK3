@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePassword } from '../../redux/User/userForgotPasswordSlice';
+import { updatePassword, validateOldPassword } from '../../redux/User/userForgotPasswordSlice';
 import { useNavigate } from 'react-router-dom';
 import styles from './ChangePass.module.scss';
 import Loading from '../Loading';
@@ -12,43 +12,62 @@ const cx = classNames.bind(styles);
 const ChangePassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, isChangePassword } = useSelector((state) => state.userForgotPassword);
-    const { isLoggedIn, userEmail } = useSelector((state) => state.user); // Assume userEmail is stored here
+
+    const { loading, error } = useSelector((state) => state.userForgotPassword);
+    const { userEmail } = useSelector((state) => {
+        const user = state.user.userCurrent;
+        return {
+            isLoggedIn: user.isLoggedIn,
+            userEmail: user.userEmail,
+        };
+    });
 
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        if (!userEmail) {
+            Swal.fire('Oops!', "User email is missing.", 'error');
+            return;
+        }
+
         if (newPassword !== confirmNewPassword) {
-            Swal.fire('Oop!', "New password and confirm new password must match.", 'error');
+            Swal.fire('Oops!', "New password and confirm new password must match.", 'error');
             return;
         }
 
         if (newPassword === oldPassword) {
-            Swal.fire('Oop!', "New password cannot be the same as the old password.", 'error');
+            Swal.fire('Oops!', "New password cannot be the same as the old password.", 'error');
             return;
         }
 
-        if (newPassword !== "" && confirmNewPassword !== "" && oldPassword !== "") {
-            // Dispatch the updatePassword action with the user's email
-            dispatch(updatePassword({ email: userEmail, oldPassword, newPassword }));
+        if (newPassword && confirmNewPassword && oldPassword) {
+            try {
+                const resultAction = await dispatch(validateOldPassword({ userEmail, oldPassword }));
+
+                if (validateOldPassword.fulfilled.match(resultAction)) {
+                    const updateResult = await dispatch(updatePassword({ userEmail, oldPassword, newPassword }));
+
+                    if (updatePassword.fulfilled.match(updateResult)) {
+                        Swal.fire('Success!', "Password updated successfully.", 'success');
+                        // Optionally, clear the error message and redirect
+                        dispatch({ type: 'userForgotPassword/clearError' }); // Add this action to your slice
+                        // navigate('/some-path'); // Optionally redirect
+                    } else {
+                        Swal.fire('Oops!', "Failed to update password. Please try again.", 'error');
+                    }
+                } else {
+                    Swal.fire('Oops!', "Old password is incorrect.", 'error');
+                }
+            } catch (error) {
+                console.error('Password change error:', error);
+                Swal.fire('Oops!', error.message || "An error occurred during password update.", 'error');
+            }
         } else {
-            Swal.fire('Oop!', "Please fill in all fields.", 'error');
+            Swal.fire('Oops!', "Please fill in all fields.", 'error');
         }
     };
-
-    useEffect(() => {
-        if (isChangePassword === 0) {
-            navigate('/login');
-        }
-    }, [isChangePassword, dispatch, navigate]);
-
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('/login');
-        }
-    }, [isLoggedIn, dispatch, navigate]);
 
     return (
         <div>
@@ -80,10 +99,14 @@ const ChangePassword = () => {
                 </button>
             </div>
             {loading && <Loading />}
-            {error && <p>{error}</p>}
+            {error && (
+                <div>
+                    <p>Error: {error.message || 'An error occurred'}</p>
+                    {/* Render other error details if needed */}
+                </div>
+            )}
         </div>
     );
 };
-
 
 export default ChangePassword;
