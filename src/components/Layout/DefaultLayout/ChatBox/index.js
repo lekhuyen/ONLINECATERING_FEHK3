@@ -10,6 +10,8 @@ import { getMessageChat, roomCodeUserJoin, showChatForm } from '../../../../redu
 // import { useParams } from 'react-router-dom';
 import { AiFillMessage } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles)
 
@@ -22,9 +24,9 @@ const ChatBox = () => {
         const storedCart = localStorage.getItem('roomCodeJoin');
         return storedCart ? JSON.parse(storedCart) : "";
     })
-    
-    // const [showChatStatus, setShowChatStatus] = useState(false)
 
+    // const [showChatStatus, setShowChatStatus] = useState(false)
+    const navigate = useNavigate()
     const { isLoggedIn, showChatStatus, roomCode } = useSelector(state => state.user)
     const dispatch = useDispatch()
     // const { roomCode } = useParams()
@@ -55,7 +57,7 @@ const ChatBox = () => {
 
     }, [userCurrent, isLoggedIn])
     useEffect(() => {
-        if (connection && userCurrent.role === "Admin") {
+        if (connection && userCurrent && userCurrent?.role === "Admin") {
             joinAllRooms();
         }
     }, [connection]);
@@ -111,7 +113,7 @@ const ChatBox = () => {
 
     useEffect(() => {
         const joinRoomAdmin = async () => {
-            if (userCurrent.role === "Admin") {
+            if (userCurrent && userCurrent?.role === "Admin") {
                 if (roomCode) {
                     try {
                         const response = await axios.post("http://localhost:5044/api/Room/join", {
@@ -132,45 +134,62 @@ const ChatBox = () => {
     }, [roomCode])
 
     const joinRoom = async (e) => {
-        dispatch(showChatForm({ showChat: true }))
-        if (connection?._connectionStarted && userCurrent.role === "User") {
-            try {
-                const resAddRoom = await axios.post("http://localhost:5044/api/Room/", {
-                    roomCode: `${userCurrent?.id}`,
-                })
+        if (isLoggedIn) {
+            dispatch(showChatForm({ showChat: true }))
+            if (connection?._connectionStarted && userCurrent.role === "User") {
+                try {
+                    const resAddRoom = await axios.post("http://localhost:5044/api/Room/", {
+                        roomCode: `${userCurrent?.id}`,
+                    })
 
-                if (resAddRoom?.data.status === 1) {
-                    console.log("dang joi");
-                    
-                    const response = await axios.post("http://localhost:5044/api/Room/join", {
-                        roomCode: `${roomCodeJoin}`,
-                    })                    
-                    console.log(response.data.data);
-                    if(response?.data?.status === 0) {  
-                    localStorage.setItem('roomCodeJoin', JSON.stringify(response.data.data))
+                    if (resAddRoom?.data.status === 1) {
+                        // console.log("dang joi");
+
+                        const response = await axios.post("http://localhost:5044/api/Room/join", {
+                            roomCode: `${roomCodeJoin}`,
+                        })
+                        // console.log(response.data.data);
+                        if (response?.data?.status === 0) {
+                            localStorage.setItem('roomCodeJoin', JSON.stringify(response.data.data))
+                            await connection.invoke("JoinRoom", userCurrent?.userEmail, `${userCurrent?.id}`)
+                        }
+                    }
+                    if (resAddRoom?.data?.status === 0) {
+
+                        // dispatch(roomCodeUserJoin({ roomCodeJoin: resAddRoom.data.data }))
+                        localStorage.setItem('roomCodeJoin', JSON.stringify(resAddRoom.data.data))
                         await connection.invoke("JoinRoom", userCurrent?.userEmail, `${userCurrent?.id}`)
                     }
+                    //  else {
+                    //     alert("Invalid room name or password");
+                    // }
+                } catch (error) {
+                    console.log("error join room: ", error);
                 }
-                if (resAddRoom?.data?.status === 0) {
-                    
-                    // dispatch(roomCodeUserJoin({ roomCodeJoin: resAddRoom.data.data }))
-                    localStorage.setItem('roomCodeJoin', JSON.stringify(resAddRoom.data.data))
-                    await connection.invoke("JoinRoom", userCurrent?.userEmail, `${userCurrent?.id}`)
-                }
-                //  else {
-                //     alert("Invalid room name or password");
-                // }
-            } catch (error) {
-                console.log("error join room: ", error);
             }
+        }
+        else {
+            Swal.fire({
+                title: "You are not logged in",
+                text: "Please Login to comment!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Login"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login')
+                }
+            });
         }
     }
 
     useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
-// console.log(messages);
-console.log(roomCodeJoin);
+    // console.log(messages);
+    // console.log(roomCodeJoin);
 
     return (
         <div className={styles.chatBox_wapper}>

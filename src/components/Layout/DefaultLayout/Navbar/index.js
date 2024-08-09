@@ -131,7 +131,7 @@ const Navbar = () => {
                         onClick={hanldeShowNotitfi}
                         className="p__icon_notifi"><IoIosNotifications size={25}/>
                         {
-                            messNotifi.length > 0 
+                            messNotifi.length && isLoggedIn > 0 
                             ? 
                             <div className="p__notifi_count">{messNotifi.length}</div>
                             :
