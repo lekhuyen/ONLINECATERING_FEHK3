@@ -1,0 +1,111 @@
+.chatBox_wapper {
+    position: fixed;
+    bottom: 0;
+    right: 20px;    
+    z-index: 111;
+}
+.waper_container {
+    background-color: white;
+
+    display: grid;
+    grid-template-rows: 40px 1fr 50px;
+    color: black;
+    width: 400px;
+    height: 500px;
+}
+.chatBox_header {
+    box-shadow: inset -4px -15px 15px -3px rgba(0,0,0,0.1); 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+}
+.chatBox_header h4 {
+    font-size: 20px;
+    margin-bottom: 0;
+    color: burlywood;
+}
+.icon_close {
+    padding-right: 20px;
+    color: #3578E5;
+
+    cursor: pointer;
+}
+.chatBox_content {
+    overflow-y: scroll;
+    box-shadow: inset 0px 10px 14px -3px rgba(0,0,0,0.1);
+}
+.chatBox_content_more_2 {
+    width: 100%;
+}
+.chatBox_content_more {
+    max-width: max-content;
+    min-width: 50px;
+    background-color: #3578E5; 
+    color: #fff;
+    margin-top: 10px;
+    margin-left: 10px;
+    word-wrap: break-word;
+    border-radius: 7px;
+    padding: 3px;
+}
+.chatBox_content_more:last-child {
+    margin-bottom: 20px;
+}
+.chatBox_content_1 {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+
+}
+
+.chatBox_content_more p,.chatBox_content_more_1 p {
+    font-size: 16px;
+    margin-bottom: 0;
+    justify-content: flex-end;
+}
+
+
+.chat_box_input {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.chat_box_input textarea {
+    width: 90%;
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: inset 0px 10px 14px -3px rgba(0,0,0,0.1);
+    outline: none;
+    border: none;
+    padding: 10px;
+}
+
+.btn_submit {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: inset 5px 12px 82px 10px rgba(0,0,0,0.1);
+    color: burlywood;
+}
+
+.show_chat {
+    height: 100px;  
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.icon_show {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}

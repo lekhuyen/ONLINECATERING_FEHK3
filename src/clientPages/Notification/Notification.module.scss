@@ -1,0 +1,49 @@
+.wapper {
+    position: absolute;
+    top: 28px;
+    right: -15px;
+    width: 400px;
+    height: max-content;
+    background-color: #fff;
+    color: black;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.wapper_1 {
+    width: 100%;
+    background-color: #fff;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+
+}
+.wapper_1:first-child {
+    padding-top: 15px;
+
+}
+.wapper_1:last-child {
+    padding-bottom: 15px;
+}
+
+
+.notifi_content {
+    // width: 100%;
+    margin: 0!important;
+    white-space: nowrap;       
+    overflow: hidden;         
+    text-overflow: ellipsis;
+
+    // flex-direction: column;
+    // justify-content: flex-start;
+}
+.wapper div span {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+.wapper div p {
+    margin-bottom: 0;
+    line-height: 20px;
+    font-size: 15px;
+}

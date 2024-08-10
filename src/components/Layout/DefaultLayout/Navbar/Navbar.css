@@ -137,6 +137,24 @@
   }
 }
 
+
+/* notifi */
+.p__icon_notifi {
+  cursor: pointer;
+}
+.p__notifi_count {
+  position: absolute;
+  bottom: 30px;
+  right: -5px;
+  width: 17px;
+  height: 17px;
+  background-color:red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 10px;
+}
 /*  */
 
 .app__navbar-login a {
