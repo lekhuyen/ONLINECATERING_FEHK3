@@ -6,6 +6,7 @@ import styles from './ChangePass.module.scss';
 import Loading from '../Loading';
 import classNames from 'classnames/bind';
 import Swal from 'sweetalert2';
+import { logout } from '../../redux/User/userSlice';
 
 const cx = classNames.bind(styles);
 
@@ -15,10 +16,10 @@ const ChangePassword = () => {
 
     const { loading, error } = useSelector((state) => state.userForgotPassword);
     const { userEmail } = useSelector((state) => {
-        const user = state.user.userCurrent;
+        const user = state.user.userCurrent || {}; // Add a fallback to an empty object
         return {
-            isLoggedIn: user.isLoggedIn,
-            userEmail: user.userEmail,
+            isLoggedIn: user.isLoggedIn || false, // Add a fallback to false
+            userEmail: user.userEmail || '', // Add a fallback to an empty string
         };
     });
 
@@ -53,7 +54,6 @@ const ChangePassword = () => {
                         Swal.fire('Success!', "Password updated successfully.", 'success');
                         // Optionally, clear the error message and redirect
                         dispatch({ type: 'userForgotPassword/clearError' }); // Add this action to your slice
-                        // navigate('/some-path'); // Optionally redirect
                     } else {
                         Swal.fire('Oops!', "Failed to update password. Please try again.", 'error');
                     }
@@ -67,6 +67,8 @@ const ChangePassword = () => {
         } else {
             Swal.fire('Oops!', "Please fill in all fields.", 'error');
         }
+        dispatch(logout());
+        navigate("/login");
     };
 
     return (

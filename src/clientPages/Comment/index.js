@@ -93,6 +93,8 @@ const Comment = () => {
         } else if (+dishId === 2) {
             const resDessert = await apiGetDessertById(appetizerId)
             const pointRating = resDessert?.data?.ratings?.$values
+            
+            
 
             var ratingUserPointDessert = pointRating.find(rating => rating.userId === userCurrent.id)?.point
 
@@ -668,7 +670,7 @@ const Comment = () => {
                                                     {
                                                         !editCommentReplyStatus[`${index}-${replyIndex}`] &&
                                                         <div className={cx("comment-content-user")}>
-                                                            <span>{item.user.userName}</span>
+                                                            <span>{c.user?.userName}</span>
                                                             <p>{c.content}</p>
                                                         </div>
                                                     }
