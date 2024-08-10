@@ -51,12 +51,12 @@ const Accounts = () => {
         setCurrentPage(1);
     };
 
-    const handleStatusToggle = (id, currentStatus) => {
-        if (!id) return; // Ensure id is valid
-    
+    const handleStatusToggle = (id, currentStatus, role) => {
+        if (!id || role === 'Admin') return; // Ensure id is valid and the role is not 'Admin'
+
         const newStatus = !currentStatus;
         const action = newStatus ? 'ban' : 'activate';
-    
+
         setSelectedUser({ id, newStatus, action });
         setShowModal(true);
     };
@@ -130,12 +130,14 @@ const Accounts = () => {
                                 <td>{account.phone}</td>
                                 <td>{account.role}</td>
                                 <td>
-                                    <button
-                                        className={`btn btn-sm ${account.status ? 'btn-danger' : 'btn-success '}`}
-                                        onClick={() => handleStatusToggle(account.id, account.status)}
-                                    >
-                                        {account.status ? 'Banned' : 'Active'}
-                                    </button>
+                                    {account.role !== 'Admin' && (
+                                        <button
+                                            className={`btn btn-sm ${account.status ? 'btn-danger' : 'btn-success'}`}
+                                            onClick={() => handleStatusToggle(account.id, account.status, account.role)}
+                                        >
+                                            {account.status ? 'Banned' : 'Active'}
+                                        </button>
+                                    )}
                                 </td>
                             </tr>
                         ))}
