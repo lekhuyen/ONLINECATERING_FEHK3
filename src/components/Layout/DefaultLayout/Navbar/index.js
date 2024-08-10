@@ -5,17 +5,41 @@ import images from "../../../../constants/images";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../../redux/User/userSlice";
-import { IoMdCart } from "react-icons/io";
+import { logout, showNotification } from "../../../../redux/User/userSlice";
+import { IoIosNotifications, IoMdCart } from "react-icons/io";
+import Notification from "../../../../clientPages/Notification";
 
 const Navbar = () => {
     const navigate = useNavigate()
     const [toggleMenu, setToggleMenu] = React.useState(false);
-    const { isLoggedIn, orderStatus } = useSelector(state => state.user)
+    const { isLoggedIn, orderStatus,showNotifiStatus,showChatForm } = useSelector(state => state.user)
     const [userCurrent, setUserCurrent] = useState('')
     const [showLoginBtn, setShowLoginBtn] = useState(false)
     const dispatch = useDispatch()
+    const { messageChat } = useSelector(state => state.user);
+    const [messNotifi, setMessNotifi] = useState([]);
+    useEffect(() => {
+        if (messageChat) {
+            const result = processMessages(messageChat);
+            setMessNotifi(result);
+        }
+    }, [messageChat]);
 
+    const processMessages = (messages) => {
+        const grouped = messages.reduce((acc, message) => {
+            if (!acc[message.roomCode]) {
+                acc[message.roomCode] = [];
+            }
+            acc[message.roomCode].push(message);
+            return acc;
+        }, {});
+
+        const lastMessagesPerRoom = Object.values(grouped).map(group => group[group.length - 1]);
+
+        const otherMessages = messages.filter(message => !lastMessagesPerRoom.some(lastMsg => lastMsg.roomCode === message.roomCode));
+
+        return [...lastMessagesPerRoom, ...otherMessages];
+    };
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -32,7 +56,10 @@ const Navbar = () => {
         localStorage.removeItem("userCurrent")
         navigate("/")
     }
-
+    const hanldeShowNotitfi = () => {
+        dispatch(showNotification({statusNotifi:!showNotifiStatus}))
+        // setShowNotifiStatus(prev =>(!prev))
+    }
     return (
         <nav className="app__navbar">
             <div className="app__navbar-logo">
@@ -99,6 +126,24 @@ const Navbar = () => {
                         </div>
                 }
                 <div />
+                <div className="p__opensans" style={{position: 'relative'}}>
+                    <div 
+                        onClick={hanldeShowNotitfi}
+                        className="p__icon_notifi"><IoIosNotifications size={25}/>
+                        {
+                            messNotifi.length && isLoggedIn > 0 
+                            ? 
+                            <div className="p__notifi_count">{messNotifi.length}</div>
+                            :
+                            ""
+                        }
+                    </div>
+                    {
+                        showNotifiStatus && 
+                        <div><Notification/></div>
+                    }
+                </div>
+
                 <div onClick={() => navigate('/order')} className="p__carticon">
                     {
                         orderStatus &&
